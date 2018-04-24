@@ -82,7 +82,7 @@ public class Contribuintes
     /**
      * Devolve o email do contribuinte da classe Contribuintes.
      * @param
-     * @return 
+     * @return email 
      */
     public String getEMAIL()
     {
@@ -91,6 +91,8 @@ public class Contribuintes
     
     /**
      * Atualiza o email do contribuinte da classe Contribuintes.
+     * @param email
+     * @return 
      */
     public void setEMAIL(String email_p)
     {
@@ -99,6 +101,8 @@ public class Contribuintes
     
     /**
      * Devolve o nome do contribuinte da classe Contribuintes.
+     * @param
+     * @return nome
      */
     public String getNOME()
     {
@@ -107,6 +111,8 @@ public class Contribuintes
     
     /**
      * Atualiza o nome do contribuinte da classe Contribuintes.
+     * @param nome
+     * @return 
      */
     public void setNOME(String nome_p)
     {
@@ -115,6 +121,8 @@ public class Contribuintes
     
     /**
      * Devolve a morada do contribuinte da classe Contribuintes.
+     * @param
+     * @return morada
      */
     public String getMORADA()
     {
@@ -123,6 +131,8 @@ public class Contribuintes
     
     /**
      * Atualiza a morada do contribuinte da classe Contribuintes.
+     * @param morada
+     * @return
      */
     public void setMORADA(String morada_p)
     {
@@ -131,6 +141,8 @@ public class Contribuintes
     
     /**
      * Devolve a password de acesso do contribuinte da classe Contribuintes.
+     * @param
+     * @return password
      */
     public String getPASSWORD()
     {
@@ -139,6 +151,8 @@ public class Contribuintes
     
     /**
      * Atualiza a password de acesso do contribuinte da classe Contribuintes.
+     * @param password
+     * @return
      */
     public void setPASSWORD(String password_p)
     {
@@ -147,7 +161,8 @@ public class Contribuintes
     
     /**
      * Método que devolve a representação em String da classe Contribuintes.
-     * @return String.
+     * @param
+     * @return String
      */
     public String toString()
     {
@@ -163,6 +178,8 @@ public class Contribuintes
     
     /**
      * Método que verifica se a classe Contribuintes c é igual à classe Contribuintes que recebe a mensagem.
+     * @param Object
+     * @return Boolean
      */
     public boolean equals(Object o)
     {
@@ -179,7 +196,7 @@ public class Contribuintes
     /**
      * Método que faz uma cópia da classe Contribuintes receptora da mensagem.
      * Para tal invoca o construtor de cópia.
-     *
+     * @param
      * @return Contribuintes clone da classe Contribuintes que recebe a mensagem.
      */
     public Contribuintes clone()
