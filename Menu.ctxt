@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Menu
+comment1.params=
+comment1.target=void\ time()
+comment1.text=\r\n\ M\u00E9todo\ para\ fazer\ uma\ pausa\ no\ sistema\ de\ 2\ segundos.\r\n
+comment2.params=args
+comment2.target=void\ main(java.lang.String[])
+comment2.text=\r\n\ M\u00E9todo\ que\ inicializa\ o\ programa\ JavaFatura.\r\n
+numComments=3

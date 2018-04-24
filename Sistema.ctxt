@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Sistema
+comment1.params=
+comment1.target=void\ registar_Atividades_Economicas()
+comment2.params=
+comment2.target=void\ registar_CI()
+comment3.params=
+comment3.target=void\ registar_CC()
+comment4.params=
+comment4.target=void\ login_CI()
+comment5.params=
+comment5.target=void\ login_CC()
+comment6.params=
+comment6.target=java.lang.String\ toString()
+comment6.text=\r\n\ M\u00E9todo\ que\ devolve\ a\ representa\u00E7\u00E3o\ em\ String\ da\ classe\ Sistema.\r\n\ @return\ String.\r\n
+numComments=7
