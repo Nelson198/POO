@@ -1,7 +1,7 @@
 /**
  * Classe Menu.
  * 
- * @author P.O.O. - Project - 2017/2018 BOT 
+ * @author P.O.O. - Project - 2017/2018 
  * @version 1.0
  */
 import java.util.Scanner;
