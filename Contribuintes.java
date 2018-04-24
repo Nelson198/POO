@@ -15,6 +15,8 @@ public class Contribuintes
     
     /**
      * Construtor por omissão da classe Contribuintes.
+     * @param
+     * @return
      */
     public Contribuintes()
     {
@@ -27,6 +29,12 @@ public class Contribuintes
     
     /**
      * Construtor parametrizado da classe Contribuintes.
+     * @param NIF
+     * @param email
+     * @param nome
+     * @param morada
+     * @param password
+     * @return
      */
     public Contribuintes(int NIF_p, String email_p, String nome_p, String morada_p, String password_p)
     {
@@ -39,6 +47,8 @@ public class Contribuintes
     
     /**
      * Construtor de cópia da classe Contribuintes.
+     * @param Contribuintes umContribuinte
+     * @return
      */
     public Contribuintes(Contribuintes umContribuinte)
     {
@@ -51,6 +61,8 @@ public class Contribuintes
     
     /**
      * Devolve o NIF do contribuinte da classe Contribuintes.
+     * @param
+     * @return NIF
      */
     public int getNIF()
     {
@@ -59,6 +71,8 @@ public class Contribuintes
     
     /**
      * Atualiza o NIF do contribuinte da classe Contribuintes.
+     * @param NIF
+     * @return
      */
     public void setNIF(int NIF_p)
     {
@@ -67,6 +81,8 @@ public class Contribuintes
     
     /**
      * Devolve o email do contribuinte da classe Contribuintes.
+     * @param
+     * @return 
      */
     public String getEMAIL()
     {
