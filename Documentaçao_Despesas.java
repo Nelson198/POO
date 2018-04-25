@@ -19,6 +19,8 @@ public class Documentaçao_Despesas
 
     /**
      * Construtor por omissão de Documentação_Despesas.
+     * @param
+     * @return
      */
     public Documentaçao_Despesas()
     {
@@ -33,6 +35,14 @@ public class Documentaçao_Despesas
     
     /**
      * Construtor parametrizado de Documentação_Despesas.
+     * @param NIF_emitente
+     * @param designação
+     * @param data_hora
+     * @param NIF_cliente
+     * @param descrição
+     * @param natureza
+     * @param valor
+     * @return
      */
     public Documentaçao_Despesas(int NIF_e, String designação_e, LocalDateTime data_hora_d, int NIF_c, String descrição_d, String natureza_d, double valor_d)
     {
@@ -47,6 +57,8 @@ public class Documentaçao_Despesas
     
     /**
      * Construtor de cópia de Documentação_Despesas.
+     * @param Documentaçao_Despesas
+     * @return
      */
     public Documentaçao_Despesas(Documentaçao_Despesas umaDespesa)
     {
@@ -61,6 +73,8 @@ public class Documentaçao_Despesas
     
     /**
      * Devolve o NIF do emitente da Despesa.
+     * @param
+     * @return NIF_emitente
      */
     public int getNIF_EMITENTE()
     {
@@ -68,7 +82,19 @@ public class Documentaçao_Despesas
     }
     
     /**
+     * Atualiza o NIF do emitente da Despesa.
+     * @param NIF_emitente
+     * @return
+     */
+    public void setNIF_EMITENTE(int NIF_e)
+    {
+        this.NIF_emitente = NIF_e;
+    }
+    
+    /**
      * Devolve a designação do emitente da Despesa.
+     * @param
+     * @return designação_emitente
      */
     public String getDESIGNAÇÃO_EMITENTE()
     {
@@ -76,7 +102,19 @@ public class Documentaçao_Despesas
     }
     
     /**
+     * Atualiza a designação do emitente da Despesa.
+     * @param designação_emitente
+     * @return
+     */
+    public void setDESIGNAÇÃO_EMITENTE(String designação_e)
+    {
+        this.designação_emitente = designação_e;
+    }
+    
+    /**
      * Devolve a data/hora da Despesa.
+     * @param
+     * @return data_hora_despesa
      */
     public LocalDateTime getDATA_HORA_DESPESA()
     {
@@ -84,7 +122,19 @@ public class Documentaçao_Despesas
     }
     
     /**
+     * Atualiza a data da Despesa.
+     * @param data_hora_despesa
+     * @return
+     */
+    public void setDATA_HORA_DESPESA(LocalDateTime data_hora_d)
+    {
+        this.data_hora_despesa = data_hora_d;
+    }
+    
+    /**
      * Devolve o NIF do cliente da Despesa.
+     * @param
+     * @return NIF_cliente
      */
     public int getNIF_CLIENTE()
     {
@@ -92,7 +142,19 @@ public class Documentaçao_Despesas
     }
     
     /**
+     * Atualiza o NIF do cliente da Despesa.
+     * @param NIF_cliente
+     * @return
+     */
+    public void setNIF_CLIENTE(int NIF_c)
+    {
+        this.NIF_cliente = NIF_c;
+    }
+    
+    /**
      * Devolve a descrição da Despesa.
+     * @param
+     * @return descrição_despesa
      */
     public String getDESCRIÇÃO_DESPESA()
     {
@@ -100,7 +162,19 @@ public class Documentaçao_Despesas
     }
     
     /**
+     * Atualiza a descrição da Despesa.
+     * @param descrição_despesa
+     * @return
+     */
+    public void setDESCRIÇÃO_DESPESA(String descrição_d)
+    {
+        this.descrição_despesa = descrição_d;
+    }
+    
+    /**
      * Devolve a natureza da Despesa, ou seja, a atividade económica a que esta está associada.
+     * @param
+     * @return natureza_despesa
      */
     public String getNATUREZA_DESPESA()
     {
@@ -108,63 +182,29 @@ public class Documentaçao_Despesas
     }
     
     /**
-     * Devolve o montante da Despesa.
-     */
-    public double getVALOR_DESPESA()
-    {
-        return this.valor_despesa;
-    }
-    
-    /**
-     * Atualiza o NIF do emitente da Despesa.
-     */
-    public void setNIF_EMITENTE(int NIF_e)
-    {
-        this.NIF_emitente = NIF_e;
-    }
-
-    /**
-     * Atualiza a designação do emitente da Despesa.
-     */
-    public void setDESIGNAÇÃO_EMITENTE(String designação_e)
-    {
-        this.designação_emitente = designação_e;
-    }
-
-    /**
-     * Atualiza a data da Despesa.
-     */
-    public void setDATA_HORA_DESPESA(LocalDateTime data_hora_d)
-    {
-        this.data_hora_despesa = data_hora_d;
-    }
-
-    /**
-     * Atualiza o NIF do cliente da Despesa.
-     */
-    public void setNIF_CLIENTE(int NIF_c)
-    {
-        this.NIF_cliente = NIF_c;
-    }
-
-    /**
-     * Atualiza a descrição da Despesa.
-     */
-    public void setDESCRIÇÃO_DESPESA(String descrição_d)
-    {
-        this.descrição_despesa = descrição_d;
-    }
-
-    /**
      * Atualiza a natureza da Despesa, ou seja, a atividade económica a que esta está associada.
+     * @param natureza_despesa
+     * @return
      */
     public void setNATUREZA_DESPESA(String natureza_d)
     {
         this.natureza_despesa = natureza_d;
     }
+    
+    /**
+     * Devolve o montante da Despesa.
+     * @param
+     * @return valor_despesa
+     */
+    public double getVALOR_DESPESA()
+    {
+        return this.valor_despesa;
+    }
 
     /**
      * Atualiza o montante da Despesa.
+     * @param valor_despesa
+     * @return
      */
     public void setVALOR_DESPESA(double valor_d)
     {
@@ -173,6 +213,8 @@ public class Documentaçao_Despesas
 
     /**
      * Método que verifica se a Documentação_Despesas d é igual à Documentação_Despesas que recebe a mensagem.
+     * @param Object
+     * @return boolean
      */
     public boolean equals(Object o)
     {
@@ -190,6 +232,7 @@ public class Documentaçao_Despesas
     
     /**
      * Método que devolve a representação em String da classe Documentação_Despesas.
+     * @param
      * @return String.
      */
     public String toString()
@@ -209,7 +252,7 @@ public class Documentaçao_Despesas
     /**
      * Método que faz uma cópia da classe Documentação_Despesas receptora da mensagem.
      * Para tal invoca o construtor de cópia.
-     *
+     * @param
      * @return Documentação_Despesas clone da classe Documentação_Despesas que recebe a mensagem.
      */
     public Documentaçao_Despesas clone()

@@ -15,6 +15,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     
     /**
      * Construtor por omissão de Contribuintes_Coletivos_Empresas
+     * @param
+     * @return 
      */
     public Contribuintes_Coletivos_Empresas()
     {
@@ -25,6 +27,14 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     
     /**
      * Construtor parametrizado de Contribuintes_Coletivos_Empresas
+     * @param NIF
+     * @param email
+     * @param nome
+     * @param morada
+     * @param password
+     * @param atividades_economicas
+     * @param coeficiente_fiscal
+     * @return
      */
     public Contribuintes_Coletivos_Empresas(int NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
     {
@@ -35,6 +45,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     
     /**
      * Construtor de cópia de Contribuintes_Coletivos_Empresas
+     * @param Contribuintes_Coletivos_Empresas
+     * @return
      */
     public Contribuintes_Coletivos_Empresas(Contribuintes_Coletivos_Empresas umContribuinte_Coletivo_Empresa)
     {
@@ -45,6 +57,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     
     /**
      * Devolve o array com as atividades económicas da empresa.
+     * @param
+     * @return atividades_economicas
      */
     public List<String> getATIVIDADES_ECONOMICAS()
     {
@@ -58,6 +72,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     
     /**
      * Atualiza o array com as atividades económicas da empresa.
+     * @param atividades_economicas
+     * @return
      */
     public void setATIVIDADES_ECONOMICAS(List<String> atividades_economicas_p)
     {
@@ -70,6 +86,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
 
     /**
      * Devolve o coeficiente fiscal da empresa.
+     * @param 
+     * @return coeficiente_fiscal
      */
     public double getCOEFICIENTE_FISCAL()
     {
@@ -78,6 +96,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
 
     /**
      * Atualiza o coeficiente fiscal da empresa.
+     * @param coeficiente_fiscal
+     * @return
      */
     public void setCOEFICIENTE_FISCAL(double coeficiente_fiscal_p)
     {
@@ -86,6 +106,8 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
 
     /**
      * Método que verifica se a classe Contribuintes_Coletivos_Empresas d é igual à classe Contribuintes_Coletivos_Empresas que recebe a mensagem.
+     * @param Object
+     * @return boolean
      */
     public boolean equals(Object o)
     {
@@ -98,6 +120,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
    
     /**
      * Método que devolve a representação em String da classe Contribuintes_Coletivos_Empresas
+     * @param
      * @return String.
      */
     public String toString()
@@ -117,7 +140,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     /**
      * Método que faz uma cópia da classe Contribuintes_Coletivos_Empresas receptora da mensagem.
      * Para tal invoca o construtor de cópia.
-     *
+     * @param
      * @return Contribuintes_Coletivos_Empresas clone da classe Contribuintes_Coletivos_Empresas que recebe a mensagem.
      */
     public Contribuintes_Coletivos_Empresas clone()

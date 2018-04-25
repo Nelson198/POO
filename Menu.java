@@ -11,6 +11,8 @@ public class Menu
 {
     /**
      * Método para fazer uma pausa no sistema de 2 segundos.
+     * @param
+     * @return
      */
     private static void time()
     {
