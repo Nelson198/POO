@@ -10,15 +10,15 @@ import java.util.concurrent.TimeUnit;
 public class Menu
 {
     /**
-     * Método para fazer uma pausa no sistema de 2 segundos.
-     * @param
+     * Método para fazer uma pausa no sistema de x segundos.
+     * @param x
      * @return
      */
-    private static void time()
+    private static void time(int x)
     {
         try
         {
-            Thread.sleep(2000);
+            Thread.sleep(x);
         }
         catch(Exception e){}
     }
@@ -34,18 +34,20 @@ public class Menu
         int opçao = 0;
         do
         {
-            System.out.println("========================================================================");
-            System.out.println("||                           Menu JavaFatura                          ||");
-            System.out.println("========================================================================");
-            System.out.println("|| Opções:                                                            ||");
-            System.out.println("||        1 ---> Login Contribuinte Individual                        ||");
-            System.out.println("||        2 ---> Login Contribuinte Coletivo / Empresas               ||");
-            System.out.println("||--------------------------------------------------------------------||");
-            System.out.println("||        3 ---> Registar Contribuinte Individual                     ||");
-            System.out.println("||        4 ---> Registar Contribuinte Coletivo / Empresas            ||");
-            System.out.println("||--------------------------------------------------------------------||");
-            System.out.println("||        5 ---> Sair                                                 ||");
-            System.out.println("========================================================================");
+            StringBuilder sb = new StringBuilder();
+            sb.append("                                           ========================================================================\n");
+            sb.append("                                           ||                           Menu JavaFatura                          ||\n");
+            sb.append("                                           ========================================================================\n");
+            sb.append("                                           || Opções:                                                            ||\n");
+            sb.append("                                           ||        1 ---> Login                                                ||\n");
+            sb.append("                                           ||        2 ---> Logout                                               ||\n");
+            sb.append("                                           ||--------------------------------------------------------------------||\n");
+            sb.append("                                           ||        3 ---> Registar Contribuinte Individual                     ||\n");
+            sb.append("                                           ||        4 ---> Registar Contribuinte Coletivo / Empresas            ||\n");
+            sb.append("                                           ||--------------------------------------------------------------------||\n");
+            sb.append("                                           ||        5 ---> Sair                                                 ||\n");
+            sb.append("                                           ========================================================================\n");
+            System.out.print(sb);
         
             System.out.print("Insira a opção: "); opçao = read.nextInt();
             System.out.print("\n");
@@ -53,24 +55,27 @@ public class Menu
             switch(opçao)
             {
                 case 1:
-                    s.login_CI();
-                    m.time();
+                    s.login();
+                    m.time(1500);
                     System.out.print('\u000C');
                     break;
    
                 case 2:
-                    s.login_CC();
-                    m.time();
+                    s.logout();
+                    m.time(1500);
                     System.out.print('\u000C');
                     break;
                 
                 case 3:
                     s.registar_CI();
+                    m.time(2000);
                     System.out.print('\u000C');
                     break;
                     
                 case 4:
-                
+                    s.registar_CC();
+                    m.time(2000);
+                    System.out.print('\u000C');
                     break;
                 
                 case 5:
@@ -81,9 +86,9 @@ public class Menu
                     break;
             
                 default:
-                    System.out.println("Selecionou uma opção inválida!");
+                    System.out.println("\nSelecionou uma opção inválida!");
                     read.close();
-                    m.time();
+                    m.time(2000);
                     System.out.print('\u000C');
                     System.exit(0);
             }
@@ -92,7 +97,7 @@ public class Menu
         
         System.out.print("A sair do Sistema ...");
         read.close();
-        m.time();
+        m.time(1000);
         System.out.print('\u000C');
         System.exit(0);
     }

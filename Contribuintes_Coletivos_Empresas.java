@@ -36,7 +36,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
      * @param coeficiente_fiscal
      * @return
      */
-    public Contribuintes_Coletivos_Empresas(int NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
+    public Contribuintes_Coletivos_Empresas(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p);
         setATIVIDADES_ECONOMICAS(atividades_economicas_p);
@@ -126,7 +126,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Contribuinte Coletivo:\n");
+        sb.append("Contribuinte Coletivo: ");
         sb.append("(NIF: ").append(super.getNIF()).append(", ");
         sb.append("Email: ").append(super.getEMAIL()).append(", ");
         sb.append("Nome: ").append(super.getNOME()).append(", ");

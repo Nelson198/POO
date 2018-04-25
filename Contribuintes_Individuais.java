@@ -13,7 +13,7 @@ public class Contribuintes_Individuais extends Contribuintes
 {
     // Variáveis de instância
     private int agregado_familiar; /* Nº de elementos do agregado familiar */
-    private List<Integer> NIFs_agregado_familiar; /* Array com os NIF's de cada elemento do agregado familiar */
+    private List<String> NIFs_agregado_familiar; /* Array com os NIF's de cada elemento do agregado familiar */
     private double coeficiente_fiscal; /* factor multiplicativo que é associado a cada despesa elegível */
     private List<String> atividades_economicas; /* Ativididades Económicas */
 
@@ -44,7 +44,7 @@ public class Contribuintes_Individuais extends Contribuintes
      * @param atividades_economicas
      * @return
      */
-    public Contribuintes_Individuais(int NIF_p, String email_p, String nome_p, String morada_p, String password_p, int agregado_familiar_p, List<Integer> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
+    public Contribuintes_Individuais(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p);
         this.agregado_familiar = agregado_familiar_p;
@@ -92,10 +92,10 @@ public class Contribuintes_Individuais extends Contribuintes
      * @param
      * @return NIFs_agregado_familiar
      */
-    public List getNIFS_AGREGADO_FAMILIAR()
+    public List<String> getNIFS_AGREGADO_FAMILIAR()
     {
-        List<Integer> nova = new ArrayList<>(this.getAGREGADO_FAMILIAR());
-        for(int nif: this.NIFs_agregado_familiar)
+        List<String> nova = new ArrayList<>(this.getAGREGADO_FAMILIAR());
+        for(String nif: this.NIFs_agregado_familiar)
         {
             nova.add(nif);
         }
@@ -107,10 +107,10 @@ public class Contribuintes_Individuais extends Contribuintes
      * @param NIFs_agregado_familiar
      * @return
      */
-    public void setNIFS_AGREGADO_FAMILIAR(List<Integer> NIFs_agregado_familiar_p)
+    public void setNIFS_AGREGADO_FAMILIAR(List<String> NIFs_agregado_familiar_p)
     {
-        this.NIFs_agregado_familiar = new ArrayList<Integer>(this.agregado_familiar);
-        for(int nif: NIFs_agregado_familiar_p)
+        this.NIFs_agregado_familiar = new ArrayList<String>(this.agregado_familiar);
+        for(String nif: NIFs_agregado_familiar_p)
         {
             this.NIFs_agregado_familiar.add(nif);
         }
@@ -188,8 +188,8 @@ public class Contribuintes_Individuais extends Contribuintes
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Contribuinte Individual:\n");
-        sb.append("NIF: ").append(super.getNIF()).append(", ");
+        sb.append("Contribuinte Individual: ");
+        sb.append("(NIF: ").append(super.getNIF()).append(", ");
         sb.append("Email: ").append(super.getEMAIL()).append(", ");
         sb.append("Nome: ").append(super.getNOME()).append(", ");
         sb.append("Morada: ").append(super.getMORADA()).append(", ");
@@ -197,7 +197,7 @@ public class Contribuintes_Individuais extends Contribuintes
         sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAGREGADO_FAMILIAR()).append(", ");
         sb.append("NIF's do Agregado Familiar: ").append(this.getNIFS_AGREGADO_FAMILIAR().toString()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append("\n");
+        sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append(")\n");
         return sb.toString();
     }
     

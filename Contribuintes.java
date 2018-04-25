@@ -7,7 +7,7 @@
 public class Contribuintes
 {
     // variáveis de instância
-    private int NIF;
+    private String NIF;
     private String email;
     private String nome;
     private String morada;
@@ -20,7 +20,7 @@ public class Contribuintes
      */
     public Contribuintes()
     {
-        this.NIF = 0;
+        this.NIF = "N/D";
         this.email = "N/D";
         this.nome = "N/D";
         this.morada = "N/D";
@@ -36,7 +36,7 @@ public class Contribuintes
      * @param password
      * @return
      */
-    public Contribuintes(int NIF_p, String email_p, String nome_p, String morada_p, String password_p)
+    public Contribuintes(String NIF_p, String email_p, String nome_p, String morada_p, String password_p)
     {
         this.NIF = NIF_p;
         this.email = email_p;
@@ -64,7 +64,7 @@ public class Contribuintes
      * @param
      * @return NIF
      */
-    public int getNIF()
+    public String getNIF()
     {
         return this.NIF;
     }
@@ -74,7 +74,7 @@ public class Contribuintes
      * @param NIF
      * @return
      */
-    public void setNIF(int NIF_p)
+    public void setNIF(String NIF_p)
     {
         this.NIF = NIF_p;
     }
@@ -186,7 +186,7 @@ public class Contribuintes
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Contribuintes c = (Contribuintes) o;
-        return (this.NIF == c.getNIF()
+        return (this.NIF.equals(c.getNIF())
              && this.email.equals(c.getEMAIL())
              && this.nome.equals(c.getNOME())
              && this.morada.equals(c.getMORADA())
