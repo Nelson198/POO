@@ -35,12 +35,15 @@ public class Menu
         sb.append("                                           ||                                Menu JavaFatura                               ||\n");
         sb.append("                                           ==================================================================================\n");
         sb.append("                                           || Opções:                                                                      ||\n");
-        sb.append("                                           ||        1 ---> Login                                                          ||\n");
+        sb.append("                                           ||        1 ---> Login (Contribuintes)                                          ||\n");
         sb.append("                                           ||------------------------------------------------------------------------------||\n");
-        sb.append("                                           ||        2 ---> Registar Contribuinte Individual                               ||\n");
-        sb.append("                                           ||        3 ---> Registar Contribuinte Coletivo / Empresas                      ||\n");
+        sb.append("                                           ||        2 ---> Login (Administrador)                                          ||\n");
+        sb.append("                                           ||        3 ---> Logout (Administrador)                                         ||\n");
         sb.append("                                           ||------------------------------------------------------------------------------||\n");
-        sb.append("                                           ||        4 ---> Sair                                                           ||\n");
+        sb.append("                                           ||        4 ---> Registar Contribuinte Individual                               ||\n");
+        sb.append("                                           ||        5 ---> Registar Contribuinte Coletivo / Empresas                      ||\n");
+        sb.append("                                           ||------------------------------------------------------------------------------||\n");
+        sb.append("                                           ||        6 ---> Sair                                                           ||\n");
         sb.append("                                           ==================================================================================\n");
         System.out.print(sb);
     }
@@ -99,7 +102,7 @@ public class Menu
         sb.append("                                 ||---------------------------------------------------------------------------------------------------||\n");
         sb.append("                                 ||        7 ---> Obter a listagem das faturas, ordenada por data de emissão                          ||\n"); 
         sb.append("                                 ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                 ||        8 ---> Obter a listagem das faturas, ordenada por valor                                    ||\n"); 
+        sb.append("                                 ||        8 ---> Obter a listagem das faturas, ordenada por valor decrescente                        ||\n"); 
         sb.append("                                 ||---------------------------------------------------------------------------------------------------||\n");
         sb.append("                                 ||        9 ---> Logout                                                                              ||\n");
         sb.append("                                 =======================================================================================================\n");
@@ -124,7 +127,7 @@ public class Menu
             switch(opçao1)
             {
                 case 1:
-                    int r = s.login();
+                    int r = s.login_contribuintes();
                     switch(r)
                     {
                         case -1:
@@ -142,7 +145,6 @@ public class Menu
                                 switch(opçao2)
                                 {
                                     case 1:
-                                        s.faturas();
                                         break;
                                     
                                     case 4:
@@ -151,13 +153,14 @@ public class Menu
                                     case 7:
                                         break;
                                     
+                                    
                                     default:
                                         System.out.print("Selecionou uma opção inválida!\nSe pretende sair do menu, por favor faça Logout.");
                                         m.time(2000);
                                         break;
                                 }
                             }while(opçao2 != 7);
-                            s.logout();
+                            s.logout_contribuintes();
                             System.out.print('\u000C');
                             break;
                         
@@ -171,6 +174,14 @@ public class Menu
                             
                                 switch(opçao3)
                                 {
+                                    case 1:
+                                        s.registar_faturas();
+                                        break;
+                                    
+                                    case 8:
+                                        s.faturas_ord_contribuinte_decrescente_despesa();
+                                        break;
+                                    
                                     case 9:
                                         break;
                                     
@@ -180,26 +191,35 @@ public class Menu
                                         break;
                                 }
                             }while(opçao3 != 9);
-                            s.logout();
+                            s.logout_contribuintes();
                             System.out.print('\u000C');
                             break;
                     }
                     break;
                 
                 case 2:
+                    s.login_administrador();
+                    System.out.print('\u000C');
+                    break;
+                
+                case 3:
+                    s.logout_administrador();
+                    break;
+                    
+                case 4:
                     s.registar_CI();
                     System.out.print('\u000C');
                     break;
                     
-                case 3:
+                case 5:
                     s.registar_CC();
                     System.out.print('\u000C');
                     break;
                     
-                case 4:
+                case 6:
                     break;
                     
-                case 5:
+                case 7:
                     System.out.print(s.toString());
                     break;
             
@@ -208,7 +228,7 @@ public class Menu
                     m.time(2000);
                     System.out.print('\u000C');
             }
-        }while(opçao1 != 4);
+        }while(opçao1 != 6);
         
         System.out.print("A sair do Sistema ...");
         read.close();

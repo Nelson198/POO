@@ -1,40 +1,40 @@
 /**
- * Classe das Despesas.
+ * Classe da Fatura.
  * 
  * @author P.O.O. - Project - 2017/2018
  * @version 1.0
  */
 import java.time.LocalDateTime;
 
-public class Documentaçao_Despesas
+public class Fatura implements Comparable<Fatura>
 {
     // Variáveis de Instância
-    private int NIF_emitente;
+    private String NIF_emitente;
     private String designação_emitente;
     private LocalDateTime data_hora_despesa;
-    private int NIF_cliente;
+    private String NIF_cliente;
     private String descrição_despesa;
     private String natureza_despesa; //atividade económica
     private double valor_despesa;
 
     /**
-     * Construtor por omissão de Documentação_Despesas.
+     * Construtor por omissão de Fatura.
      * @param
      * @return
      */
-    public Documentaçao_Despesas()
+    public Fatura()
     {
-        this.NIF_emitente = 0;
+        this.NIF_emitente = "N/D";
         this.designação_emitente = "N/D";
         this.data_hora_despesa = LocalDateTime.now();
-        this.NIF_cliente = 0;
+        this.NIF_cliente = "N/D";
         this.descrição_despesa = "N/D";
         this.natureza_despesa = "N/D";
         this.valor_despesa = 0;
     }
     
     /**
-     * Construtor parametrizado de Documentação_Despesas.
+     * Construtor parametrizado de Fatura.
      * @param NIF_emitente
      * @param designação
      * @param data_hora
@@ -44,7 +44,7 @@ public class Documentaçao_Despesas
      * @param valor
      * @return
      */
-    public Documentaçao_Despesas(int NIF_e, String designação_e, LocalDateTime data_hora_d, int NIF_c, String descrição_d, String natureza_d, double valor_d)
+    public Fatura(String NIF_e, String designação_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, String natureza_d, double valor_d)
     {
         this.NIF_emitente = NIF_e;
         this.designação_emitente = designação_e;
@@ -56,11 +56,11 @@ public class Documentaçao_Despesas
     }
     
     /**
-     * Construtor de cópia de Documentação_Despesas.
+     * Construtor de cópia de Fatura.
      * @param Documentaçao_Despesas
      * @return
      */
-    public Documentaçao_Despesas(Documentaçao_Despesas umaDespesa)
+    public Fatura(Fatura umaDespesa)
     {
         this.NIF_emitente = umaDespesa.getNIF_EMITENTE();
         this.designação_emitente = umaDespesa.getDESIGNAÇÃO_EMITENTE();
@@ -76,7 +76,7 @@ public class Documentaçao_Despesas
      * @param
      * @return NIF_emitente
      */
-    public int getNIF_EMITENTE()
+    public String getNIF_EMITENTE()
     {
         return this.NIF_emitente;
     }
@@ -86,7 +86,7 @@ public class Documentaçao_Despesas
      * @param NIF_emitente
      * @return
      */
-    public void setNIF_EMITENTE(int NIF_e)
+    public void setNIF_EMITENTE(String NIF_e)
     {
         this.NIF_emitente = NIF_e;
     }
@@ -136,7 +136,7 @@ public class Documentaçao_Despesas
      * @param
      * @return NIF_cliente
      */
-    public int getNIF_CLIENTE()
+    public String getNIF_CLIENTE()
     {
         return this.NIF_cliente;
     }
@@ -146,7 +146,7 @@ public class Documentaçao_Despesas
      * @param NIF_cliente
      * @return
      */
-    public void setNIF_CLIENTE(int NIF_c)
+    public void setNIF_CLIENTE(String NIF_c)
     {
         this.NIF_cliente = NIF_c;
     }
@@ -212,7 +212,7 @@ public class Documentaçao_Despesas
     }
 
     /**
-     * Método que verifica se a Documentação_Despesas d é igual à Documentação_Despesas que recebe a mensagem.
+     * Método que verifica se a Fatura d é igual à Fatura que recebe a mensagem.
      * @param Object
      * @return boolean
      */
@@ -220,18 +220,18 @@ public class Documentaçao_Despesas
     {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
-        Documentaçao_Despesas d = (Documentaçao_Despesas) o;
-        return (this.NIF_emitente == d.getNIF_EMITENTE()
+        Fatura d = (Fatura) o;
+        return (this.NIF_emitente.equals(d.getNIF_EMITENTE())
              && this.designação_emitente.equals(d.getDESIGNAÇÃO_EMITENTE())
              && this.data_hora_despesa.isEqual(d.getDATA_HORA_DESPESA())
-             && this.NIF_cliente == d.getNIF_CLIENTE()
+             && this.NIF_cliente.equals(d.getNIF_CLIENTE())
              && this.descrição_despesa.equals(d.getDESCRIÇÃO_DESPESA())
              && this.natureza_despesa.equals(d.getNATUREZA_DESPESA())
              && this.valor_despesa == d.getVALOR_DESPESA());
     }
     
     /**
-     * Método que devolve a representação em String da classe Documentação_Despesas.
+     * Método que devolve a representação em String da classe Fatura.
      * @param
      * @return String.
      */
@@ -250,13 +250,24 @@ public class Documentaçao_Despesas
     }
     
     /**
-     * Método que faz uma cópia da classe Documentação_Despesas receptora da mensagem.
+     * Método que faz uma cópia da classe Faturas receptora da mensagem.
      * Para tal invoca o construtor de cópia.
      * @param
-     * @return Documentação_Despesas clone da classe Documentação_Despesas que recebe a mensagem.
+     * @return Fatura clone da classe Fatura que recebe a mensagem.
      */
-    public Documentaçao_Despesas clone()
+    public Fatura clone()
     {
-        return new Documentaçao_Despesas(this);
+        return new Fatura(this);
+    }
+    
+    /**
+    * Implementação da ordem natural de comparação de instâncias de Fatura.
+    * Por simplificação, apenas se está a comparar os valores das despesas.
+    */
+    public int compareTo(Fatura fatura)
+    {
+         if(this.getVALOR_DESPESA() > fatura.getVALOR_DESPESA()) return -1;
+         else if (this.getVALOR_DESPESA() < fatura.getVALOR_DESPESA()) return 1;
+         else return 0;
     }
 }
