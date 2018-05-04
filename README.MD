@@ -1,3 +1,3 @@
-***JavaFatura***
+*JavaFatura*
 
-Arlindo Torres, Nelson Teixeira, José Boticas
++ Arlindo Torres, Nelson Teixeira, José Boticas
