@@ -127,7 +127,7 @@ public class Menu
             switch(opçao1)
             {
                 case 1:
-                    int r = s.login_contribuintes();
+                    int r = s.loginContribuinte();
                     switch(r)
                     {
                         case -1:
@@ -160,7 +160,7 @@ public class Menu
                                         break;
                                 }
                             }while(opçao2 != 7);
-                            s.logout_contribuintes();
+                            s.logoutContribuinte();
                             System.out.print('\u000C');
                             break;
                         
@@ -175,7 +175,7 @@ public class Menu
                                 switch(opçao3)
                                 {
                                     case 1:
-                                        s.registar_faturas();
+                                        s.registarFaturas();
                                         break;
                                     
                                     case 8:
@@ -191,19 +191,19 @@ public class Menu
                                         break;
                                 }
                             }while(opçao3 != 9);
-                            s.logout_contribuintes();
+                            s.logoutContribuinte();
                             System.out.print('\u000C');
                             break;
                     }
                     break;
                 
                 case 2:
-                    s.login_administrador();
+                    s.loginAdmin();
                     System.out.print('\u000C');
                     break;
                 
                 case 3:
-                    s.logout_administrador();
+                    s.logoutAdmin();
                     break;
                     
                 case 4:
