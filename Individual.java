@@ -1,5 +1,5 @@
 /**
- * Classe Contribuintes_Individuais.
+ * Classe Individual.
  * 
  * @author P.O.O. - Project - 2017/2018 
  * @version 1.0
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Contribuintes_Individuais extends Contribuintes
+public class Individual extends Contribuinte
 {
     // Variáveis de instância
     private int agregado_familiar; /* Nº de elementos do agregado familiar */
@@ -18,11 +18,11 @@ public class Contribuintes_Individuais extends Contribuintes
     private List<String> atividades_economicas; /* Ativididades Económicas */
 
     /**
-     * Construtor por omissão da classe Contribuintes_Individuais.
+     * Construtor por omissão da classe Individual.
      * @param
      * @return
      */
-    public Contribuintes_Individuais()
+    public Individual()
     {
         super();
         this.agregado_familiar = 0;
@@ -32,7 +32,7 @@ public class Contribuintes_Individuais extends Contribuintes
     }
     
     /**
-     * Construtor parametrizado da classe Contribuintes_Individuais.
+     * Construtor parametrizado da classe Individual.
      * @param NIF
      * @param email
      * @param nome
@@ -44,7 +44,7 @@ public class Contribuintes_Individuais extends Contribuintes
      * @param atividades_economicas
      * @return
      */
-    public Contribuintes_Individuais(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
+    public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p);
         this.agregado_familiar = agregado_familiar_p;
@@ -54,11 +54,11 @@ public class Contribuintes_Individuais extends Contribuintes
     }
     
     /**
-     * Construtor de cópia da classe Contribuintes_Individuais.
-     * @param Contribuintes_Individuais umContribuinte_Individual
+     * Construtor de cópia da classe Individual.
+     * @param Individual umContribuinte_Individual
      * @return
      */
-    public Contribuintes_Individuais(Contribuintes_Individuais umContribuinte_Individual)
+    public Individual(Individual umContribuinte_Individual)
     {
         super(umContribuinte_Individual);
         this.agregado_familiar = umContribuinte_Individual.getAGREGADO_FAMILIAR();
@@ -166,7 +166,7 @@ public class Contribuintes_Individuais extends Contribuintes
     }
 
     /**
-     * Método que verifica se a classe Contribuintes_Individuais d é igual à classe Contribuintes_Individuais que recebe a mensagem.
+     * Método que verifica se a classe Individual d é igual à classe Individual que recebe a mensagem.
      * @param Object
      * @return boolean
      */
@@ -174,14 +174,14 @@ public class Contribuintes_Individuais extends Contribuintes
     {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
-        Contribuintes_Individuais c = (Contribuintes_Individuais) o;
+        Individual c = (Individual) o;
         return (super.equals(c) && this.agregado_familiar == c.getAGREGADO_FAMILIAR()
                                 && this.NIFs_agregado_familiar.equals(c.getNIFS_AGREGADO_FAMILIAR())
                                 && this.coeficiente_fiscal == c.getCOEFICIENTE_FISCAL());
     }
     
     /**
-     * Método que devolve a representação em String da classe Contribuintes_Individuais.
+     * Método que devolve a representação em String da classe Individual.
      * @param
      * @return String.
      */
@@ -202,13 +202,13 @@ public class Contribuintes_Individuais extends Contribuintes
     }
     
     /**
-     * Método que faz uma cópia da classe Contribuintes_Individuais receptora da mensagem.
+     * Método que faz uma cópia da classe Individual receptora da mensagem.
      * Para tal invoca o construtor de cópia.
      * @param
-     * @return Contribuintes_Individuais clone da classe Contribuintes_Individuais que recebe a mensagem.
+     * @return Individual clone da classe Individual que recebe a mensagem.
      */
-    public Contribuintes_Individuais clone()
+    public Individual clone()
     {
-        return new Contribuintes_Individuais(this);
+        return new Individual(this);
     }
 }

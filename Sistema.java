@@ -21,8 +21,8 @@ public class Sistema
     /* variáveis de instância */
     private String password_admin = "admin123";                      /* Palavra Passe do Administrador */
     
-    private Contribuintes contribuinte = new Contribuintes();        /* Contribuinte que se encontra dentro do Sistema */
-    private Map<String, Contribuintes> registered = new HashMap<>(); /* Dicionário que associa o NIF do Contribuinte (Chave) à sua informação (Valor) */
+    private Contribuinte contribuinte = new Contribuinte();        /* Contribuinte que se encontra dentro do Sistema */
+    private Map<String, Contribuinte> registered = new HashMap<>(); /* Dicionário que associa o NIF do Contribuinte (Chave) à sua informação (Valor) */
     private List<Fatura> faturas = new ArrayList<>();                /* Lista com as faturas registadas */
     
     /* private Map<String, String> hash_password = new HashMap<>(); */     /* Dicionário que guarda as hash code das passwords */
@@ -38,7 +38,7 @@ public class Sistema
      * @param
      * @return Contribuinte que se encontra dentro do Sistema.
      */
-    private Contribuintes getContribuinte()
+    private Contribuinte getContribuinte()
     {
         return this.contribuinte.clone();
     }
@@ -48,19 +48,19 @@ public class Sistema
      * @param Contribuinte
      * @return
      */
-    private void setContribuinte(Contribuintes c)
+    private void setContribuinte(Contribuinte c)
     {
         
     }
     
     /**
-     * Método que devolve o dicionário de todos os contribuintes registados no Sistema.
+     * Método que devolve o dicionário de todos os Contribuinte registados no Sistema.
      * @param
-     * @return Map<String, Contribuintes> com os contribuintes registados no Sistema.
+     * @return Map<String, Contribuinte> com os Contribuinte registados no Sistema.
      */
-    private Map<String, Contribuintes> getRegistados()
+    private Map<String, Contribuinte> getRegistados()
     {
-        Map<String, Contribuintes> res = new HashMap<>();
+        Map<String, Contribuinte> res = new HashMap<>();
         for(String s: this.registered.keySet())
         {
             res.put(s, this.registered.get(s).clone());
@@ -69,11 +69,11 @@ public class Sistema
     }
     
     /**
-     * Método que atualiza o dicionário de todos os contribuintes registados no Sistema.
-     * @param Map<String, Contribuintes> com os contribuintes registados no Sistema.
+     * Método que atualiza o dicionário de todos os Contribuinte registados no Sistema.
+     * @param Map<String, Contribuinte> com os Contribuinte registados no Sistema.
      * @return
      */
-    private void setRegistados(Map<String, Contribuintes> dic)
+    private void setRegistados(Map<String, Contribuinte> dic)
     {
         this.registered = new HashMap<>();
         for(String s: dic.keySet())
@@ -235,7 +235,7 @@ public class Sistema
         System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
 
         read1.close(); read2.close();
-        Contribuintes_Individuais ci = new Contribuintes_Individuais(nif, email, nome, morada, password, numero_ag, nifs, numero_cf, ats);
+        Individual ci = new Individual(nif, email, nome, morada, password, numero_ag, nifs, numero_cf, ats);
         
         if(!this.registered.containsKey(ci.getNIF()))
         {
@@ -289,7 +289,7 @@ public class Sistema
         System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
         
         read1.close(); read2.close();
-        Contribuintes_Coletivos_Empresas cc = new Contribuintes_Coletivos_Empresas(nif, email, nome, morada, password, ats, numero_cf);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, ats, numero_cf);
         
         if(!this.registered.containsKey(cc.getNIF()))
         {
@@ -306,11 +306,11 @@ public class Sistema
     }
     
     /**
-     * Método que permite fazer o login dos Contribuintes no Sistema.
+     * Método que permite fazer o login dos Contribuinte no Sistema.
      * @param
      * @return r
      */
-    public int login_contribuintes()
+    public int login_Contribuinte()
     {
         int r = -1;
         Scanner read = new Scanner(System.in);
@@ -323,13 +323,13 @@ public class Sistema
         {
             this.contribuinte = this.registered.get(username).clone();
             
-            if(this.registered.get(username).getClass().getSimpleName() == "Contribuintes_Individuais")
+            if(this.registered.get(username).getClass().getSimpleName() == "Individual")
             {
                 r = 1;
                 System.out.print("\nEntrou com sucesso no Sistema!");
                 time(1000);
             }
-            else if(this.registered.get(username).getClass().getSimpleName() == "Contribuintes_Coletivos_Empresas")
+            else if(this.registered.get(username).getClass().getSimpleName() == "Coletivo")
             {
                 r = 2;
                 System.out.print("\nEntrou com sucesso no Sistema!");
@@ -345,13 +345,13 @@ public class Sistema
     }
     
     /**
-     * Método que permite fazer o logout dos Contribuintes no Sistema.
+     * Método que permite fazer o logout dos Contribuinte no Sistema.
      * @param
      * @return
      */
-    public void logout_contribuintes()
+    public void logout_Contribuinte()
     {
-        this.contribuinte = new Contribuintes();
+        this.contribuinte = new Contribuinte();
         System.out.print("Saiu com sucesso do Sistema!");
         time(1000);
     }
@@ -388,7 +388,7 @@ public class Sistema
     } 
     
     /**
-     * Método que permite submeter faturas por parte das Empresas / dos Contribuintes Coletivos.
+     * Método que permite submeter faturas por parte das Empresas / dos Contribuinte Coletivos.
      * @param
      * @return
      */
@@ -443,12 +443,12 @@ public class Sistema
     
     /**
      * Método que obtem as listagens das facturas por contribuinte num determinado intervalo de datas, por parte das empresas.
-     * @param Contribuintes c
+     * @param Contribuinte c
      * @param LocalDateTime inicio
      * @param LocalDateTime fim
      * @return List<Faturas>
      */
-    public List<Fatura> faturas_ord_contribuinte_datas(Contribuintes c, LocalDateTime inicio, LocalDateTime fim)
+    public List<Fatura> faturas_ord_contribuinte_datas(Contribuinte c, LocalDateTime inicio, LocalDateTime fim)
     {
         List<Fatura> res = new ArrayList<>();
         for(Fatura f: this.faturas)

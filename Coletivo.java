@@ -7,18 +7,18 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class Contribuintes_Coletivos_Empresas extends Contribuintes
+public class Coletivo extends Contribuinte
 {
     // Variáveis de instância
     private List<String> atividades_economicas;
     private double coeficiente_fiscal;
     
     /**
-     * Construtor por omissão de Contribuintes_Coletivos_Empresas
+     * Construtor por omissão de Coletivo
      * @param
      * @return 
      */
-    public Contribuintes_Coletivos_Empresas()
+    public Coletivo()
     {
         super();
         this.atividades_economicas = new ArrayList<String>();
@@ -26,7 +26,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     }
     
     /**
-     * Construtor parametrizado de Contribuintes_Coletivos_Empresas
+     * Construtor parametrizado de Coletivo
      * @param NIF
      * @param email
      * @param nome
@@ -36,7 +36,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
      * @param coeficiente_fiscal
      * @return
      */
-    public Contribuintes_Coletivos_Empresas(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
+    public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p);
         setATIVIDADES_ECONOMICAS(atividades_economicas_p);
@@ -44,11 +44,11 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     }
     
     /**
-     * Construtor de cópia de Contribuintes_Coletivos_Empresas
-     * @param Contribuintes_Coletivos_Empresas
+     * Construtor de cópia de Coletivo
+     * @param Coletivo
      * @return
      */
-    public Contribuintes_Coletivos_Empresas(Contribuintes_Coletivos_Empresas umContribuinte_Coletivo_Empresa)
+    public Coletivo(Coletivo umContribuinte_Coletivo_Empresa)
     {
         super(umContribuinte_Coletivo_Empresa);
         this.atividades_economicas = umContribuinte_Coletivo_Empresa.getATIVIDADES_ECONOMICAS();
@@ -105,7 +105,7 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     }
 
     /**
-     * Método que verifica se a classe Contribuintes_Coletivos_Empresas d é igual à classe Contribuintes_Coletivos_Empresas que recebe a mensagem.
+     * Método que verifica se a classe Coletivo d é igual à classe Coletivo que recebe a mensagem.
      * @param Object
      * @return boolean
      */
@@ -113,13 +113,13 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
-        Contribuintes_Coletivos_Empresas c = (Contribuintes_Coletivos_Empresas) o;
+        Coletivo c = (Coletivo) o;
         return (super.equals(c) && this.atividades_economicas.equals(c.getATIVIDADES_ECONOMICAS())
                                 && this.coeficiente_fiscal == c.getCOEFICIENTE_FISCAL());
     }
    
     /**
-     * Método que devolve a representação em String da classe Contribuintes_Coletivos_Empresas
+     * Método que devolve a representação em String da classe Coletivo
      * @param
      * @return String.
      */
@@ -138,13 +138,13 @@ public class Contribuintes_Coletivos_Empresas extends Contribuintes
     }
     
     /**
-     * Método que faz uma cópia da classe Contribuintes_Coletivos_Empresas receptora da mensagem.
+     * Método que faz uma cópia da classe Coletivo receptora da mensagem.
      * Para tal invoca o construtor de cópia.
      * @param
-     * @return Contribuintes_Coletivos_Empresas clone da classe Contribuintes_Coletivos_Empresas que recebe a mensagem.
+     * @return Coletivo clone da classe Coletivo que recebe a mensagem.
      */
-    public Contribuintes_Coletivos_Empresas clone()
+    public Coletivo clone()
     {
-        return new Contribuintes_Coletivos_Empresas(this);
+        return new Coletivo(this);
     }
 }
