@@ -310,7 +310,7 @@ public class Sistema
      * @param
      * @return r
      */
-    public int login_Contribuinte()
+    public int loginContribuinte()
     {
         int r = -1;
         Scanner read = new Scanner(System.in);
@@ -345,11 +345,11 @@ public class Sistema
     }
     
     /**
-     * Método que permite fazer o logout dos Contribuinte no Sistema.
+     * Método que permite fazer o logout do Contribuinte no Sistema.
      * @param
      * @return
      */
-    public void logout_Contribuinte()
+    public void logoutContribuinte()
     {
         this.contribuinte = new Contribuinte();
         System.out.print("Saiu com sucesso do Sistema!");
@@ -361,7 +361,7 @@ public class Sistema
      * @param
      * @return
      */
-    public void login_administrador()
+    public void loginAdmin()
     {
         Scanner read = new Scanner(System.in);
         System.out.print("Password do Administrador ---> "); String password = read.nextLine();
@@ -382,7 +382,7 @@ public class Sistema
      * @param
      * @return
      */
-    public void logout_administrador()
+    public void logoutAdmin()
     {
         
     } 
@@ -392,7 +392,7 @@ public class Sistema
      * @param
      * @return
      */
-    public void registar_faturas()
+    public void registarFaturas()
     {
         boolean isNumeric;
         double valor;
