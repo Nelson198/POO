@@ -319,7 +319,7 @@ public class Sistema
         System.out.print("Utilizador / NIF: "); String username = read.nextLine();
         System.out.print("Password: "); String password = read.nextLine();
         
-        if(this.registered.containsKey(username) && this.registered.get(username).getPASSWORD().equals(password))
+        if(this.registered.containsKey(username) && this.registered.get(username).getPassword().equals(password))
         {
             this.contribuinte = this.registered.get(username).clone();
             
@@ -401,7 +401,7 @@ public class Sistema
         
         System.out.print("Submissão de Fatura associada a uma despesa:\n");
         System.out.print("\nNIF do emitente --> "); String nif_e = this.contribuinte.getNIF(); System.out.print(nif_e);
-        System.out.print("\nNome do emitente --> "); String designaçao_e = this.contribuinte.getNOME(); System.out.print(designaçao_e);
+        System.out.print("\nNome do emitente --> "); String designaçao_e = this.contribuinte.getNome(); System.out.print(designaçao_e);
         
         do
         {

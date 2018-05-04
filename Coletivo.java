@@ -128,10 +128,10 @@ public class Coletivo extends Contribuinte
         StringBuilder sb = new StringBuilder();
         sb.append("Contribuinte Coletivo: ");
         sb.append("(NIF: ").append(super.getNIF()).append(", ");
-        sb.append("Email: ").append(super.getEMAIL()).append(", ");
-        sb.append("Nome: ").append(super.getNOME()).append(", ");
-        sb.append("Morada: ").append(super.getMORADA()).append(", ");
-        sb.append("Password: ").append(super.getPASSWORD()).append(", ");
+        sb.append("Email: ").append(super.getEmail()).append(", ");
+        sb.append("Nome: ").append(super.getNome()).append(", ");
+        sb.append("Morada: ").append(super.getMorada()).append(", ");
+        sb.append("Password: ").append(super.getPassword()).append(", ");
         sb.append("Atividades Económicas: ").append(this.getATIVIDADES_ECONOMICAS().toString()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append(")\n");
         return sb.toString();

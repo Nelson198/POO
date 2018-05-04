@@ -190,10 +190,10 @@ public class Individual extends Contribuinte
         StringBuilder sb = new StringBuilder();
         sb.append("Contribuinte Individual: ");
         sb.append("(NIF: ").append(super.getNIF()).append(", ");
-        sb.append("Email: ").append(super.getEMAIL()).append(", ");
-        sb.append("Nome: ").append(super.getNOME()).append(", ");
-        sb.append("Morada: ").append(super.getMORADA()).append(", ");
-        sb.append("Password: ").append(super.getPASSWORD()).append(", ");
+        sb.append("Email: ").append(super.getEmail()).append(", ");
+        sb.append("Nome: ").append(super.getNome()).append(", ");
+        sb.append("Morada: ").append(super.getMorada()).append(", ");
+        sb.append("Password: ").append(super.getPassword()).append(", ");
         sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAGREGADO_FAMILIAR()).append(", ");
         sb.append("NIF's do Agregado Familiar: ").append(this.getNIFS_AGREGADO_FAMILIAR().toString()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
