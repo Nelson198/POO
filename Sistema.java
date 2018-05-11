@@ -296,21 +296,29 @@ public class Sistema implements Serializable
         
         do{
             bool = true;
-            for(int i = 1; i <= numero_ag; i++)
+            if(numero_ag == 1)
             {
-                System.out.printf("NIF %d: ", i); s = read2.nextLine(); nifs.add(s);
-            }
-            if(!nifs.contains(nif))
-            {
-                bool = false; nifs.clear();
+                System.out.println("NIF 1: " + nif); nifs.add(nif);
             }
             else
             {
-                for(String a: nifs)
+                System.out.println("NIF 1: " + nif); nifs.add(nif);
+                for(int i = 2; i <= numero_ag; i++)
                 {
-                    if((a.chars().allMatch(Character::isDigit)) == false || a.length() != 9)
+                    System.out.printf("NIF %d: ", i); s = read2.nextLine(); nifs.add(s);
+                }
+                if(!nifs.contains(nif))
+                {
+                    bool = false; nifs.clear();
+                }
+                else
+                {
+                    for(String a: nifs)
                     {
-                        bool = false; nifs.clear(); break;
+                        if((a.chars().allMatch(Character::isDigit)) == false || a.length() != 9)
+                        {
+                            bool = false; nifs.clear(); break;
+                        }
                     }
                 }
             }
@@ -828,7 +836,7 @@ public class Sistema implements Serializable
     /**
      * Método que lê o estado do Sistema em ficheiro.
      * @param
-     * @return
+     * @return Sistema s
      */
     public static Sistema ler_estado() throws FileNotFoundException, IOException, ClassNotFoundException
     {
