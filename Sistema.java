@@ -538,7 +538,7 @@ public class Sistema implements Serializable
             {
                 Fatura f1 = (Fatura) o1;
                 Fatura f2 = (Fatura) o2;
-                return (f1.getValor_Despesa() > f2.getValor_Despesa()) ? -1 : (f1.getValor_Despesa() < f2.getValor_Despesa()) ? 1 : 0;
+                return (f1.getValor_Despesa() > f2.getValor_Despesa()) ? -1 : 1;
             }
         });
         for(int i: this.registados.get(nif).getIndex())
@@ -608,7 +608,7 @@ public class Sistema implements Serializable
             {
                 Fatura f1 = (Fatura) o1;
                 Fatura f2 = (Fatura) o2;
-                return f1.getData_Hora().isAfter(f2.getData_Hora()) ? -1 : f1.getData_Hora().isBefore(f2.getData_Hora()) ? 1 : 0;
+                return f1.getData_Hora().isAfter(f2.getData_Hora()) ? -1 : 1;
             }
         });
         
@@ -650,7 +650,7 @@ public class Sistema implements Serializable
             {
                 Fatura f1 = (Fatura) o1;
                 Fatura f2 = (Fatura) o2;
-                return f1.getValor_Despesa() < f2.getValor_Despesa() ? -1 : f1.getValor_Despesa() > f2.getValor_Despesa() ? 1 : 0;
+                return f1.getValor_Despesa() < f2.getValor_Despesa() ? -1 : 1;
             }
         });
 
@@ -788,7 +788,7 @@ public class Sistema implements Serializable
             {
                 Contribuinte c1 = (Contribuinte) o1;
                 Contribuinte c2 = (Contribuinte) o2;
-                return gasto_Contribuinte(c1) > gasto_Contribuinte(c2) ? -1 : gasto_Contribuinte(c1) < gasto_Contribuinte(c2) ? 1 : 0;
+                return gasto_Contribuinte(c1) > gasto_Contribuinte(c2) ? -1 : 1;
             }
         });
         for(Contribuinte c: this.registados.values())
