@@ -143,7 +143,7 @@ public class Menu
     {   
         int opçao1, opçao2, opçao3, opçao4;
         Scanner read = new Scanner(System.in);
-        Menu m = new Menu(); Sistema s = null;
+        Menu m = new Menu(); Sistema s = new Sistema();
         
         try{
             s = s.ler_estado();
@@ -159,6 +159,7 @@ public class Menu
         catch(IOException e){
             s = new Sistema();
             System.out.println("Erro de Leitura: Erro ao ler ficheiro de estado.");
+
         }
         
         do

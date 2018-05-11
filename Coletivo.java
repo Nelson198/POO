@@ -6,8 +6,9 @@
  */
 import java.util.List;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Coletivo extends Contribuinte
+public class Coletivo extends Contribuinte implements Serializable
 {
     // Variáveis de instância
     private List<String> atividades_economicas;

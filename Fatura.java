@@ -7,8 +7,9 @@
 import java.util.Comparator;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 
-public class Fatura
+public class Fatura implements Serializable
 {
     // Variáveis de Instância
     private String NIF_emitente;

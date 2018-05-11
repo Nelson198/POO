@@ -6,7 +6,9 @@
  */
 import java.util.List;
 import java.util.ArrayList;
-public class Contribuinte
+import java.io.Serializable;
+
+public class Contribuinte implements Serializable
 {
     // variáveis de instância
     private String NIF;

@@ -818,7 +818,7 @@ public class Sistema implements Serializable
      */
     public void gravar_estado() throws FileNotFoundException, IOException
     {
-        FileOutputStream fos = new FileOutputStream("estado.bin");
+        FileOutputStream fos = new FileOutputStream("estado");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(this);
         oos.flush();
@@ -832,7 +832,7 @@ public class Sistema implements Serializable
      */
     public Sistema ler_estado() throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        File f = new File("estado.bin");
+        File f = new File("estado");
         Sistema s = null;
 
         if(!f.exists())
@@ -842,9 +842,10 @@ public class Sistema implements Serializable
         } 
         else 
         {
-            FileInputStream fis = new FileInputStream("estado.bin");
-            Sistema s = (Sistema) ois.readObject();
+            FileInputStream fis = new FileInputStream("estado");
             ObjectInputStream ois = new ObjectInputStream(fis);
+            
+            s = (Sistema) ois.readObject();
             ois.close();
         }
         

@@ -6,8 +6,9 @@
  */
 import java.util.List;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Individual extends Contribuinte
+public class Individual extends Contribuinte implements Serializable
 {
     // Variáveis de instância
     private int agregado_familiar;               /* Nº de elementos do agregado familiar */
