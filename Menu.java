@@ -335,7 +335,7 @@ public class Menu
                     break;
             
                 default:
-                    System.out.print("\nSelecionou uma opção inválida!\nSe pretende sair do menu, por favor insira a opção 5.");
+                    System.out.print("Selecionou uma opção inválida!\nSe pretende sair do menu, por favor insira a opção 5.");
                     m.time(2000);
                     System.out.print('\u000C');
             }

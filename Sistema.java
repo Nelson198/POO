@@ -6,6 +6,7 @@
  */
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.io.FileNotFoundException;
 import java.lang.ClassNotFoundException;
 import java.io.ObjectInputStream;
@@ -53,6 +54,23 @@ public class Sistema implements Serializable
         catch(Exception e){};
     }
     
+    /**
+     * Método que verifica se uma data é válida.
+     * @param String inDate
+     * @return boolean
+     */
+    public boolean isValidDate(String inDate)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+        try{
+            dateFormat.parse(inDate.trim());
+        }catch (ParseException e){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Método que converte um objeto do tipo Date num objeto do tipo LocalDate.
      * @param Date
@@ -324,14 +342,18 @@ public class Sistema implements Serializable
             }
         }while(bool == false);
         
-        System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); at = read2.nextLine();
+        do{
+            System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); at = read2.nextLine();
+        }while(at.length() == 0);
         String[] ss = at.split("-");
         for(int i=0; i < ss.length; i++)
         {
             ats.add(ss[i]);
         }
         
-        System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
+        do{
+            System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
+        }while(numero_cf <= 0);
 
         read1.close(); read2.close();
         Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, nifs, numero_cf, ats);
@@ -387,14 +409,18 @@ public class Sistema implements Serializable
             System.out.print("Password --> "); password = read2.nextLine();
         }while(password.length() == 0);
         
-        System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); atividades = read2.nextLine();
+        do{
+            System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); atividades = read2.nextLine();
+        }while(atividades.length() == 0);
         String[] ss = atividades.split("-");
         for(int i=0; i < ss.length; i++)
         {
             ats.add(ss[i]);
         }
         
-        System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
+        do{
+            System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
+        }while(numero_cf <= 0);
         
         read1.close(); read2.close();
         Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, numero_cf);
@@ -432,7 +458,7 @@ public class Sistema implements Serializable
         System.out.print("\n");
         do
         {
-            System.out.println("NIF do cliente --> "); nif_ci = read2.nextLine();
+            System.out.print("NIF do cliente --> "); nif_ci = read2.nextLine();
             isNumeric = nif_ci.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
         } while(!this.registados.containsKey(nif_ci) || nif_e.equals(nif_ci) || nif_ci.length() != 9 || isNumeric == false || (nif_ci.indexOf('1') != 0 && nif_ci.indexOf('2') != 0 && nif_ci.indexOf('5') != 0));
         
@@ -493,7 +519,7 @@ public class Sistema implements Serializable
         LocalDateTime fim = LocalDateTime.now();
         LocalTime lt = LocalTime.of(0, 0, 0);
         Date date1, date2;
-        String nif;
+        String nif, data;
         Scanner read = new Scanner(System.in);
         
         do{
@@ -501,16 +527,42 @@ public class Sistema implements Serializable
         }while(!this.registados.containsKey(nif));
         
         try{
-            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(read.nextLine());
+            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            boolean b = isValidDate(data);
+            if(b == false)
+            {
+                System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
+                System.out.print("Prima enter para continuar ...");
+                read.nextLine();
+                return;
+            }
             LocalDate ld1 = convertToLocalDate(date1);
             inicio = LocalDateTime.of(ld1, lt);
-        }catch(Exception e){};
+        }catch(Exception e){
+            System.out.println("\nErro!");
+            System.out.print("Prima enter para continuar ...");
+            read.nextLine();
+            return;
+        };
         
         try{
-            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(read.nextLine());
+            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            boolean b = isValidDate(data);
+            if(b == false)
+            {
+                System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
+                System.out.print("Prima enter para continuar ...");
+                read.nextLine();
+                return;
+            }
             LocalDate ld2 = convertToLocalDate(date2);
             fim = LocalDateTime.of(ld2, lt);
-        }catch(Exception e){};
+        }catch(Exception e){
+            System.out.println("\nErro!");
+            System.out.print("Prima enter para continuar ...");
+            read.nextLine();
+            return;
+        };
         
         System.out.print("\n");
         for(int i: this.registados.get(nif).getIndex())
@@ -521,7 +573,7 @@ public class Sistema implements Serializable
             }
         }
         
-        System.out.print("\nPrima enter para continuar ...");
+        System.out.print("Prima enter para continuar ...");
         read.nextLine();
     }
     
@@ -575,19 +627,46 @@ public class Sistema implements Serializable
         LocalDateTime fim = LocalDateTime.now();
         LocalTime lt = LocalTime.of(0, 0, 0);
         Date date1, date2;
+        String data;
         Scanner read = new Scanner(System.in);
         
         try{
-            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(read.nextLine());
+            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            boolean b = isValidDate(data);
+            if(b == false)
+            {
+                System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
+                System.out.print("Prima enter para continuar ...");
+                read.nextLine();
+                return;
+            }
             LocalDate ld1 = convertToLocalDate(date1);
             inicio = LocalDateTime.of(ld1, lt);
-        }catch(Exception e){};
+        }catch(Exception e){
+            System.out.println("\nErro!");
+            System.out.print("Prima enter para continuar ...");
+            read.nextLine();
+            return;
+        };
         
         try{
-            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(read.nextLine());
+            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            boolean b = isValidDate(data);
+            if(b == false)
+            {
+                System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
+                System.out.print("Prima enter para continuar ...");
+                read.nextLine();
+                return;
+            }
             LocalDate ld2 = convertToLocalDate(date2);
             fim = LocalDateTime.of(ld2, lt);
-        }catch(Exception e){};
+        }catch(Exception e){
+            System.out.println("\nErro!");
+            System.out.print("Prima enter para continuar ...");
+            read.nextLine();
+            return;
+        };
         
         System.out.print("\n");
         for(int i: this.contribuinte.getIndex())
@@ -640,7 +719,7 @@ public class Sistema implements Serializable
             System.out.println(f.toString());
         }
         
-        System.out.print("\nPrima enter para continuar ...");
+        System.out.print("Prima enter para continuar ...");
         read.nextLine();
     }
     
@@ -681,7 +760,7 @@ public class Sistema implements Serializable
             System.out.println(f.toString());
         }
         
-        System.out.print("\nPrima enter para continuar ...");
+        System.out.print("Prima enter para continuar ...");
         read.nextLine();
     }
 
@@ -811,7 +890,14 @@ public class Sistema implements Serializable
             {
                 break;
             }
-            System.out.println("Contribuinte " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
+            if(c instanceof Individual)
+            {
+                System.out.println("Contribuinte Individual " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
+            }
+            else if(c instanceof Coletivo)
+            {
+                System.out.println("Empresa " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
+            }
             i += 1;
         }
         
@@ -856,7 +942,6 @@ public class Sistema implements Serializable
             s = (Sistema) ois.readObject();
             ois.close();
         }
-        
         return s;
     }
     
