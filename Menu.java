@@ -143,10 +143,11 @@ public class Menu
     {   
         int opçao1, opçao2, opçao3, opçao4;
         Scanner read = new Scanner(System.in);
-        Menu m = new Menu(); Sistema s = new Sistema();
+        Menu m = new Menu(); 
+        Sistema s;
         
         try{
-            s = s.ler_estado();
+            s = Sistema.ler_estado();
         }
         catch(ClassNotFoundException e){
             s = new Sistema();

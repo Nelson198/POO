@@ -830,7 +830,7 @@ public class Sistema implements Serializable
      * @param
      * @return
      */
-    public Sistema ler_estado() throws FileNotFoundException, IOException, ClassNotFoundException
+    public static Sistema ler_estado() throws FileNotFoundException, IOException, ClassNotFoundException
     {
         File f = new File("estado");
         Sistema s = null;
@@ -844,7 +844,7 @@ public class Sistema implements Serializable
         {
             FileInputStream fis = new FileInputStream("estado");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            
+
             s = (Sistema) ois.readObject();
             ois.close();
         }
