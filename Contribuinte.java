@@ -4,6 +4,8 @@
  * @author P.O.O. - Project - 2017/2018 
  * @version 1.01
  */
+import java.util.List;
+import java.util.ArrayList;
 public class Contribuinte
 {
     // variáveis de instância
@@ -12,6 +14,7 @@ public class Contribuinte
     private String nome;
     private String morada;
     private String password;
+    private List<Integer> index;
     
     /**
      * Construtor por omissão da classe Contribuinte.
@@ -25,6 +28,7 @@ public class Contribuinte
         this.nome = "N/D";
         this.morada = "N/D";
         this.password = "N/D";
+        this.index = new ArrayList<>();
     }
     
     /**
@@ -34,15 +38,17 @@ public class Contribuinte
      * @param nome
      * @param morada
      * @param password
+     * @param index
      * @return
      */
-    public Contribuinte(String NIF_p, String email_p, String nome_p, String morada_p, String password_p)
+    public Contribuinte(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index)
     {
         this.NIF = NIF_p;
         this.email = email_p;
         this.nome = nome_p;
         this.morada = morada_p;
         this.password = password_p;
+        setIndex(index);
     }
     
     /**
@@ -57,6 +63,7 @@ public class Contribuinte
         this.nome = umContribuinte.getNome();
         this.morada = umContribuinte.getMorada();
         this.password = umContribuinte.getPassword();
+        this.index = umContribuinte.getIndex();
     }
     
     /**
@@ -160,6 +167,35 @@ public class Contribuinte
     }
     
     /**
+     * Devolve a lista de indices das faturas associadas.
+     * @param
+     * @return res
+     */
+    public List<Integer> getIndex()
+    {
+        List<Integer> res = new ArrayList<>();
+        for(int i: this.index)
+        {
+            res.add(i);
+        }
+        return res;
+    }
+    
+    /**
+     * Atualiza a lista de indices das faturas associadas.
+     * @param res
+     * @return
+     */
+    public void setIndex(List<Integer> res)
+    {
+        this.index = new ArrayList<>();
+        for(int i: res)
+        {
+            this.index.add(i);
+        }
+    }
+    
+    /**
      * Método que devolve a representação em String da classe Contribuinte.
      * @param
      * @return String
@@ -168,11 +204,12 @@ public class Contribuinte
     {
         StringBuilder sb = new StringBuilder();
         sb.append("Contribuinte:\n");
-        sb.append("(NIF: ").append(getNIF()).append(", ");
-        sb.append("Email: ").append(getEmail()).append(", ");
-        sb.append("Nome: ").append(getNome()).append(", ");
-        sb.append("Morada: ").append(getMorada()).append(", ");
-        sb.append("Password de Acesso: ").append(getPassword()).append(")\n");
+        sb.append("(NIF: ").append(this.getNIF()).append(", ");
+        sb.append("Email: ").append(this.getEmail()).append(", ");
+        sb.append("Nome: ").append(this.getNome()).append(", ");
+        sb.append("Morada: ").append(this.getMorada()).append(", ");
+        sb.append("Password de Acesso: ").append(getPassword()).append(", ");
+        sb.append("Lista de indices das faturas associadas: ").append(this.getIndex()).append(")\n");
         return sb.toString();
     }
     
@@ -190,7 +227,8 @@ public class Contribuinte
              && this.email.equals(c.getEmail())
              && this.nome.equals(c.getNome())
              && this.morada.equals(c.getMorada())
-             && this.password.equals(c.getPassword()));
+             && this.password.equals(c.getPassword())
+             && this.index.equals(c.getIndex()));
     }
     
     /**

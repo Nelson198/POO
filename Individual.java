@@ -4,18 +4,16 @@
  * @author P.O.O. - Project - 2017/2018 
  * @version 1.0
  */
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Individual extends Contribuinte
 {
     // Variáveis de instância
-    private int agregado_familiar; /* Nº de elementos do agregado familiar */
+    private int agregado_familiar;               /* Nº de elementos do agregado familiar */
     private List<String> NIFs_agregado_familiar; /* Array com os NIF's de cada elemento do agregado familiar */
-    private double coeficiente_fiscal; /* factor multiplicativo que é associado a cada despesa elegível */
-    private List<String> atividades_economicas; /* Ativididades Económicas */
+    private double coeficiente_fiscal;           /* factor multiplicativo que é associado a cada despesa elegível */
+    private List<String> atividades_economicas;  /* Ativididades Económicas */
 
     /**
      * Construtor por omissão da classe Individual.
@@ -38,15 +36,17 @@ public class Individual extends Contribuinte
      * @param nome
      * @param morada
      * @param password
+     * @param index
      * @param agregado_familiar
      * @param NIFs_agregado_familiar
      * @param coeficiente_fiscal
      * @param atividades_economicas
      * @return
      */
-    public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
+    public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p,
+                      int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
     {
-        super(NIF_p, email_p, nome_p, morada_p, password_p);
+        super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         this.agregado_familiar = agregado_familiar_p;
         setNIFS_AGREGADO_FAMILIAR(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
@@ -194,6 +194,7 @@ public class Individual extends Contribuinte
         sb.append("Nome: ").append(super.getNome()).append(", ");
         sb.append("Morada: ").append(super.getMorada()).append(", ");
         sb.append("Password: ").append(super.getPassword()).append(", ");
+        sb.append("Indices das faturas associadas: ").append(this.getIndex()).append(", ");
         sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAGREGADO_FAMILIAR()).append(", ");
         sb.append("NIF's do Agregado Familiar: ").append(this.getNIFS_AGREGADO_FAMILIAR().toString()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");

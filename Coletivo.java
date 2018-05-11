@@ -36,9 +36,10 @@ public class Coletivo extends Contribuinte
      * @param coeficiente_fiscal
      * @return
      */
-    public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<String> atividades_economicas_p, double coeficiente_fiscal_p)
+    public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
+                                            List<String> atividades_economicas_p, double coeficiente_fiscal_p)
     {
-        super(NIF_p, email_p, nome_p, morada_p, password_p);
+        super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         setATIVIDADES_ECONOMICAS(atividades_economicas_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
@@ -131,7 +132,8 @@ public class Coletivo extends Contribuinte
         sb.append("Email: ").append(super.getEmail()).append(", ");
         sb.append("Nome: ").append(super.getNome()).append(", ");
         sb.append("Morada: ").append(super.getMorada()).append(", ");
-        sb.append("Password: ").append(super.getPassword()).append(", ");
+        sb.append("Password de Acesso: ").append(super.getPassword()).append(", ");
+        sb.append("Indíces das Faturas: ").append(super.getIndex()).append(", ");
         sb.append("Atividades Económicas: ").append(this.getATIVIDADES_ECONOMICAS().toString()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append(")\n");
         return sb.toString();

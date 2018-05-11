@@ -4,13 +4,15 @@
  * @author P.O.O. - Project - 2017/2018
  * @version 1.0
  */
+import java.util.Comparator;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class Fatura implements Comparable<Fatura>
+public class Fatura
 {
     // Variáveis de Instância
     private String NIF_emitente;
-    private String designação_emitente;
+    private String nome_emitente;
     private LocalDateTime data_hora_despesa;
     private String NIF_cliente;
     private String descrição_despesa;
@@ -25,7 +27,7 @@ public class Fatura implements Comparable<Fatura>
     public Fatura()
     {
         this.NIF_emitente = "N/D";
-        this.designação_emitente = "N/D";
+        this.nome_emitente = "N/D";
         this.data_hora_despesa = LocalDateTime.now();
         this.NIF_cliente = "N/D";
         this.descrição_despesa = "N/D";
@@ -36,7 +38,7 @@ public class Fatura implements Comparable<Fatura>
     /**
      * Construtor parametrizado de Fatura.
      * @param NIF_emitente
-     * @param designação
+     * @param nome_emitente
      * @param data_hora
      * @param NIF_cliente
      * @param descrição
@@ -44,10 +46,10 @@ public class Fatura implements Comparable<Fatura>
      * @param valor
      * @return
      */
-    public Fatura(String NIF_e, String designação_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, String natureza_d, double valor_d)
+    public Fatura(String NIF_e, String nome_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, String natureza_d, double valor_d)
     {
         this.NIF_emitente = NIF_e;
-        this.designação_emitente = designação_e;
+        this.nome_emitente = nome_e;
         this.data_hora_despesa = data_hora_d;
         this.NIF_cliente = NIF_c;
         this.descrição_despesa = descrição_d;
@@ -62,13 +64,13 @@ public class Fatura implements Comparable<Fatura>
      */
     public Fatura(Fatura umaDespesa)
     {
-        this.NIF_emitente = umaDespesa.getNIF_EMITENTE();
-        this.designação_emitente = umaDespesa.getDESIGNAÇÃO_EMITENTE();
-        this.data_hora_despesa = umaDespesa.getDATA_HORA_DESPESA();
-        this.NIF_cliente = umaDespesa.getNIF_CLIENTE();
-        this.descrição_despesa = umaDespesa.getDESCRIÇÃO_DESPESA();
-        this.natureza_despesa = umaDespesa.getNATUREZA_DESPESA();
-        this.valor_despesa = umaDespesa.getVALOR_DESPESA();
+        this.NIF_emitente = umaDespesa.getNIF_Emitente();
+        this.nome_emitente = umaDespesa.getNome_Emitente();
+        this.data_hora_despesa = umaDespesa.getData_Hora();
+        this.NIF_cliente = umaDespesa.getNIF_Cliente();
+        this.descrição_despesa = umaDespesa.getDescriçao_Despesa();
+        this.natureza_despesa = umaDespesa.getNatureza_Despesa();
+        this.valor_despesa = umaDespesa.getValor_Despesa();
     }
     
     /**
@@ -76,7 +78,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return NIF_emitente
      */
-    public String getNIF_EMITENTE()
+    public String getNIF_Emitente()
     {
         return this.NIF_emitente;
     }
@@ -86,7 +88,7 @@ public class Fatura implements Comparable<Fatura>
      * @param NIF_emitente
      * @return
      */
-    public void setNIF_EMITENTE(String NIF_e)
+    public void setNIF_Emitente(String NIF_e)
     {
         this.NIF_emitente = NIF_e;
     }
@@ -96,9 +98,9 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return designação_emitente
      */
-    public String getDESIGNAÇÃO_EMITENTE()
+    public String getNome_Emitente()
     {
-        return this.designação_emitente;
+        return this.nome_emitente;
     }
     
     /**
@@ -106,9 +108,9 @@ public class Fatura implements Comparable<Fatura>
      * @param designação_emitente
      * @return
      */
-    public void setDESIGNAÇÃO_EMITENTE(String designação_e)
+    public void setNome_Emitente(String designação_e)
     {
-        this.designação_emitente = designação_e;
+        this.nome_emitente = designação_e;
     }
     
     /**
@@ -116,7 +118,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return data_hora_despesa
      */
-    public LocalDateTime getDATA_HORA_DESPESA()
+    public LocalDateTime getData_Hora()
     {
         return this.data_hora_despesa;
     }
@@ -126,7 +128,7 @@ public class Fatura implements Comparable<Fatura>
      * @param data_hora_despesa
      * @return
      */
-    public void setDATA_HORA_DESPESA(LocalDateTime data_hora_d)
+    public void setData_Hora(LocalDateTime data_hora_d)
     {
         this.data_hora_despesa = data_hora_d;
     }
@@ -136,7 +138,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return NIF_cliente
      */
-    public String getNIF_CLIENTE()
+    public String getNIF_Cliente()
     {
         return this.NIF_cliente;
     }
@@ -146,7 +148,7 @@ public class Fatura implements Comparable<Fatura>
      * @param NIF_cliente
      * @return
      */
-    public void setNIF_CLIENTE(String NIF_c)
+    public void setNIF_Cliente(String NIF_c)
     {
         this.NIF_cliente = NIF_c;
     }
@@ -156,7 +158,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return descrição_despesa
      */
-    public String getDESCRIÇÃO_DESPESA()
+    public String getDescriçao_Despesa()
     {
         return this.descrição_despesa;
     }
@@ -166,7 +168,7 @@ public class Fatura implements Comparable<Fatura>
      * @param descrição_despesa
      * @return
      */
-    public void setDESCRIÇÃO_DESPESA(String descrição_d)
+    public void setDescriçao_Despesa(String descrição_d)
     {
         this.descrição_despesa = descrição_d;
     }
@@ -176,7 +178,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return natureza_despesa
      */
-    public String getNATUREZA_DESPESA()
+    public String getNatureza_Despesa()
     {
         return this.natureza_despesa;
     }
@@ -186,7 +188,7 @@ public class Fatura implements Comparable<Fatura>
      * @param natureza_despesa
      * @return
      */
-    public void setNATUREZA_DESPESA(String natureza_d)
+    public void setNatureza_Despesa(String natureza_d)
     {
         this.natureza_despesa = natureza_d;
     }
@@ -196,7 +198,7 @@ public class Fatura implements Comparable<Fatura>
      * @param
      * @return valor_despesa
      */
-    public double getVALOR_DESPESA()
+    public double getValor_Despesa()
     {
         return this.valor_despesa;
     }
@@ -206,7 +208,7 @@ public class Fatura implements Comparable<Fatura>
      * @param valor_despesa
      * @return
      */
-    public void setVALOR_DESPESA(double valor_d)
+    public void setValor_Despesa(double valor_d)
     {
         this.valor_despesa = valor_d;
     }
@@ -221,15 +223,15 @@ public class Fatura implements Comparable<Fatura>
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Fatura d = (Fatura) o;
-        return (this.NIF_emitente.equals(d.getNIF_EMITENTE())
-             && this.designação_emitente.equals(d.getDESIGNAÇÃO_EMITENTE())
-             && this.data_hora_despesa.isEqual(d.getDATA_HORA_DESPESA())
-             && this.NIF_cliente.equals(d.getNIF_CLIENTE())
-             && this.descrição_despesa.equals(d.getDESCRIÇÃO_DESPESA())
-             && this.natureza_despesa.equals(d.getNATUREZA_DESPESA())
-             && this.valor_despesa == d.getVALOR_DESPESA());
+        return (this.NIF_emitente.equals(d.getNIF_Emitente())
+             && this.nome_emitente.equals(d.getNome_Emitente())
+             && this.data_hora_despesa.isEqual(d.getData_Hora())
+             && this.NIF_cliente.equals(d.getNIF_Cliente())
+             && this.descrição_despesa.equals(d.getDescriçao_Despesa())
+             && this.natureza_despesa.equals(d.getNatureza_Despesa())
+             && this.valor_despesa == d.getValor_Despesa());
     }
-    
+
     /**
      * Método que devolve a representação em String da classe Fatura.
      * @param
@@ -238,14 +240,11 @@ public class Fatura implements Comparable<Fatura>
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Despesa:\n");
-        sb.append("(NIF do Emitente: ").append(this.getNIF_EMITENTE()).append(", ");
-        sb.append("Designação do Emitente: ").append(this.getDESIGNAÇÃO_EMITENTE()).append(", ");
-        sb.append("Data/Hora da Despesa: ").append(this.getDATA_HORA_DESPESA()).append(", ");
-        sb.append("NIF do Cliente: ").append(this.getNIF_CLIENTE()).append(", ");
-        sb.append("Descrição da Despesa: ").append(this.getDESCRIÇÃO_DESPESA()).append(", ");
-        sb.append("Natureza da Despesa (Atividade Económica): ").append(this.getNATUREZA_DESPESA()).append(", ");
-        sb.append("Montante da Despesa: ").append(this.getVALOR_DESPESA()).append(")\n");
+        sb.append("Esta fatura foi emitida pela Empresa ").append(this.getNome_Emitente()).append(", cujo NIF é ").append(this.getNIF_Emitente()).append(".\n");
+        sb.append("O/A contribuinte com NIF ").append(this.getNIF_Cliente()).append(" adquiriu um(uns) / uma/(umas) ").append(this.getDescriçao_Despesa());
+        sb.append(" num valor de ").append(this.getValor_Despesa()).append(" €, às ");
+        sb.append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        sb.append(" na data ").append(this.getData_Hora().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"))).append(".\n");
         return sb.toString();
     }
     
@@ -258,16 +257,5 @@ public class Fatura implements Comparable<Fatura>
     public Fatura clone()
     {
         return new Fatura(this);
-    }
-    
-    /**
-    * Implementação da ordem natural de comparação de instâncias de Fatura.
-    * Por simplificação, apenas se está a comparar os valores das despesas.
-    */
-    public int compareTo(Fatura fatura)
-    {
-         if(this.getVALOR_DESPESA() > fatura.getVALOR_DESPESA()) return -1;
-         else if (this.getVALOR_DESPESA() < fatura.getVALOR_DESPESA()) return 1;
-         else return 0;
     }
 }
