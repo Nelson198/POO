@@ -832,10 +832,22 @@ public class Sistema implements Serializable
      */
     public Sistema ler_estado() throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        FileInputStream fis = new FileInputStream("estado.bin");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Sistema s = (Sistema) ois.readObject();
-        ois.close();
+        File f = new File("estado.bin");
+        Sistema s = null;
+
+        if(!f.exists())
+        {
+            f.createNewFile();
+            s = new Sistema();
+        } 
+        else 
+        {
+            FileInputStream fis = new FileInputStream("estado.bin");
+            Sistema s = (Sistema) ois.readObject();
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            ois.close();
+        }
+        
         return s;
     }
     
