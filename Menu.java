@@ -84,17 +84,19 @@ public class Menu
         sb.append("                                             ||                             Menu JavaFatura - Contribuintes Individuais                           ||\n");
         sb.append("                                             =======================================================================================================\n");
         sb.append("                                             || Opções:                                                                                           ||\n");
-        sb.append("                                             ||        1 ---> Ver faturas que foram passadas em seu nome.                                         ||\n");
+        sb.append("                                             ||        1 ---> Ver faturas de despesas feitas em seu nome.                                         ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        2 ---> Obter a listagem das facturas, ordenada por data de emissão.                        ||\n"); 
+        sb.append("                                             ||        2 ---> Validar faturas pendentes.                                                          ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        3 ---> Obter a listagem das facturas, ordenada por valor crescente de despesa.             ||\n"); 
+        sb.append("                                             ||        3 ---> Obter a listagem das facturas, ordenada por data de emissão.                        ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        4 ---> Verificar montante de dedução fiscal acumulado por si.                              ||\n");
+        sb.append("                                             ||        4 ---> Obter a listagem das facturas, ordenada por valor crescente de despesa.             ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        5 ---> Verificar montante de dedução fiscal acumulado pelo agregado familiar.              ||\n");
+        sb.append("                                             ||        5 ---> Verificar montante de dedução fiscal acumulado por si.                              ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        6 ---> Logout.                                                                             ||\n");
+        sb.append("                                             ||        6 ---> Verificar montante de dedução fiscal acumulado pelo agregado familiar.              ||\n");
+        sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
+        sb.append("                                             ||        7 ---> Logout.                                                                             ||\n");
         sb.append("                                             =======================================================================================================\n");
         System.out.print(sb);
     }
@@ -113,12 +115,12 @@ public class Menu
         sb.append("                                             || Opções:                                                                                           ||\n");
         sb.append("                                             ||        1 ---> Adicionar fatura.                                                                   ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        2 ---> Associar classificação de actividade económica a um documento de despesa            ||\n");
+        sb.append("                                             ||        2 ---> Validar faturas pendentes.                                                          ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        3 ---> Corrigir a classificação de actividade económica de um documento de despesa         ||\n");
-        sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n"); 
-        sb.append("                                             ||        4 ---> Ver despesas emitidas pela empresa.                                                 ||\n");
+        sb.append("                                             ||        3 ---> Ver faturas emitidas pela empresa.                                                  ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
+        sb.append("                                             ||        4 ---> Ver faturas de despesas feitas pela empresa.                                        ||\n"); 
+        sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");        
         sb.append("                                             ||        5 ---> Obter a listagem das faturas de um contribuinte num determinado intervalo de datas. ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
         sb.append("                                             ||        6 ---> Obter a listagem das faturas de um contribuinte ordenada por valor decrescente.     ||\n"); 
@@ -191,22 +193,26 @@ public class Menu
                                     case 1:
                                         s.mostrar_faturas_CI();
                                         break;
-                                    
+                                        
                                     case 2:
-                                        s.mostrar_faturas_ord_data_Contribuintes();
+                                        s.validar_faturas_pendentes();
                                         break;
                                     
                                     case 3:
+                                        s.mostrar_faturas_ord_data_Contribuintes();
+                                        break;
+                                    
+                                    case 4:
                                         s.mostrar_faturas_ord_valor_crescente_despesa_Contribuintes();
                                         break;
 
-                                    case 4:
-                                        break;
-                                    
                                     case 5:
                                         break;
                                     
                                     case 6:
+                                        break;
+                                    
+                                    case 7:
                                         break;
                                     
                                     default:
@@ -214,7 +220,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(opçao2 != 6);
+                            }while(opçao2 != 7);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;
@@ -234,13 +240,15 @@ public class Menu
                                         break;
                                     
                                     case 2:
+                                        s.validar_faturas_pendentes();
                                         break;
-                                    
+
                                     case 3:
+                                        s.mostrar_faturas_emitidas_CC();
                                         break;
 
                                     case 4:
-                                        s.mostrar_faturas_CC();
+                                        s.mostrar_faturas_para_CC();
                                         break;
 
                                     case 5:

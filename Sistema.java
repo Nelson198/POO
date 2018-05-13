@@ -37,9 +37,7 @@ public class Sistema implements Serializable
     private Contribuinte contribuinte;                                     /* Contribuinte que se encontra dentro do Sistema */
     private Map<String, Contribuinte> registados;                          /* Dicionário que associa o NIF do Contribuinte (Chave) à sua informação (Valor) */
     private List<Fatura> faturas;                                          /* Lista com as faturas registadas */
-    
-    /* private Map<String, String> hash_password = new HashMap<>(); */     /* Dicionário que guarda as hash code das passwords */
-    /* private Set<String> activities_available = new HashSet<>(); */
+    private List<String> atividades_economicas_disponiveis;                 /* Set com as atividades económicas disponíveis no Sistema */
 
     /**
      * Método para fazer uma pausa no sistema de x segundos.
@@ -78,9 +76,7 @@ public class Sistema implements Serializable
      */
     public LocalDate convertToLocalDate(Date dateToConvert)
     {
-        return dateToConvert.toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
+        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
     
     /**
@@ -94,6 +90,23 @@ public class Sistema implements Serializable
         this.contribuinte = null;
         this.registados = new HashMap<>();
         this.faturas = new ArrayList<>();
+        this.atividades_economicas_disponiveis = new ArrayList<>();
+        this.atividades_economicas_disponiveis.add("Saúde");
+        this.atividades_economicas_disponiveis.add("Educação");
+        this.atividades_economicas_disponiveis.add("Restauração");
+        this.atividades_economicas_disponiveis.add("Transportes");
+        this.atividades_economicas_disponiveis.add("Manutenção e Reparação de veículos");
+        this.atividades_economicas_disponiveis.add("Serviços Bancários");
+        this.atividades_economicas_disponiveis.add("Serviços de fornecimento de eletricidade e água");
+        this.atividades_economicas_disponiveis.add("Cabeleireiros e Estética");
+        this.atividades_economicas_disponiveis.add("Agricultura");
+        this.atividades_economicas_disponiveis.add("Indústrias extrativas e transformadoras");
+        this.atividades_economicas_disponiveis.add("Comércio");
+        this.atividades_economicas_disponiveis.add("Construção");
+        this.atividades_economicas_disponiveis.add("Alojamento e Hotelaria");
+        this.atividades_economicas_disponiveis.add("Informação e Comunicação");
+        this.atividades_economicas_disponiveis.add("Seguros");
+        this.atividades_economicas_disponiveis.add("Imóveis");        
     }
 
     /**
@@ -173,6 +186,35 @@ public class Sistema implements Serializable
             this.faturas.add(f.clone());
         }
     }
+
+    /**
+     * Método que devolve o set das atividades económicas do Sistema.
+     * @param
+     * return List<String>
+     */
+    public List<String> getAtividadesEconomicas()
+    {
+        List<String> res = new ArrayList<>();
+        for(String s : this.atividades_economicas_disponiveis)
+        {
+            res.add(s);
+        }
+        return res;
+    }
+
+    /**
+     * Método que atualiza o set das atividades económicas do Sistema.
+     * @param List<String>
+     * return
+     */
+    public void setAtividadesEconomicas(List<String> atividades)
+    {
+        this.atividades_economicas_disponiveis = new ArrayList<>();
+        for(String s : atividades)
+        {
+            this.atividades_economicas_disponiveis.add(s);
+        }
+    }
     
     /**
      * Método que permite fazer o login dos Contribuinte no Sistema.
@@ -191,14 +233,8 @@ public class Sistema implements Serializable
         if(this.registados.containsKey(username) && this.registados.get(username).getPassword().equals(password))
         {
             this.contribuinte = this.registados.get(username).clone();
-            if(this.registados.get(username) instanceof Individual)
-            {
-                r = 1;
-            }
-            else if(this.registados.get(username) instanceof Coletivo)
-            {
-                r = 2;
-            }
+            if(this.registados.get(username) instanceof Individual) r = 1;
+            else if(this.registados.get(username) instanceof Coletivo) r = 2;
             System.out.print("\nEntrou com sucesso no Sistema!");
             time(1000);
         }
@@ -255,23 +291,8 @@ public class Sistema implements Serializable
     {
         System.out.print("Saiu com sucesso do Menu!");
         time(1000);
-    } 
-    /*private void registar_Atividades_Economicas()
-    {
-        this.activities_available.add("Saúde");
-        this.activities_available.add("Educação");
-        this.activities_available.add("Imóveis");
-        this.activities_available.add("Lares");
-        this.activities_available.add("Manutenção e Reparação de veículos");
-        this.activities_available.add("Alojamento");
-        this.activities_available.add("Restauração");
-        this.activities_available.add("Cabeleireiros");
-        this.activities_available.add("Veterinários");
-        this.activities_available.add("Transportes Públicos");
-        this.activities_available.add("Serviços Bancários");
-        this.activities_available.add("Eletricidade e Água");
-    }*/
-    
+    }
+
     /**
      * Método que regista um contribuinte individual no sistema.
      * @param
@@ -294,7 +315,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Email --> "); email = read2.nextLine();
-        }while(email.indexOf('@') == -1);
+        }while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
 
         do{
             System.out.print("Nome --> "); nome = read2.nextLine();
@@ -314,10 +335,7 @@ public class Sistema implements Serializable
         
         do{
             bool = true;
-            if(numero_ag == 1)
-            {
-                System.out.println("NIF 1: " + nif); nifs.add(nif);
-            }
+            if(numero_ag == 1) {System.out.println("NIF 1: " + nif); nifs.add(nif);}
             else
             {
                 System.out.println("NIF 1: " + nif); nifs.add(nif);
@@ -343,13 +361,22 @@ public class Sistema implements Serializable
         }while(bool == false);
         
         do{
-            System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); at = read2.nextLine();
-        }while(at.length() == 0);
-        String[] ss = at.split("-");
-        for(int i=0; i < ss.length; i++)
-        {
-            ats.add(ss[i]);
-        }
+            for(String t: this.atividades_economicas_disponiveis)
+            {
+                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
+                if(at.equals("S") || at.equals("s"))
+                {
+                    ats.add(t);
+                }
+                else if(at.equals("N") || at.equals("n")) {}
+                else
+                {
+                    System.out.print("Erro: Dados inválidos!");
+                    time(1500);
+                    return;
+                }
+            }
+        }while(ats.size() == 0);
         
         do{
             System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
@@ -360,16 +387,13 @@ public class Sistema implements Serializable
         
         if(!this.registados.containsKey(ci.getNIF()))
         {
-            System.out.print("\nA registar ...");
             this.registados.put(ci.getNIF(), ci.clone());
-            time(1000);
-            System.out.print("\nContribuinte registado com sucesso!");
-            time(1500);
+            System.out.print("\nA registar ..."); time(1000);
+            System.out.print("\nContribuinte registado com sucesso!"); time(1500);
         }
         else
         {
-            System.out.print("\nAviso: Já existe um Contribuinte Individual com este NIF no Sistema.");
-            time(1500);
+            System.out.print("\nAviso: Já existe um Contribuinte Individual com este NIF no Sistema."); time(1500);
         }
     }
     
@@ -381,13 +405,12 @@ public class Sistema implements Serializable
     public void registar_CC()
     {
         List<String> ats = new ArrayList<>(); List<Integer> index = new ArrayList<>();
-        String nif, email, nome, morada, password, atividades;
+        String nif, email, nome, morada, password, at;
         boolean isNumeric;
         double numero_cf;
         Scanner read1 = new Scanner(System.in); Scanner read2 = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
-        
         do{
             System.out.print("NIF --> "); nif = read2.nextLine();
             isNumeric = nif.chars().allMatch(Character::isDigit); /* Verificar se a string NIF é numérica. */
@@ -395,7 +418,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Email --> "); email = read2.nextLine();
-        } while(email.indexOf('@') == -1);
+        } while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
 
         do{
             System.out.print("Nome --> "); nome = read2.nextLine();
@@ -410,13 +433,22 @@ public class Sistema implements Serializable
         }while(password.length() == 0);
         
         do{
-            System.out.print("Atividades Económicas (nota: Separe as atividades económicas por um único hífen -) --> "); atividades = read2.nextLine();
-        }while(atividades.length() == 0);
-        String[] ss = atividades.split("-");
-        for(int i=0; i < ss.length; i++)
-        {
-            ats.add(ss[i]);
-        }
+            for(String t: this.atividades_economicas_disponiveis)
+            {
+                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
+                if(at.equals("S") || at.equals("s"))
+                {
+                    ats.add(t);
+                }
+                else if(at.equals("N") || at.equals("n")) {}
+                else
+                {
+                    System.out.print("Erro: Dados inválidos!");
+                    time(1500);
+                    return;
+                }
+            }
+        }while(ats.size() == 0);
         
         do{
             System.out.print("Coeficiente Fiscal --> "); numero_cf = read1.nextDouble();
@@ -427,16 +459,13 @@ public class Sistema implements Serializable
         
         if(!this.registados.containsKey(cc.getNIF()))
         {
-            System.out.print("\nA registar ...");
-            this.registados.put(cc.getNIF(), cc.clone());
-            time(1000);
-            System.out.print("\nContribuinte registado com sucesso!");
-            time(1500);
+            this.registados.put(cc.getNIF(),cc.clone());
+            System.out.print("\nA registar ..."); time(1000);
+            System.out.print("\nContribuinte registado com sucesso!"); time(1500);
         }
         else
         {
-            System.out.print("\nAviso: Já existe um Contribuinte com este NIF no Sistema.");
-            time(1500);
+            System.out.print("\nAviso: Já existe um Contribuinte com este NIF no Sistema."); time(1500);
         }
     }
     
@@ -447,9 +476,11 @@ public class Sistema implements Serializable
      */
     public void registar_Faturas()
     {
+        StringBuilder sb = new StringBuilder();
+        List<String> at = new ArrayList<>();
         boolean isNumeric;
         double valor;
-        String nif_ci, descriçao, atividade;
+        String nif_ci, descriçao, atividades;
         Scanner read1 = new Scanner(System.in); Scanner read2 = new Scanner(System.in);
         
         System.out.print("Submissão de Fatura associada a uma despesa:\n");
@@ -460,17 +491,29 @@ public class Sistema implements Serializable
         {
             System.out.print("NIF do cliente --> "); nif_ci = read2.nextLine();
             isNumeric = nif_ci.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
-        } while(!this.registados.containsKey(nif_ci) || nif_e.equals(nif_ci) || nif_ci.length() != 9 || isNumeric == false || (nif_ci.indexOf('1') != 0 && nif_ci.indexOf('2') != 0 && nif_ci.indexOf('5') != 0));
+        }while(!this.registados.containsKey(nif_ci) || nif_e.equals(nif_ci) || nif_ci.length() != 9 || isNumeric == false || (nif_ci.indexOf('1') != 0 && nif_ci.indexOf('2') != 0 && nif_ci.indexOf('5') != 0));
         
         do
         {
             System.out.print("Descrição da despesa --> "); descriçao = read2.nextLine();
         }while(descriçao.length() == 0);
         
-        do
-        {   
-            System.out.print("Natureza / Atividade económica da despesa --> "); atividade = read2.nextLine();
-        }while(atividade.length() == 0);
+        if(((Coletivo) this.contribuinte).getATIVIDADES_ECONOMICAS().size() == 1)
+        {
+            at.add(((Coletivo) this.contribuinte).getATIVIDADES_ECONOMICAS().get(0));
+            sb.append(((Coletivo) this.contribuinte).getATIVIDADES_ECONOMICAS().get(0));
+            System.out.println("Atividade(s) económica(s) da despesa --> " + sb.toString());
+        }
+        else
+        {
+            for(String s: ((Coletivo) this.contribuinte).getATIVIDADES_ECONOMICAS())
+            {
+                at.add(s);
+                sb.append(s).append(", ");
+            }
+            String res = sb.toString(); res = res.substring(0, res.length()-2); 
+            System.out.println("Atividade(s) económica(s) da despesa --> " + res);
+        }
         
         do
         {
@@ -479,12 +522,11 @@ public class Sistema implements Serializable
         
         System.out.print("Data / Hora da despesa --> "); LocalDateTime data_hora = LocalDateTime.now(); System.out.print(data_hora.toString());
         
-        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, atividade, valor);
+        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false);
         
-        if(!this.faturas.contains(f))
+        if(at.size() == 1 && !this.faturas.contains(f))
         {
             this.faturas.add(f.clone());
-            System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!");
             
             List<Integer> cc = this.registados.get(nif_e).getIndex();
             cc.add(this.faturas.indexOf(f));
@@ -497,14 +539,72 @@ public class Sistema implements Serializable
             List<Integer> contribuinte_in_system = this.contribuinte.getIndex();
             contribuinte_in_system.add(this.faturas.indexOf(f));
             this.contribuinte.setIndex(contribuinte_in_system);
-            //this.contribuinte = this.registados.get(nif_e).clone();
             
-            time(1500);
+            System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1500);
+        }
+        else if(at.size() >= 2 && !this.faturas.contains(f))
+        {
+            f.setPendente(true);
+            this.faturas.add(f.clone());
+            
+            List<Integer> cc = this.registados.get(nif_e).getIndex();
+            cc.add(this.faturas.indexOf(f));
+            this.registados.get(nif_e).setIndex(cc);
+            
+            List<Integer> cliente = this.registados.get(nif_ci).getIndex();
+            cliente.add(this.faturas.indexOf(f));
+            this.registados.get(nif_ci).setIndex(cliente);
+            
+            List<Integer> contribuinte_in_system = this.contribuinte.getIndex();
+            contribuinte_in_system.add(this.faturas.indexOf(f));
+            this.contribuinte.setIndex(contribuinte_in_system);
+            
+            System.out.print("\n\nA fatura foi submetida com sucesso no Sistema! Fatura Pendente de Validação por parte do Contribuinte!"); time(2000);
         }
         else
         {
-            System.out.print("\nAviso: Esta fatura já foi submetida anteriormente.");
-            time(1500);
+            System.out.print("\nAviso: Esta fatura já foi submetida anteriormente."); time(1500);
+        }
+    }
+    
+    /**
+     * Método que trata de validar faturas pendentes por parte dos Contribuintes.
+     * @param
+     * @return
+     */
+    public void validar_faturas_pendentes()
+    {
+        String option;
+        List<String> res = new ArrayList<>();
+        Scanner read = new Scanner(System.in);
+        
+        for(int i: this.contribuinte.getIndex())
+        {
+            if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
+            {
+                System.out.print("Fatura por validar:\n\n");
+                System.out.println(this.faturas.get(i).toString());
+                
+                for(String s:  this.faturas.get(i).getNatureza_Despesa())
+                {
+                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "?(S/N) "); option = read.nextLine();
+                    if(option.equals("S") || option.equals("s"))
+                    {
+                        res.add(s);
+                        this.faturas.get(i).setNatureza_Despesa(res);
+                        this.faturas.get(i).setPendente(false);
+                        res.clear();
+                        System.out.print("Fatura validada com sucesso.\n\n"); time(1500);
+                        break;
+                    }
+                    else if (option.equals("N") || option.equals("n")) {}
+                    else
+                    {
+                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                        return;
+                    }
+                }
+            }
         }
     }
     
@@ -529,11 +629,9 @@ public class Sistema implements Serializable
         try{
             System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
             boolean b = isValidDate(data);
-            if(b == false)
-            {
+            if(b == false){
                 System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
-                System.out.print("Prima enter para continuar ...");
-                read.nextLine();
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
                 return;
             }
             LocalDate ld1 = convertToLocalDate(date1);
@@ -572,9 +670,7 @@ public class Sistema implements Serializable
                 System.out.println(this.faturas.get(i).toString());
             }
         }
-        
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
     
     /**
@@ -603,28 +699,27 @@ public class Sistema implements Serializable
         });
         for(int i: this.registados.get(nif).getIndex())
         {
-            tree.add(this.faturas.get(i).clone());
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
+            {
+                tree.add(this.faturas.get(i).clone());
+            }
         }
         for(Fatura f: tree)
         {
             System.out.println(f.toString());
         }
-        
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
     
     /**
      * Método que indica o total facturado por uma empresa num determinado período.
-     * @param
      * @param
      * @return
      */
     public void total_faturado_CC()
     {
         double res = 0;
-        LocalDateTime inicio = LocalDateTime.now();
-        LocalDateTime fim = LocalDateTime.now();
+        LocalDateTime inicio = LocalDateTime.now(); LocalDateTime fim = LocalDateTime.now();
         LocalTime lt = LocalTime.of(0, 0, 0);
         Date date1, date2;
         String data;
@@ -633,52 +728,43 @@ public class Sistema implements Serializable
         try{
             System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
             boolean b = isValidDate(data);
-            if(b == false)
-            {
+            if(b == false){
                 System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
-                System.out.print("Prima enter para continuar ...");
-                read.nextLine();
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
                 return;
             }
             LocalDate ld1 = convertToLocalDate(date1);
             inicio = LocalDateTime.of(ld1, lt);
         }catch(Exception e){
-            System.out.println("\nErro!");
-            System.out.print("Prima enter para continuar ...");
-            read.nextLine();
+            System.out.print("\nErro!\nPrima enter para continuar ..."); read.nextLine();
             return;
         };
         
         try{
             System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
             boolean b = isValidDate(data);
-            if(b == false)
-            {
+            if(b == false){
                 System.out.println("\nErro: Inseriu um data inválida de acordo com o formato indicado!");
-                System.out.print("Prima enter para continuar ...");
-                read.nextLine();
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
                 return;
             }
             LocalDate ld2 = convertToLocalDate(date2);
             fim = LocalDateTime.of(ld2, lt);
         }catch(Exception e){
-            System.out.println("\nErro!");
-            System.out.print("Prima enter para continuar ...");
-            read.nextLine();
+            System.out.print("\nErro!\nPrima enter para continuar ..."); read.nextLine();
             return;
         };
         
         System.out.print("\n");
         for(int i: this.contribuinte.getIndex())
         {
-            if(this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
             {
                 res += this.faturas.get(i).getValor_Despesa();
             }
         }
-        System.out.println("Total faturado pela Empresa " + this.contribuinte.getNome() + ": " + res + " €.");
-        System.out.print("\nPrima enter para continuar ...");
-        read.nextLine();
+        System.out.println("Total faturado pela Empresa / Instituição " + this.contribuinte.getNome() + ": " + res + " €.");
+        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
     
     /**
@@ -718,9 +804,7 @@ public class Sistema implements Serializable
         {
             System.out.println(f.toString());
         }
-        
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
     
     /**
@@ -759,9 +843,7 @@ public class Sistema implements Serializable
         {
             System.out.println(f.toString());
         }
-        
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
@@ -777,31 +859,51 @@ public class Sistema implements Serializable
         {
             System.out.println(this.faturas.get(i).toString());
         }
-
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
-     * Método que permite visualizar todas as faturas de uma Empresa.
+     * Método que permite visualizar todas as faturas emitidas por parte de uma Empresa.
      * @param
      * @return
      */
-    public void mostrar_faturas_CC()
+    public void mostrar_faturas_emitidas_CC()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas da empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
+        System.out.println("Faturas emitidas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
         for(int i: this.contribuinte.getIndex())
         {
-            System.out.println(this.faturas.get(i).toString());
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
+            {
+                System.out.println(this.faturas.get(i).toString());
+            }
         }
-
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
+     * Método que permite visualizar todas as faturas de despesas feitas por parte de uma Empresa.
+     * @param
+     * @return
+     */
+    public void mostrar_faturas_para_CC()
+    {
+        Scanner read = new Scanner(System.in);
+        System.out.println("Faturas de despesas feitas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
+        for(int i: this.contribuinte.getIndex())
+        {
+            if(this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
+            {
+                System.out.println(this.faturas.get(i).toString());
+            }
+        }
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
+    }    
+
+    /**
      * Método que permite ao administrador ver todas as faturas do Sistema.
+     * @param
+     * @return
      */
     public void mostrar_faturas_Administrador()
     {
@@ -811,13 +913,13 @@ public class Sistema implements Serializable
         {
             System.out.println(f.toString());
         }
-
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
      * Método que permite ao administrador ver todos os Contribuintes registados do Sistema.
+     * @param
+     * @return
      */
     public void mostrar_Contribuintes_Administrador()
     {
@@ -827,9 +929,7 @@ public class Sistema implements Serializable
         {
             System.out.println(c.toString());
         }
-
-        System.out.print("Prima enter para continuar ...");
-        read.nextLine();
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
@@ -868,7 +968,6 @@ public class Sistema implements Serializable
         double aux;
         int i = 0;
         Scanner read = new Scanner(System.in);
-        
         TreeSet<Contribuinte> top = new TreeSet<Contribuinte>(new Comparator()
         {
             public int compare(Object o1, Object o2)
@@ -878,18 +977,15 @@ public class Sistema implements Serializable
                 return gasto_Contribuinte(c1) > gasto_Contribuinte(c2) ? -1 : 1;
             }
         });
+        
         for(Contribuinte c: this.registados.values())
         {
             top.add(c.clone());
         }
-        System.out.println(top.toString());
         System.out.println("TOP 10 Contribuintes com mais gastos no Sistema:\n");
         for(Contribuinte c: top)
         {
-            if(i == 10)
-            {
-                break;
-            }
+            if(i == 10) break;
             if(c instanceof Individual)
             {
                 System.out.println("Contribuinte Individual " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
@@ -900,9 +996,7 @@ public class Sistema implements Serializable
             }
             i += 1;
         }
-        
-        System.out.print("\nPrima enter para continuar ...");
-        read.nextLine();
+        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
 
     /**

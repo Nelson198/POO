@@ -5,6 +5,8 @@
  * @version 1.0
  */
 import java.util.Comparator;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.Serializable;
@@ -17,8 +19,9 @@ public class Fatura implements Serializable
     private LocalDateTime data_hora_despesa;
     private String NIF_cliente;
     private String descrição_despesa;
-    private String natureza_despesa; //atividade económica
+    private List<String> natureza_despesa; //atividade económica
     private double valor_despesa;
+    private boolean pendente;
 
     /**
      * Construtor por omissão de Fatura.
@@ -32,8 +35,9 @@ public class Fatura implements Serializable
         this.data_hora_despesa = LocalDateTime.now();
         this.NIF_cliente = "N/D";
         this.descrição_despesa = "N/D";
-        this.natureza_despesa = "N/D";
+        this.natureza_despesa = new ArrayList<>();
         this.valor_despesa = 0;
+        this.pendente = false;
     }
     
     /**
@@ -47,15 +51,16 @@ public class Fatura implements Serializable
      * @param valor
      * @return
      */
-    public Fatura(String NIF_e, String nome_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, String natureza_d, double valor_d)
+    public Fatura(String NIF_e, String nome_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, List<String> natureza_d, double valor_d, boolean pendente)
     {
         this.NIF_emitente = NIF_e;
         this.nome_emitente = nome_e;
         this.data_hora_despesa = data_hora_d;
         this.NIF_cliente = NIF_c;
         this.descrição_despesa = descrição_d;
-        this.natureza_despesa = natureza_d;
+        setNatureza_Despesa(natureza_d);
         this.valor_despesa = valor_d;
+        this.pendente = pendente;
     }
     
     /**
@@ -72,6 +77,7 @@ public class Fatura implements Serializable
         this.descrição_despesa = umaDespesa.getDescriçao_Despesa();
         this.natureza_despesa = umaDespesa.getNatureza_Despesa();
         this.valor_despesa = umaDespesa.getValor_Despesa();
+        this.pendente = umaDespesa.getPendente();
     }
     
     /**
@@ -179,9 +185,14 @@ public class Fatura implements Serializable
      * @param
      * @return natureza_despesa
      */
-    public String getNatureza_Despesa()
+    public List<String> getNatureza_Despesa()
     {
-        return this.natureza_despesa;
+        List<String> res = new ArrayList<>();
+        for(String s: this.natureza_despesa)
+        {
+            res.add(s);
+        }
+        return res;
     }
     
     /**
@@ -189,9 +200,13 @@ public class Fatura implements Serializable
      * @param natureza_despesa
      * @return
      */
-    public void setNatureza_Despesa(String natureza_d)
+    public void setNatureza_Despesa(List<String> natureza_d)
     {
-        this.natureza_despesa = natureza_d;
+        this.natureza_despesa = new ArrayList<>();
+        for(String s: natureza_d)
+        {
+            this.natureza_despesa.add(s);
+        }
     }
     
     /**
@@ -213,6 +228,26 @@ public class Fatura implements Serializable
     {
         this.valor_despesa = valor_d;
     }
+    
+    /**
+     * Método que devolve a indicação de a fatura estar ou não pendente de validação por parte do contribuinte.
+     * @param
+     * @return boolean
+     */
+    public boolean getPendente()
+    {
+        return this.pendente;
+    }
+    
+    /**
+     * Método que atualiza a indicação de a fatura estar ou não pendente de validação por parte do contribuinte.
+     * @param boolean
+     * @return
+     */
+    public void setPendente(boolean b)
+    {
+        this.pendente = b;
+    }
 
     /**
      * Método que verifica se a Fatura d é igual à Fatura que recebe a mensagem.
@@ -230,9 +265,10 @@ public class Fatura implements Serializable
              && this.NIF_cliente.equals(d.getNIF_Cliente())
              && this.descrição_despesa.equals(d.getDescriçao_Despesa())
              && this.natureza_despesa.equals(d.getNatureza_Despesa())
-             && this.valor_despesa == d.getValor_Despesa());
+             && this.valor_despesa == d.getValor_Despesa()
+             && this.pendente == d.getPendente());
     }
-
+    
     /**
      * Método que devolve a representação em String da classe Fatura.
      * @param
@@ -246,6 +282,11 @@ public class Fatura implements Serializable
         sb.append(" num valor de ").append(this.getValor_Despesa()).append(" €, às ");
         sb.append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         sb.append(" na data ").append(this.getData_Hora().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"))).append(".\n");
+        
+        if(this.getPendente() == true)
+        {
+            sb.append("Esta fatura encrontra-se pendente de validação por parte do Contribuinte.\n");
+        }
         return sb.toString();
     }
     
