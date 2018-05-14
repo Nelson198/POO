@@ -582,7 +582,7 @@ public class Sistema implements Serializable
         {
             if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
             {
-                System.out.print("Fatura por validar:\n\n");
+                System.out.print("---> Fatura por validar:\n\n");
                 System.out.println(this.faturas.get(i).toString());
                 
                 for(String s:  this.faturas.get(i).getNatureza_Despesa())
@@ -624,7 +624,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
-        }while(!this.registados.containsKey(nif));
+        }while(!this.registados.containsKey(nif) || nif.equals(this.contribuinte.getNIF()));
         
         try{
             System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
@@ -685,7 +685,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
-        }while(!this.registados.containsKey(nif));
+        }while(!this.registados.containsKey(nif) || nif.equals(this.contribuinte.getNIF()));
         System.out.print("\n");
         
         TreeSet<Fatura> tree = new TreeSet<Fatura>(new Comparator()
@@ -763,7 +763,7 @@ public class Sistema implements Serializable
                 res += this.faturas.get(i).getValor_Despesa();
             }
         }
-        System.out.println("Total faturado pela Empresa / Instituição " + this.contribuinte.getNome() + ": " + res + " €.");
+        System.out.printf("Total faturado pela Empresa / Instituição %s: %.2f €.", this.contribuinte.getNome(), res);
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
     
@@ -988,11 +988,11 @@ public class Sistema implements Serializable
             if(i == 10) break;
             if(c instanceof Individual)
             {
-                System.out.println("Contribuinte Individual " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
+                System.out.printf("Contribuinte Individual %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
             }
             else if(c instanceof Coletivo)
             {
-                System.out.println("Empresa " + c.getNome() + ", com NIF " + c.getNIF() + ": " + gasto_Contribuinte(c) + " €.");
+                System.out.printf("Empresa / Instituição %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
             }
             i += 1;
         }
