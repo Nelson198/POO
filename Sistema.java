@@ -1,4 +1,12 @@
 /**
+ * TODO:
+ *  - Definir se é empresa interior no registo do contribuinte coletivo
+ *  - Redução do imposto se o contribuinte for individual e tiver familia numerosa
+ *  - Redução do imposto se o contribuinte for coletivo e for empresa interior
+ *  - Função que dado um NIF vê se a familia é numerosa
+ */
+
+/**
  * Classe Sistema.
  * 
  * @author P.O.O. - Project - 2017/2018
