@@ -1,0 +1,88 @@
+Faturas de todo o Sistema:
+
+Esta fatura foi emitida pela Empresa Hospital, cujo NIF é 512346789.
+O/A contribuinte com NIF 123456789 pagou / comprou / adquiriu um(uns) / uma/(umas) consulta de rotina num valor de 13.9 €, às 18:22:41 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Hospital, cujo NIF é 512346789.
+O/A contribuinte com NIF 123456788 pagou / comprou / adquiriu um(uns) / uma/(umas) consulta num valor de 17.8 €, às 18:23:05 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Hospital, cujo NIF é 512346789.
+O/A contribuinte com NIF 123456777 pagou / comprou / adquiriu um(uns) / uma/(umas) medicamentos num valor de 12.7 €, às 18:23:56 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Apple, cujo NIF é 512346788.
+O/A contribuinte com NIF 123456789 pagou / comprou / adquiriu um(uns) / uma/(umas) Apple Watch 2 Nike num valor de 299.0 €, às 18:25:10 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Apple, cujo NIF é 512346788.
+O/A contribuinte com NIF 123456788 pagou / comprou / adquiriu um(uns) / uma/(umas) Beats Solo 3 Wireless num valor de 299.0 €, às 18:25:43 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Apple, cujo NIF é 512346788.
+O/A contribuinte com NIF 123456777 pagou / comprou / adquiriu um(uns) / uma/(umas) Ipad num valor de 400.0 €, às 18:26:24 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa U.M., cujo NIF é 512346777.
+O/A contribuinte com NIF 123456789 pagou / comprou / adquiriu um(uns) / uma/(umas) mensalidade de transporte AAUM num valor de 25.45 €, às 18:28:53 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa U.M., cujo NIF é 512346777.
+O/A contribuinte com NIF 123456789 pagou / comprou / adquiriu um(uns) / uma/(umas) livro num valor de 18.0 €, às 18:29:35 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa U.M., cujo NIF é 512346777.
+O/A contribuinte com NIF 123456788 pagou / comprou / adquiriu um(uns) / uma/(umas) bloco de senhas de cantina num valor de 25.95 €, às 18:30:07 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa U.M., cujo NIF é 512346777.
+O/A contribuinte com NIF 123456777 pagou / comprou / adquiriu um(uns) / uma/(umas) 150 num valor de 150.0 €, às 18:30:30 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Apple, cujo NIF é 512346788.
+O/A contribuinte com NIF 512346666 pagou / comprou / adquiriu um(uns) / uma/(umas) Imac Pro 5k num valor de 5500.0 €, às 18:38:30 na data 19/05/2018.
+
+Esta fatura foi emitida pela Empresa Asus, cujo NIF é 512346666.
+O/A contribuinte com NIF 512346788 pagou / comprou / adquiriu um(uns) / uma/(umas) Zenbook Pro 15' UX550VE num valor de 1799.0 €, às 18:41:05 na data 19/05/2018.
+
+=====================================================================================================================================================================================================================
+
+Contribuintes registados no Sistema:
+
+Contribuinte Coletivo: (NIF: 512346789, Email: hospital@gmail.com, Nome: Hospital, Morada: Braga, Password de Acesso: med, Indíces das Faturas associadas: [0, 1, 2], Atividades Económicas: {Saúde=0.0}, Coeficiente Fiscal: 20.0)
+
+Contribuinte Coletivo: (NIF: 512346788, Email: apple@me.com, Nome: Apple, Morada: Londres, Password de Acesso: mac os, Indíces das Faturas associadas: [3, 4, 5, 10, 11], Atividades Económicas: {Comércio=1799.0}, Coeficiente Fiscal: 20.0)
+
+Contribuinte Coletivo: (NIF: 512346777, Email: um@outlook.com, Nome: U.M., Morada: Braga, Password de Acesso: reitor, Indíces das Faturas associadas: [6, 7, 8, 9], Atividades Económicas: {Habitação=0.0, Educação=0.0, Transportes públicos=0.0, Restauração e similares=0.0}, Coeficiente Fiscal: 20.0)
+
+Contribuinte Individual: (NIF: 123456666, Email: gonçalo@gmail.com, Nome: Gonçalo, Morada: Famalicão, Password: lcc, Indices das faturas associadas: [], Nº de elementos do Agregado Familiar: 1, NIF's do Agregado Familiar: [123456666], Atividades Económicas: {Educação=0.0, Transportes públicos=0.0, Saúde=0.0, Restauração e similares=0.0, Despesas gerais familiares=0.0}, Coeficiente Fiscal: 15.0)
+
+Contribuinte Individual: (NIF: 123455555, Email: ricardo@gmail.com, Nome: Ricardo, Morada: Braga, Password: lcc, Indices das faturas associadas: [], Nº de elementos do Agregado Familiar: 1, NIF's do Agregado Familiar: [123455555], Atividades Económicas: {Educação=0.0, Transportes públicos=0.0, Saúde=0.0, Despesas gerais familiares=0.0}, Coeficiente Fiscal: 15.0)
+
+Contribuinte Individual: (NIF: 123456788, Email: boticas@gmail.com, Nome: Boticas, Morada: Guimarães, Password: 81241, Indices das faturas associadas: [1, 4, 8], Nº de elementos do Agregado Familiar: 1, NIF's do Agregado Familiar: [123456788], Atividades Económicas: {Educação=0.0, Transportes públicos=0.0, Saúde=17.8, Despesas gerais familiares=324.95}, Coeficiente Fiscal: 15.0)
+
+Contribuinte Individual: (NIF: 123456777, Email: arlindo@gmail.com, Nome: Arlindo, Morada: Póvoa de Varzim, Password: 80298, Indices das faturas associadas: [2, 5, 9], Nº de elementos do Agregado Familiar: 1, NIF's do Agregado Familiar: [123456777], Atividades Económicas: {Habitação=150.0, Educação=0.0, Saúde=12.7, Despesas gerais familiares=400.0}, Coeficiente Fiscal: 15.0)
+
+Contribuinte Individual: (NIF: 123456789, Email: nelson@gmail.com, Nome: Nelson, Morada: Braga, Password: 80584, Indices das faturas associadas: [0, 3, 6, 7], Nº de elementos do Agregado Familiar: 1, NIF's do Agregado Familiar: [123456789], Atividades Económicas: {Educação=18.0, Transportes públicos=25.45, Saúde=13.9, Despesas gerais familiares=299.0}, Coeficiente Fiscal: 15.0)
+
+Contribuinte Coletivo: (NIF: 512346666, Email: asus@gmail.com, Nome: Asus, Morada: Madrid, Password de Acesso: zenbook, Indíces das Faturas associadas: [10, 11], Atividades Económicas: {Comércio=5500.0}, Coeficiente Fiscal: 20.0)
+
+Contribuinte Coletivo: (NIF: 512344444, Email: dell@gmail.com, Nome: Dell, Morada: Berlim, Password de Acesso: xps, Indíces das Faturas associadas: [], Atividades Económicas: {Comércio=0.0}, Coeficiente Fiscal: 20.0)
+
+=====================================================================================================================================================================================================================
+
+TOP 10 Contribuintes com mais gastos no Sistema:
+
+Empresa / Instituição Asus, com NIF 512346666: 5500,00 €.
+Empresa / Instituição Apple, com NIF 512346788: 1799,00 €.
+Contribuinte Individual Arlindo, com NIF 123456777: 562,70 €.
+Contribuinte Individual Nelson, com NIF 123456789: 356,35 €.
+Contribuinte Individual Boticas, com NIF 123456788: 342,75 €.
+Empresa / Instituição Hospital, com NIF 512346789: 0,00 €.
+Empresa / Instituição U.M., com NIF 512346777: 0,00 €.
+Contribuinte Individual Gonçalo, com NIF 123456666: 0,00 €.
+Contribuinte Individual Ricardo, com NIF 123455555: 0,00 €.
+Empresa / Instituição Dell, com NIF 512344444: 0,00 €.
+
+=====================================================================================================================================================================================================================
+
+TOP 5 Empresas / Instituições com mais faturas emitidas no Sistema:
+
+Empresa / Instituição Apple, com NIF 512346788: ---> 4 faturas emitidas; ---> Dedução fiscal acumulada: 500,00 €.
+Empresa / Instituição U.M., com NIF 512346777: ---> 4 faturas emitidas; ---> Dedução fiscal acumulada: 0,00 €.
+Empresa / Instituição Hospital, com NIF 512346789: ---> 3 faturas emitidas; ---> Dedução fiscal acumulada: 0,00 €.
+Empresa / Instituição Asus, com NIF 512346666: ---> 1 faturas emitidas; ---> Dedução fiscal acumulada: 500,00 €.
+Empresa / Instituição Dell, com NIF 512344444: ---> 0 faturas emitidas; ---> Dedução fiscal acumulada: 0,00 €.
+
+=====================================================================================================================================================================================================================
