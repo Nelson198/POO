@@ -15,6 +15,7 @@ public class Coletivo extends Contribuinte implements Serializable
     // Variáveis de instância
     private Map<String, Double> atividades_economicas;
     private double coeficiente_fiscal;
+    private boolean interior;
     
     /**
      * Construtor por omissão de Coletivo
@@ -26,6 +27,7 @@ public class Coletivo extends Contribuinte implements Serializable
         super();
         this.atividades_economicas = new HashMap<>();
         this.coeficiente_fiscal = 0;
+        this.interior = false;
     }
     
     /**
@@ -37,14 +39,16 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param password
      * @param atividades_economicas
      * @param coeficiente_fiscal
+     * @param interior
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                    Map<String, Double> atividades_economicas_p, double coeficiente_fiscal_p)
+                    Map<String, Double> atividades_economicas_p, double coeficiente_fiscal_p, boolean interior)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         setAtividades_Economicas(atividades_economicas_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
+        this.interior = interior;
     }
     
     /**
@@ -52,11 +56,12 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param Coletivo
      * @return
      */
-    public Coletivo(Coletivo umContribuinte_Coletivo_Empresa)
+    public Coletivo(Coletivo c)
     {
-        super(umContribuinte_Coletivo_Empresa);
-        this.atividades_economicas = umContribuinte_Coletivo_Empresa.getAtividades_Economicas();
-        this.coeficiente_fiscal = umContribuinte_Coletivo_Empresa.getCoeficiente_Fiscal();
+        super(c);
+        this.atividades_economicas = c.getAtividades_Economicas();
+        this.coeficiente_fiscal = c.getCoeficiente_Fiscal();
+        this.interior = c.getInterior();
     }
     
     /**
@@ -107,6 +112,26 @@ public class Coletivo extends Contribuinte implements Serializable
     {
         this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
+
+    /**
+     * Indica se empresa é do interior
+     * @param
+     * @return interior
+     */
+    public boolean getInterior() {
+        return this.interior;
+    }
+
+    /**
+     * Atualiza o estatuto da empresa (se é Empresa Interior ou não)
+     * @param interior
+     * @return
+     */
+    public void setInterior(boolean interior) {
+        this.interior = interior;
+    }
+
+
 
     /**
      * Método que verifica se a classe Coletivo d é igual à classe Coletivo que recebe a mensagem.
