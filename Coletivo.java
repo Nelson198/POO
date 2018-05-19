@@ -4,6 +4,8 @@
  * @author P.O.O. - Project - 2017/2018 
  * @version 1.0
  */
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -11,7 +13,7 @@ import java.io.Serializable;
 public class Coletivo extends Contribuinte implements Serializable
 {
     // Variáveis de instância
-    private List<String> atividades_economicas;
+    private Map<String, Double> atividades_economicas;
     private double coeficiente_fiscal;
     
     /**
@@ -22,7 +24,7 @@ public class Coletivo extends Contribuinte implements Serializable
     public Coletivo()
     {
         super();
-        this.atividades_economicas = new ArrayList<String>();
+        this.atividades_economicas = new HashMap<>();
         this.coeficiente_fiscal = 0;
     }
     
@@ -38,7 +40,7 @@ public class Coletivo extends Contribuinte implements Serializable
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                    List<String> atividades_economicas_p, double coeficiente_fiscal_p)
+                    Map<String, Double> atividades_economicas_p, double coeficiente_fiscal_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         setAtividades_Economicas(atividades_economicas_p);
@@ -62,12 +64,12 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param
      * @return atividades_economicas
      */
-    public List<String> getAtividades_Economicas()
+    public Map<String, Double> getAtividades_Economicas()
     {
-        List<String> nova = new ArrayList<String>();
-        for(String s: this.atividades_economicas)
+        Map<String, Double> nova = new HashMap<>();
+        for(String s: this.atividades_economicas.keySet())
         {
-            nova.add(s);
+            nova.put(s, this.atividades_economicas.get(s));
         }
         return nova;
     }
@@ -77,12 +79,12 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param atividades_economicas
      * @return
      */
-    public void setAtividades_Economicas(List<String> atividades_economicas_p)
+    public void setAtividades_Economicas(Map<String, Double> atividades_economicas_p)
     {
-        this.atividades_economicas = new ArrayList<>();
-        for(String ae: atividades_economicas_p)
+        this.atividades_economicas = new HashMap<>();
+        for(String ae: atividades_economicas_p.keySet())
         {
-            this.atividades_economicas.add(ae);
+            this.atividades_economicas.put(ae, atividades_economicas_p.get(ae));
         }
     }
 

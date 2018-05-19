@@ -107,7 +107,7 @@ public class Sistema implements Serializable
         this.atividades_economicas_disponiveis.put("Lares", new double[] {25.0, 400});
         this.atividades_economicas_disponiveis.put("Donativos", new double[] {0.0, 0.0});
 
-        this.descontos_ag = new double[] {5.0, 10.0, 12.5, 15.0, 20.0};
+        this.descontos_ag = new double[] {5.0, 10.0, 12.5, 15.0, 17.5};
     }
 
     /**
@@ -416,7 +416,8 @@ public class Sistema implements Serializable
      */
     public void registar_CC()
     {
-        List<String> ats = new ArrayList<>(); List<Integer> index = new ArrayList<>();
+        List<Integer> index = new ArrayList<>();
+        Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at;
         boolean isNumeric;
         double cf, r;
@@ -447,16 +448,19 @@ public class Sistema implements Serializable
         do{
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
-                if(at.equals("S") || at.equals("s"))
+                if(!t.equals("Despesas gerais familiares"))
                 {
-                    ats.add(t);
-                }
-                else if(at.equals("N") || at.equals("n")) {}
-                else
-                {
-                    System.out.print("Erro: Dados inválidos!"); time(1500);
-                    return;
+                    System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
+                    if(at.equals("S") || at.equals("s"))
+                    {
+                        ats.put(t, 0.0);
+                    }
+                    else if(at.equals("N") || at.equals("n")) {}
+                    else
+                    {
+                        System.out.print("Erro: Dados inválidos!"); time(1500);
+                        return;
+                    }
                 }
             }
         }while(ats.size() == 0);
@@ -502,13 +506,13 @@ public class Sistema implements Serializable
 
         if(c.getAtividades_Economicas().size() == 1)
         {
-            at.add(c.getAtividades_Economicas().get(0));
-            sb.append(c.getAtividades_Economicas().get(0));
+            at.add((String) c.getAtividades_Economicas().keySet().toArray()[0]);
+            sb.append((String) c.getAtividades_Economicas().keySet().toArray()[0]);
             System.out.println("Atividade(s) económica(s) da despesa --> " + sb.toString());
         }
         else
         {
-            for(String s: (c.getAtividades_Economicas()))
+            for(String s: c.getAtividades_Economicas().keySet())
             {
                 at.add(s);
                 sb.append(s).append(", ");
@@ -522,7 +526,6 @@ public class Sistema implements Serializable
             System.out.print("NIF do cliente --> "); nif_ci = read2.nextLine();
             isNumeric = nif_ci.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
         }while(!this.registados.containsKey(nif_ci) || nif_e.equals(nif_ci) || nif_ci.length() != 9 || isNumeric == false || (nif_ci.indexOf('1') != 0 && nif_ci.indexOf('2') != 0 && nif_ci.indexOf('5') != 0));
-        
 
         do
         {
@@ -557,7 +560,14 @@ public class Sistema implements Serializable
             
             if(at.size() == 1)
             {
-                acumular_valor_despesa_CI(f.clone(), nif_ci, at.get(0), valor);
+                if(this.registados.get(nif_ci) instanceof Individual) 
+                {
+                    acumular_valor_despesa_CI(nif_ci, at.get(0), valor);
+                }
+                else if(this.registados.get(nif_ci) instanceof Coletivo) 
+                {
+                    acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
+                }
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
             else if(at.size() >= 2) System.out.print("\n\nA fatura foi submetida com sucesso no Sistema! Fatura Pendente de Validação por parte do Contribuinte!"); time(2000);
@@ -591,7 +601,14 @@ public class Sistema implements Serializable
                         this.faturas.get(i).setNatureza_Despesa(res);
                         this.faturas.get(i).setPendente(false);
                         res.clear();
-                        acumular_valor_despesa_CI(this.faturas.get(i).clone(), this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
+                        if(this.contribuinte instanceof Individual)
+                        {
+                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
+                        }
+                        else if(this.contribuinte instanceof Coletivo)
+                        {
+                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
+                        }
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1500);
                         break;
                     }
@@ -607,11 +624,11 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente.
+     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Individual).
      * @param
      * @return
      */
-    public void acumular_valor_despesa_CI(Fatura f, String nif_ci, String at, double despesa)
+    public void acumular_valor_despesa_CI(String nif_ci, String at, double despesa)
     {
         double d;
         Map<String, Double> map;
@@ -638,6 +655,32 @@ public class Sistema implements Serializable
                     break;
                 }
                 else index += 1;
+            }
+        }
+    }
+    
+    /**
+     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Coletivo).
+     * @param
+     * @return
+     */
+    public void acumular_valor_despesa_CC(String nif_cc, String at, double despesa)
+    {
+        double d;
+        Map<String, Double> map;
+        if(this.registados.get(nif_cc) instanceof Coletivo)
+        {
+            Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
+            for(String s : c.getAtividades_Economicas().keySet())
+            {
+                if(at.compareTo(s) == 0)
+                {
+                    d = c.getAtividades_Economicas().get(s);
+                    map = c.getAtividades_Economicas();
+                    map.put(s, d + despesa);
+                    ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas(map);
+                    break;
+                }
             }
         }
     }
@@ -1107,8 +1150,8 @@ public class Sistema implements Serializable
             System.out.println("\nTOP " + n + " Empresas / Instituições com mais faturas emitidas no Sistema:\n");
             for(Coletivo c: top)
             {
-                if(i == n){ break; }
-                System.out.printf("Empresa / Instituição %s, com NIF %s: %d faturas emitidas.\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c));
+                if(i == n) break;
+                System.out.printf("Empresa / Instituição %s, com NIF %s: ---> %d faturas emitidas; ---> Dedução fiscal acumulada: %.2f €.\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c), calcular_deduçao_fiscal_CC(c));
                 i += 1;
             }
         }
@@ -1153,6 +1196,33 @@ public class Sistema implements Serializable
             System.out.printf("Montante de dedução fiscal acumulado pelo seu agregado familiar: %.2f €", res);
         }
         System.out.print("\n\nPrima enter para continuar ..."); ler.nextLine();
+    }
+
+    /**
+     * Método que calcula o montante de dedução fiscal de um contribuinte coletivo.
+     * @param
+     * @return
+     */
+    public double calcular_deduçao_fiscal_CC(Coletivo c)
+    {
+        Scanner ler = new Scanner(System.in);
+        double percentagem = 0; double maximo_valor = 0; double valor_deduzido = 0; double res = 0;
+
+        for(String s : c.getAtividades_Economicas().keySet())
+        {
+            valor_deduzido = c.getAtividades_Economicas().get(s);
+            percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+            maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
+            if(valor_deduzido <= maximo_valor)
+            {
+                res += valor_deduzido * (percentagem / 100);
+            }
+            else
+            {
+                res += maximo_valor;
+            }
+        }
+        return res;
     }
 
     /**
