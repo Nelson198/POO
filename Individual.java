@@ -4,6 +4,8 @@
  * @author P.O.O. - Project - 2017/2018 
  * @version 1.0
  */
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -11,10 +13,10 @@ import java.io.Serializable;
 public class Individual extends Contribuinte implements Serializable
 {
     // Variáveis de instância
-    private int agregado_familiar;               /* Nº de elementos do agregado familiar */
-    private List<String> NIFs_agregado_familiar; /* Array com os NIF's de cada elemento do agregado familiar */
-    private double coeficiente_fiscal;           /* factor multiplicativo que é associado a cada despesa elegível */
-    private List<String> atividades_economicas;  /* Ativididades Económicas */
+    private int agregado_familiar;                      /* Nº de elementos do agregado familiar */
+    private List<String> NIFs_agregado_familiar;        /* Array com os NIF's de cada elemento do agregado familiar */
+    private double coeficiente_fiscal;                  /* Factor multiplicativo que é associado a cada despesa elegível */
+    private Map<String, Double> atividades_economicas;  /* Dicionário: Chave -> Ativididade Económica; Valor -> valor descontado */
 
     /**
      * Construtor por omissão da classe Individual.
@@ -24,10 +26,10 @@ public class Individual extends Contribuinte implements Serializable
     public Individual()
     {
         super();
-        this.agregado_familiar = 0;
+        this.agregado_familiar = 1;
         this.NIFs_agregado_familiar = new ArrayList<>();
         this.coeficiente_fiscal = 0;
-        this.atividades_economicas = new ArrayList<>();
+        this.atividades_economicas = new HashMap<>();
     }
     
     /**
@@ -45,13 +47,13 @@ public class Individual extends Contribuinte implements Serializable
      * @return
      */
     public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p,
-                      int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, List<String> ae_p)
+                      int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, Map<String, Double> ae_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         this.agregado_familiar = agregado_familiar_p;
-        setNIFS_AGREGADO_FAMILIAR(NIFs_agregado_familiar_p);
+        setNifs_Agregado_Familiar(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
-        setATIVIDADES_ECONOMICAS(ae_p);
+        setAtividades_Economicas(ae_p);
     }
     
     /**
@@ -62,10 +64,10 @@ public class Individual extends Contribuinte implements Serializable
     public Individual(Individual umContribuinte_Individual)
     {
         super(umContribuinte_Individual);
-        this.agregado_familiar = umContribuinte_Individual.getAGREGADO_FAMILIAR();
-        this.NIFs_agregado_familiar = umContribuinte_Individual.getNIFS_AGREGADO_FAMILIAR();
-        this.coeficiente_fiscal = umContribuinte_Individual.getCOEFICIENTE_FISCAL();
-        this.atividades_economicas = umContribuinte_Individual.getATIVIDADES_ECONOMICAS();
+        this.agregado_familiar = umContribuinte_Individual.getAgregado_Familiar();
+        this.NIFs_agregado_familiar = umContribuinte_Individual.getNifs_Agregado_Familiar();
+        this.coeficiente_fiscal = umContribuinte_Individual.getCoeficiente_Fiscal();
+        this.atividades_economicas = umContribuinte_Individual.getAtividades_Economicas();
     }
     
     /**
@@ -73,7 +75,7 @@ public class Individual extends Contribuinte implements Serializable
      * @param
      * @return agreagado_familiar
      */
-    public int getAGREGADO_FAMILIAR()
+    public int getAgregado_Familiar()
     {
         return this.agregado_familiar;
     }
@@ -83,7 +85,7 @@ public class Individual extends Contribuinte implements Serializable
      * @param agreagado_familiar
      * @return
      */
-    public void setAGREGADO_FAMILIAR(int agregado_familiar_p)
+    public void setAgregado_Familiar(int agregado_familiar_p)
     {
         this.agregado_familiar = agregado_familiar_p;
     }
@@ -93,9 +95,9 @@ public class Individual extends Contribuinte implements Serializable
      * @param
      * @return NIFs_agregado_familiar
      */
-    public List<String> getNIFS_AGREGADO_FAMILIAR()
+    public List<String> getNifs_Agregado_Familiar()
     {
-        List<String> nova = new ArrayList<>(this.getAGREGADO_FAMILIAR());
+        List<String> nova = new ArrayList<>(this.getAgregado_Familiar());
         for(String nif: this.NIFs_agregado_familiar)
         {
             nova.add(nif);
@@ -108,7 +110,7 @@ public class Individual extends Contribuinte implements Serializable
      * @param NIFs_agregado_familiar
      * @return
      */
-    public void setNIFS_AGREGADO_FAMILIAR(List<String> NIFs_agregado_familiar_p)
+    public void setNifs_Agregado_Familiar(List<String> NIFs_agregado_familiar_p)
     {
         this.NIFs_agregado_familiar = new ArrayList<String>(this.agregado_familiar);
         for(String nif: NIFs_agregado_familiar_p)
@@ -122,7 +124,7 @@ public class Individual extends Contribuinte implements Serializable
      * @param
      * @return coeficiente_fiscal
      */
-    public double getCOEFICIENTE_FISCAL()
+    public double getCoeficiente_Fiscal()
     {
         return this.coeficiente_fiscal;
     }
@@ -132,37 +134,37 @@ public class Individual extends Contribuinte implements Serializable
      * @param coeficiente_fiscal
      * @return
      */
-    public void setCOEFICIENTE_FISCAL(double coeficiente_fiscal_p)
+    public void setCoeficiente_Fiscal(double coeficiente_fiscal_p)
     {
         this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
     
     /**
-     * Devolve a lista das atividades económicas do contribuinte individual.
+     * Devolve o dicionário das atividades económicas do contribuinte individual.
      * @param
-     * @return atividades_economicas
+     * @return Map<String, Double> atividades_economicas
      */
-    public List<String> getATIVIDADES_ECONOMICAS()
+    public Map<String, Double> getAtividades_Economicas()
     {
-        List<String> nova = new ArrayList<>();
-        for(String s: this.atividades_economicas)
+        Map<String, Double> nova = new HashMap<>();
+        for(String s: this.atividades_economicas.keySet())
         {
-            nova.add(s);
+            nova.put(s, this.atividades_economicas.get(s));
         }
         return nova;
     }
     
     /**
-     * Atualiza a lista das atividades económicas do contribuinte individual.
-     * @param atividades_economicas
+     * Atualiza o dicionário das atividades económicas do contribuinte individual.
+     * @param Map<String, Double> atividades_economicas
      * @return
      */
-    public void setATIVIDADES_ECONOMICAS(List<String> ae_p)
+    public void setAtividades_Economicas(Map<String, Double> ae_p)
     {
-        this.atividades_economicas= new ArrayList<>();
-        for(String s: ae_p)
+        this.atividades_economicas = new HashMap<>();
+        for(String s: ae_p.keySet())
         {
-            this.atividades_economicas.add(s);
+            this.atividades_economicas.put(s, ae_p.get(s));
         }
     }
 
@@ -176,9 +178,10 @@ public class Individual extends Contribuinte implements Serializable
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Individual c = (Individual) o;
-        return (super.equals(c) && this.agregado_familiar == c.getAGREGADO_FAMILIAR()
-                                && this.NIFs_agregado_familiar.equals(c.getNIFS_AGREGADO_FAMILIAR())
-                                && this.coeficiente_fiscal == c.getCOEFICIENTE_FISCAL());
+        return (super.equals(c) && this.agregado_familiar == c.getAgregado_Familiar()
+                                && this.NIFs_agregado_familiar.equals(c.getNifs_Agregado_Familiar())
+                                && this.coeficiente_fiscal == c.getCoeficiente_Fiscal()
+                                && this.atividades_economicas.equals(c.getAtividades_Economicas()));
     }
     
     /**
@@ -195,11 +198,11 @@ public class Individual extends Contribuinte implements Serializable
         sb.append("Nome: ").append(super.getNome()).append(", ");
         sb.append("Morada: ").append(super.getMorada()).append(", ");
         sb.append("Password: ").append(super.getPassword()).append(", ");
-        sb.append("Indices das faturas associadas: ").append(this.getIndex()).append(", ");
-        sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAGREGADO_FAMILIAR()).append(", ");
-        sb.append("NIF's do Agregado Familiar: ").append(this.getNIFS_AGREGADO_FAMILIAR().toString()).append(", ");
+        sb.append("Indices das faturas associadas: ").append(super.getIndex()).append(", ");
+        sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAgregado_Familiar()).append(", ");
+        sb.append("NIF's do Agregado Familiar: ").append(this.getNifs_Agregado_Familiar().toString()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append(")\n");
+        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
     }
     

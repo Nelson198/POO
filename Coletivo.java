@@ -38,10 +38,10 @@ public class Coletivo extends Contribuinte implements Serializable
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                                            List<String> atividades_economicas_p, double coeficiente_fiscal_p)
+                    List<String> atividades_economicas_p, double coeficiente_fiscal_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
-        setATIVIDADES_ECONOMICAS(atividades_economicas_p);
+        setAtividades_Economicas(atividades_economicas_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
     
@@ -53,8 +53,8 @@ public class Coletivo extends Contribuinte implements Serializable
     public Coletivo(Coletivo umContribuinte_Coletivo_Empresa)
     {
         super(umContribuinte_Coletivo_Empresa);
-        this.atividades_economicas = umContribuinte_Coletivo_Empresa.getATIVIDADES_ECONOMICAS();
-        this.coeficiente_fiscal = umContribuinte_Coletivo_Empresa.getCOEFICIENTE_FISCAL();
+        this.atividades_economicas = umContribuinte_Coletivo_Empresa.getAtividades_Economicas();
+        this.coeficiente_fiscal = umContribuinte_Coletivo_Empresa.getCoeficiente_Fiscal();
     }
     
     /**
@@ -62,7 +62,7 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param
      * @return atividades_economicas
      */
-    public List<String> getATIVIDADES_ECONOMICAS()
+    public List<String> getAtividades_Economicas()
     {
         List<String> nova = new ArrayList<String>();
         for(String s: this.atividades_economicas)
@@ -77,7 +77,7 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param atividades_economicas
      * @return
      */
-    public void setATIVIDADES_ECONOMICAS(List<String> atividades_economicas_p)
+    public void setAtividades_Economicas(List<String> atividades_economicas_p)
     {
         this.atividades_economicas = new ArrayList<>();
         for(String ae: atividades_economicas_p)
@@ -91,7 +91,7 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param 
      * @return coeficiente_fiscal
      */
-    public double getCOEFICIENTE_FISCAL()
+    public double getCoeficiente_Fiscal()
     {
         return this.coeficiente_fiscal;
     }
@@ -101,7 +101,7 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param coeficiente_fiscal
      * @return
      */
-    public void setCOEFICIENTE_FISCAL(double coeficiente_fiscal_p)
+    public void setCoeficiente_Fiscal(double coeficiente_fiscal_p)
     {
         this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
@@ -116,8 +116,8 @@ public class Coletivo extends Contribuinte implements Serializable
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Coletivo c = (Coletivo) o;
-        return (super.equals(c) && this.atividades_economicas.equals(c.getATIVIDADES_ECONOMICAS())
-                                && this.coeficiente_fiscal == c.getCOEFICIENTE_FISCAL());
+        return (super.equals(c) && this.atividades_economicas.equals(c.getAtividades_Economicas())
+                                && this.coeficiente_fiscal == c.getCoeficiente_Fiscal());
     }
    
     /**
@@ -134,9 +134,9 @@ public class Coletivo extends Contribuinte implements Serializable
         sb.append("Nome: ").append(super.getNome()).append(", ");
         sb.append("Morada: ").append(super.getMorada()).append(", ");
         sb.append("Password de Acesso: ").append(super.getPassword()).append(", ");
-        sb.append("Indíces das Faturas: ").append(super.getIndex()).append(", ");
-        sb.append("Atividades Económicas: ").append(this.getATIVIDADES_ECONOMICAS().toString()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCOEFICIENTE_FISCAL()).append(")\n");
+        sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append(", ");
+        sb.append("Atividades Económicas: ").append(this.getAtividades_Economicas().toString()).append(", ");
+        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
     }
     

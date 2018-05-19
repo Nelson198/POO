@@ -65,7 +65,9 @@ public class Menu
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");
         sb.append("                                                    ||        3 ---> Ver os 10 Contribuintes que mais gastaram em todo o Sistema.   ||\n");
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");
-        sb.append("                                                    ||        4 ---> ?                                                              ||\n");
+        sb.append("                                                    ||        4 ---> Ver a relação das X empresas que mais faturas têm em todo o    ||\n");
+        sb.append("                                                    ||               sistema e determinar o montante de deduções fiscais que as     ||\n");
+        sb.append("                                                    ||               despesas registadas (dessas empresas) representam.             ||\n");
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");                                     
         sb.append("                                                    ||        5 ---> Logout.                                                        ||\n");
         sb.append("                                                    ==================================================================================\n");
@@ -207,9 +209,12 @@ public class Menu
                                         break;
 
                                     case 5:
+                                        s.calcular_deduçao_fiscal_CI(1);
                                         break;
                                     
                                     case 6:
+                                        int n = ((Individual) s.getContribuinte()).getAgregado_Familiar();
+                                        s.calcular_deduçao_fiscal_CI(n);
                                         break;
                                     
                                     case 7:
@@ -316,7 +321,7 @@ public class Menu
                                         break;
 
                                     case 4:
-                                        
+                                        s.relaçao_X_CC();
                                         break;
                                     
                                     case 5:

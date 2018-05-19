@@ -278,14 +278,14 @@ public class Fatura implements Serializable
     {
         StringBuilder sb = new StringBuilder();
         sb.append("Esta fatura foi emitida pela Empresa ").append(this.getNome_Emitente()).append(", cujo NIF é ").append(this.getNIF_Emitente()).append(".\n");
-        sb.append("O/A contribuinte com NIF ").append(this.getNIF_Cliente()).append(" adquiriu um(uns) / uma/(umas) ").append(this.getDescriçao_Despesa());
+        sb.append("O/A contribuinte com NIF ").append(this.getNIF_Cliente()).append(" pagou / comprou / adquiriu um(uns) / uma/(umas) ").append(this.getDescriçao_Despesa());
         sb.append(" num valor de ").append(this.getValor_Despesa()).append(" €, às ");
         sb.append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         sb.append(" na data ").append(this.getData_Hora().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"))).append(".\n");
         
         if(this.getPendente() == true)
         {
-            sb.append("Esta fatura encrontra-se pendente de validação por parte do Contribuinte.\n");
+            sb.append("Esta fatura está pendente de validação por parte do Contribuinte.\n");
         }
         return sb.toString();
     }

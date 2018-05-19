@@ -13,62 +13,127 @@ C:\Program Files (x86)\BlueJ\jdk\bin\javadoc.exe
 -source
 1.8
 -classpath
-C:\Program Files (x86)\BlueJ\lib\bluejcore.jar;C:\Program Files (x86)\BlueJ\lib\junit-4.11.jar;C:\Program Files (x86)\BlueJ\lib\hamcrest-core-1.3.jar;C:\Program Files (x86)\BlueJ\lib\lang-stride.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-core.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-device.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-gpio-extension.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-service.jar;C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura
+C:\Program Files (x86)\BlueJ\lib\bluejcore.jar;C:\Program Files (x86)\BlueJ\lib\junit-4.11.jar;C:\Program Files (x86)\BlueJ\lib\hamcrest-core-1.3.jar;C:\Program Files (x86)\BlueJ\lib\lang-stride.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-core.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-device.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-gpio-extension.jar;C:\Program Files (x86)\BlueJ\lib\userlib\pi4j-service.jar;C:\Users\Asus\javafatura
 -d
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc
+C:\Users\Asus\javafatura\doc
 -encoding
 UTF-8
 -charset
 UTF-8
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java
+C:\Users\Asus\javafatura\Sistema.java
 <---- end of javadoc command ---->
-Loading source file C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java...
+Loading source file C:\Users\Asus\javafatura\Sistema.java...
 Constructing Javadoc information...
 Standard Doclet version 1.8.0_144
 Building tree for all the packages and classes...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\Contribuintes_Coletivos_Empresas.html...
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:21: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:21: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:51: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:63: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:78: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:92: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:92: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:67: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:77: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:87: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:97: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:107: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:117: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:127: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:137: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:147: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:157: warning - @return tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:167: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes.java:202: warning - @param tag has no arguments.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:21: warning - Tag @return cannot be used in constructor documentation.  It can only be used in the following types of documentation: method.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:21: warning - @param argument "" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:51: warning - Tag @return cannot be used in constructor documentation.  It can only be used in the following types of documentation: method.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:51: warning - @param argument "Contribuintes_Coletivos_Empresas" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - Tag @return cannot be used in constructor documentation.  It can only be used in the following types of documentation: method.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "NIF" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "email" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "nome" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "morada" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "password" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "atividades_economicas" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:39: warning - @param argument "coeficiente_fiscal" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:63: warning - @param argument "" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:92: warning - @param argument "" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:78: warning - @param argument "atividades_economicas" is not a parameter name.
-C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\Contribuintes_Coletivos_Empresas.java:78: warning - @return tag cannot be used in method with void return type.
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\package-frame.html...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\package-summary.html...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\constant-values.html...
+Generating C:\Users\Asus\javafatura\doc\Sistema.html...
+C:\Users\Asus\javafatura\Sistema.java:89: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:89: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:246: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:276: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:276: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:288: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:312: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:312: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:323: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:323: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:432: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:432: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:508: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:508: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:606: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:606: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:647: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:647: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:705: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:705: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:743: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:743: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:797: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:797: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:837: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:837: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:876: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:876: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:892: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:892: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:911: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:911: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:930: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:930: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:946: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:946: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1074: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1074: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1120: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1142: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1142: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1156: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1182: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:49: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:124: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:124: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:134: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:144: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:159: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:173: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:188: warning - @return tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:1055: warning - @param tag has no arguments.
+C:\Users\Asus\javafatura\Sistema.java:89: warning - Tag @return cannot be used in constructor documentation.  It can only be used in the following types of documentation: method.
+C:\Users\Asus\javafatura\Sistema.java:89: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1120: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:79: warning - @param argument "Date" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:705: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:705: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:647: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:647: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:202: warning - @param argument "return" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:231: warning - @param argument "return" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1142: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1142: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:62: warning - @param argument "String" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1156: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:288: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:246: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:312: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:312: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:276: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:276: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:946: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:946: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:930: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:930: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:876: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:876: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:892: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:892: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:797: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:797: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:837: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:837: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:911: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:911: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:432: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:432: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:323: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:323: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:508: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:508: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:1074: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1074: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:217: warning - @param argument "List<String>" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:1182: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:743: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:743: warning - @return tag cannot be used in method with void return type.
+C:\Users\Asus\javafatura\Sistema.java:606: warning - @param argument "" is not a parameter name.
+C:\Users\Asus\javafatura\Sistema.java:606: warning - @return tag cannot be used in method with void return type.
+Generating C:\Users\Asus\javafatura\doc\package-frame.html...
+Generating C:\Users\Asus\javafatura\doc\package-summary.html...
+Generating C:\Users\Asus\javafatura\doc\constant-values.html...
+Generating C:\Users\Asus\javafatura\doc\serialized-form.html...
 Building index for all the packages and classes...
 Building index for all classes...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\allclasses-frame.html...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\allclasses-noframe.html...
-Generating C:\Users\Asus\Desktop\P.O.O\Trabalho\javafactura\doc\index.html...
-36 warnings
+Generating C:\Users\Asus\javafatura\doc\allclasses-frame.html...
+Generating C:\Users\Asus\javafatura\doc\allclasses-noframe.html...
+Generating C:\Users\Asus\javafatura\doc\index.html...
+100 warnings
