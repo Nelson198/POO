@@ -431,7 +431,6 @@ public class Sistema implements Serializable
         double cf, r;
         Scanner read1 = new Scanner(System.in);
         Scanner read2 = new Scanner(System.in);
-        Scanner read3 = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
         do{
@@ -480,7 +479,7 @@ public class Sistema implements Serializable
         }while(cf <= 0);
 
         do{
-            System.out.print("Interior? (S/N): "); intr = read3.nextLine();
+            System.out.print("Interior? (S/N): "); intr = read2.nextLine();
             if(intr.equals("S") || intr.equals("s"))
             {
                 interior = true;
@@ -491,10 +490,11 @@ public class Sistema implements Serializable
             }
             else
             {
+                System.out.print("Introduziu um opção inválida!");
                 return;
             }
-        }while(!intr.equals("S") || !intr.equals("s") || !intr.equals("N") || !intr.equals("n"));
-  
+        }while(interior != true && interior != false);
+
         read1.close(); read2.close();
         Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf, interior);
         
@@ -570,6 +570,7 @@ public class Sistema implements Serializable
         if(!this.faturas.contains(f))
         {
             if(at.size() >= 2) f.setPendente(true);
+            
             this.faturas.add(f.clone());
         
             List<Integer> cc = this.registados.get(nif_e).getIndex();
@@ -579,10 +580,6 @@ public class Sistema implements Serializable
             List<Integer> cliente = this.registados.get(nif_ci).getIndex();
             cliente.add(this.faturas.indexOf(f));
             this.registados.get(nif_ci).setIndex(cliente);
-
-            List<Integer> utilizador = this.contribuinte.getIndex();
-            utilizador.add(this.faturas.indexOf(f));
-            this.contribuinte.setIndex(utilizador);
             
             if(at.size() == 1)
             {
@@ -612,7 +609,7 @@ public class Sistema implements Serializable
         List<String> res = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
             {
@@ -850,7 +847,7 @@ public class Sistema implements Serializable
         };
         
         System.out.print("\n");
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF()))
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
             {
@@ -879,7 +876,7 @@ public class Sistema implements Serializable
             }
         });
         
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             res.add(this.faturas.get(i).clone());
         }
@@ -891,7 +888,6 @@ public class Sistema implements Serializable
         else if (this.contribuinte instanceof Coletivo)
         {
             System.out.print("Listagem de Faturas da empresa " + this.contribuinte.getNome() + " ordenada por data de emissão:\n\n");
-
         }
 
         for(Fatura f: res)
@@ -919,7 +915,7 @@ public class Sistema implements Serializable
             }
         });
 
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             res.add(this.faturas.get(i).clone());
         }
@@ -949,7 +945,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas do contribuinte " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
         {
             System.out.println(this.faturas.get(i).toString());
         }
@@ -965,7 +961,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas emitidas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
             {
@@ -984,7 +980,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas de despesas feitas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.contribuinte.getIndex())
+        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
         {
             if(this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
             {
@@ -1109,7 +1105,7 @@ public class Sistema implements Serializable
     private int conta_faturas_emitidas_CC(Coletivo c)
     {
         int res = 0;
-        for(int i: c.getIndex())
+        for(int i: this.registados.get(c.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
             {
