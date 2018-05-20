@@ -854,7 +854,7 @@ public class Sistema implements Serializable
         };
         
         System.out.print("\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF()))
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
             {
@@ -952,7 +952,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas do contribuinte " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             System.out.println(this.faturas.get(i).toString());
         }
@@ -968,7 +968,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas emitidas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
             {
@@ -987,7 +987,7 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Faturas de despesas feitas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF().getIndex()))
+        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
             {
