@@ -534,7 +534,7 @@ public class Sistema implements Serializable
         {
             at.add((String) c.getAtividades_Economicas().keySet().toArray()[0]);
             sb.append((String) c.getAtividades_Economicas().keySet().toArray()[0]);
-            System.out.println("Atividade(s) económica(s) da despesa --> " + sb.toString());
+            System.out.println("Atividade económica da despesa --> " + sb.toString());
         }
         else
         {
@@ -544,7 +544,7 @@ public class Sistema implements Serializable
                 sb.append(s).append(", ");
             }
             String res = sb.toString(); res = res.substring(0, res.length()-2); 
-            System.out.println("Atividade(s) económica(s) da despesa --> " + res);
+            System.out.println("Possíveis atividades económicas da despesa --> " + res);
         }
         
         do
@@ -591,11 +591,17 @@ public class Sistema implements Serializable
                 {
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
-                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
+                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!");
+                time(1000);
             }
-            else if(at.size() >= 2) System.out.print("\n\nA fatura foi submetida com sucesso no Sistema! Fatura Pendente de Validação por parte do Contribuinte!"); time(2000);
+            else if(at.size() >= 2)
+            {
+                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema! Fatura Pendente de Validação por parte do Contribuinte!");
+                time(1000);
+            }
         }
-        else System.out.print("\nAviso: Esta fatura já foi submetida anteriormente."); time(2000);
+        else System.out.print("\nAviso: Esta fatura já foi submetida anteriormente."); 
+        time(2000);
     }
     
     /**
@@ -635,7 +641,8 @@ public class Sistema implements Serializable
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1500);
                         break;
                     }
-                    else if (option.equals("N") || option.equals("n")) {}
+                    else if (option.equals("N") || option.equals("n"))
+                    {}
                     else
                     {
                         System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
@@ -647,7 +654,7 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Individual).
+     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Individual), para efeitos de dedução fiscal.
      * @param
      * @return
      */
