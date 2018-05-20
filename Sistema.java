@@ -426,10 +426,12 @@ public class Sistema implements Serializable
     {
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
-        String nif, email, nome, morada, password, at;
-        boolean isNumeric;
+        String nif, email, nome, morada, password, at, intr;
+        boolean isNumeric, interior;
         double cf, r;
-        Scanner read1 = new Scanner(System.in); Scanner read2 = new Scanner(System.in);
+        Scanner read1 = new Scanner(System.in);
+        Scanner read2 = new Scanner(System.in);
+        Scanner read3 = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
         do{
@@ -476,9 +478,25 @@ public class Sistema implements Serializable
         do{
             System.out.print("Coeficiente Fiscal --> "); cf = read1.nextDouble();
         }while(cf <= 0);
+
+        do{
+            System.out.print("Interior? (S/N): "); intr = read3.nextLine();
+            if(intr.equals("S") || intr.equals("s"))
+            {
+                interior = true;
+            }
+            else if(intr.equals("N") || intr.equals("n"))
+            {
+                interior = false;
+            }
+            else
+            {
+                return;
+            }
+        }while(!intr.equals("S") || !intr.equals("s") || !intr.equals("N") || !intr.equals("n"));
   
         read1.close(); read2.close();
-        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf, interior);
         
         if(!this.registados.containsKey(cc.getNIF()))
         {
