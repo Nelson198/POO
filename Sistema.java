@@ -1039,14 +1039,14 @@ public class Sistema implements Serializable
         double res = 0;
         if(c instanceof Individual)
         {
-            for(int i: c.getIndex())
+            for(int i: this.registados.get(c.getNIF()).getIndex())
             {
                 res += this.faturas.get(i).getValor_Despesa();
             }
         }
         else if(c instanceof Coletivo)
         {
-            for(int i: c.getIndex())
+            for(int i: this.registados.get(c.getNIF()).getIndex())
             {
                 if(this.faturas.get(i).getNIF_Cliente().equals(c.getNIF()))
                 {
