@@ -323,7 +323,7 @@ public class Sistema implements Serializable
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, s, numero; 
         boolean isNumeric, bool;
-        int numero_ag;
+        int numero_ag, dependentes;
         double cf;
         Scanner read = new Scanner(System.in);
         
@@ -350,10 +350,16 @@ public class Sistema implements Serializable
         }while(password.length() == 0);
         
         do{
-            System.out.print("Nº de dependentes do agregado familiar --> "); numero = read.nextLine();
+            System.out.print("Nº de pessoas do agregado familiar --> "); numero = read.nextLine();
             isNumeric = numero.chars().allMatch(Character::isDigit);
             numero_ag = Integer.parseInt(numero);
         }while(numero_ag < 1 || isNumeric == false);
+
+        do {
+            System.out.print("Nº de dependentes --> "); numero = read.nextLine();
+            isNumeric = numero.chars().allMatch(Character::isDigit);
+            dependentes = Integer.parseInt(numero);
+        }while(numero_ag <= dependentes || isNumeric == false);
         
         do{
             bool = true;
@@ -409,7 +415,7 @@ public class Sistema implements Serializable
         }while(cf <= 0 || isNumeric == false);
 
         read.close();
-        Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, nifs, cf, ats);
+        Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, dependentes, nifs, cf, ats);
         
         if(!this.registados.containsKey(nif))
         {

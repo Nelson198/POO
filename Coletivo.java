@@ -123,7 +123,7 @@ public class Coletivo extends Contribuinte implements Serializable
     }
 
     /**
-     * Atualiza o estatuto da empresa (se é Empresa Interior ou não)
+     * Atualiza o estatuto da empresa (se é Empresa do Interior ou não)
      * @param interior
      * @return
      */
