@@ -43,7 +43,7 @@ public class Sistema implements Serializable
 {
     /* variáveis de instância */
     private static final String password_admin = "admin123";                           /* Palavra Passe do Administrador */
-    private Contribuinte contribuinte;                                                 /* Contribuinte que se encontra dentro do Sistema */
+    private String nif_contribuinte;                                                   /* NIF do Contribuinte que se encontra dentro do Sistema */
     private Map<String, Contribuinte> registados;                                      /* Dicionário que associa o NIF do Contribuinte (Chave) à sua informação (Valor) */
     private List<Fatura> faturas;                                                      /* Lista com as faturas registadas */
     private Map<String, double[]> atividades_economicas_disponiveis;                   /* Dicionário (Chave -> Atividade Económica; Valor -> [% de desconto, valor máximo de desconto] */
@@ -96,7 +96,7 @@ public class Sistema implements Serializable
      */
     public Sistema()
     {
-        this.contribuinte = null;
+        this.nif_contribuinte = "N/D";
         this.registados = new HashMap<>();
         this.faturas = new ArrayList<>();
 
@@ -129,13 +129,13 @@ public class Sistema implements Serializable
     }
     
     /**
-     * Método que devolve o Contribuinte (Individual ou Coletivo) que se encontra dentro do Sistema.
+     * Método que devolve o NIF do Contribuinte (Individual ou Coletivo) que se encontra dentro do Sistema.
      * @param
-     * @return Contribuinte que se encontra dentro do Sistema.
+     * @return NIF Contribuinte que se encontra dentro do Sistema.
      */
-    public Contribuinte getContribuinte()
+    public String getNIF_Contribuinte()
     {
-        return this.contribuinte.clone();
+        return this.nif_contribuinte;
     }
     
     /**
@@ -143,7 +143,7 @@ public class Sistema implements Serializable
      * @param
      * @return Map<String, Contribuinte> com os Contribuinte registados no Sistema.
      */
-    private Map<String, Contribuinte> getRegistados()
+    public Map<String, Contribuinte> getRegistados()
     {
         Map<String, Contribuinte> res = new HashMap<>();
         for(String s: this.registados.keySet())
@@ -251,7 +251,7 @@ public class Sistema implements Serializable
         
         if(this.registados.containsKey(username) && this.registados.get(username).getPassword().equals(password))
         {
-            this.contribuinte = this.registados.get(username).clone();
+            this.nif_contribuinte = username;
             if(this.registados.get(username) instanceof Individual) r = 1;
             else if(this.registados.get(username) instanceof Coletivo) r = 2;
             System.out.print("\nEntrou com sucesso no Sistema!");
@@ -272,7 +272,7 @@ public class Sistema implements Serializable
      */
     public void logout_Contribuinte()
     {
-        this.contribuinte = null;
+        this.nif_contribuinte = "N/D";
         System.out.print("Saiu com sucesso do Menu!");
         time(1000);
     }
@@ -321,37 +321,40 @@ public class Sistema implements Serializable
     {
         List<String> nifs = new ArrayList<>(); List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
-        String nif, email, nome, morada, password, at, s; 
-        boolean isNumeric, bool;
+        String nif, email, nome, morada, password, at, s, numero; 
+        boolean isNumeric, isLetter, bool;
         int numero_ag;
-        double cf, r;
-        Scanner read1 = new Scanner(System.in); Scanner read2 = new Scanner(System.in);
+        double cf;
+        Scanner read = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Individual:\n");
         do{
-            System.out.print("NIF --> "); nif = read2.nextLine();
+            System.out.print("NIF --> "); nif = read.nextLine();
             isNumeric = nif.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('1') != 0 && nif.indexOf('2') != 0);
         
         do{
-            System.out.print("Email --> "); email = read2.nextLine();
+            System.out.print("Email --> "); email = read.nextLine();
         }while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
 
         do{
-            System.out.print("Nome --> "); nome = read2.nextLine();
-        }while(nome.length() == 0);
+            System.out.print("Nome --> "); nome = read.nextLine();
+            isLetter = nome.chars().allMatch(Character::isLetter);
+        }while(nome.length() == 0  || isLetter == false);
         
         do{
-            System.out.print("Morada --> "); morada = read2.nextLine();
+            System.out.print("Morada --> "); morada = read.nextLine();
         }while(morada.length() == 0);
         
         do{
-            System.out.print("Password --> "); password = read2.nextLine();
+            System.out.print("Password --> "); password = read.nextLine();
         }while(password.length() == 0);
         
         do{
-            System.out.print("Nº de dependentes do agregado familiar --> "); numero_ag = read1.nextInt();
-        }while(numero_ag < 1);
+            System.out.print("Nº de dependentes do agregado familiar --> "); numero = read.nextLine();
+            isNumeric = numero.chars().allMatch(Character::isDigit);
+            numero_ag = Integer.parseInt(numero);
+        }while(numero_ag < 1 || isNumeric == false);
         
         do{
             bool = true;
@@ -361,7 +364,9 @@ public class Sistema implements Serializable
                 System.out.println("NIF 1: " + nif); nifs.add(nif);
                 for(int i = 2; i <= numero_ag; i++)
                 {
-                    System.out.printf("NIF %d: ", i); s = read2.nextLine(); nifs.add(s);
+                    System.out.printf("NIF %d: ", i);
+                    s = read.nextLine();
+                    nifs.add(s);
                 }
                 if(!nifs.contains(nif))
                 {
@@ -383,7 +388,7 @@ public class Sistema implements Serializable
         do{
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
+                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read.nextLine();
                 if(at.equals("S") || at.equals("s"))
                 {
                     ats.put(t, 0.0);
@@ -399,15 +404,17 @@ public class Sistema implements Serializable
         }while(ats.size() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); cf = read1.nextDouble();
-        }while(cf <= 0);
+            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            isNumeric = numero.chars().allMatch(Character::isDigit);
+            cf = Double.parseDouble(numero);
+        }while(cf <= 0 || isNumeric == false);
 
-        read1.close(); read2.close();
+        read.close();
         Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, nifs, cf, ats);
         
-        if(!this.registados.containsKey(ci.getNIF()))
+        if(!this.registados.containsKey(nif))
         {
-            this.registados.put(ci.getNIF(), ci.clone());
+            this.registados.put(nif, ci.clone());
             System.out.print("\nA registar ..."); time(1000);
             System.out.print("\nContribuinte registado com sucesso!"); time(1500);
         }
@@ -426,32 +433,32 @@ public class Sistema implements Serializable
     {
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
-        String nif, email, nome, morada, password, at, intr;
-        boolean isNumeric, interior;
-        double cf, r;
-        Scanner read1 = new Scanner(System.in);
-        Scanner read2 = new Scanner(System.in);
+        String nif, email, nome, morada, password, at, intr, numero;
+        boolean isNumeric, isLetter, interior;
+        double cf;
+        Scanner read = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
         do{
-            System.out.print("NIF --> "); nif = read2.nextLine();
+            System.out.print("NIF --> "); nif = read.nextLine();
             isNumeric = nif.chars().allMatch(Character::isDigit); /* Verificar se a string NIF é numérica. */
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('5') != 0);
         
         do{
-            System.out.print("Email --> "); email = read2.nextLine();
+            System.out.print("Email --> "); email = read.nextLine();
         } while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
 
         do{
-            System.out.print("Nome --> "); nome = read2.nextLine();
-        }while(nome.length() == 0);
+            System.out.print("Nome --> "); nome = read.nextLine();
+            isLetter = nome.chars().allMatch(Character::isLetter);
+        }while(nome.length() == 0  || isLetter == false);
         
         do{
-            System.out.print("Morada --> "); morada = read2.nextLine();
+            System.out.print("Morada --> "); morada = read.nextLine();
         }while(morada.length() == 0);
         
         do{
-            System.out.print("Password --> "); password = read2.nextLine();
+            System.out.print("Password --> "); password = read.nextLine();
         }while(password.length() == 0);
         
         do{
@@ -459,7 +466,7 @@ public class Sistema implements Serializable
             {
                 if(!t.equals("Despesas gerais familiares"))
                 {
-                    System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read2.nextLine();
+                    System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read.nextLine();
                     if(at.equals("S") || at.equals("s"))
                     {
                         ats.put(t, 0.0);
@@ -475,11 +482,13 @@ public class Sistema implements Serializable
         }while(ats.size() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); cf = read1.nextDouble();
-        }while(cf <= 0);
+            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            isNumeric = numero.chars().allMatch(Character::isDigit);
+            cf = Double.parseDouble(numero);
+        }while(cf <= 0 || isNumeric == false);
 
         do{
-            System.out.print("Interior? (S/N): "); intr = read2.nextLine();
+            System.out.print("Interior? (S/N): "); intr = read.nextLine();
             if(intr.equals("S") || intr.equals("s"))
             {
                 interior = true;
@@ -495,12 +504,12 @@ public class Sistema implements Serializable
             }
         }while(interior != true && interior != false);
 
-        read1.close(); read2.close();
+        read.close();
         Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf, interior);
         
-        if(!this.registados.containsKey(cc.getNIF()))
+        if(!this.registados.containsKey(nif))
         {
-            this.registados.put(cc.getNIF(),cc.clone());
+            this.registados.put(nif, cc.clone());
             System.out.print("\nA registar ..."); time(1000);
             System.out.print("\nContribuinte registado com sucesso!"); time(1500);
         }
@@ -517,24 +526,24 @@ public class Sistema implements Serializable
      */
     public void registar_Faturas()
     {
-        Coletivo c = ((Coletivo) this.contribuinte);
+        Coletivo c = ((Coletivo) this.registados.get(this.nif_contribuinte)).clone();
         StringBuilder sb = new StringBuilder();
         List<String> at = new ArrayList<>();
         boolean isNumeric;
         double valor, aux;
-        String nif_ci, descriçao, atividades;
-        Scanner read1 = new Scanner(System.in); Scanner read2 = new Scanner(System.in);
+        String nif_ci, descriçao, atividades, numero;
+        Scanner read = new Scanner(System.in);
         
         System.out.print("Submissão de Fatura associada a uma despesa:\n");
-        System.out.print("\nNIF do emitente --> "); String nif_e = this.contribuinte.getNIF(); System.out.print(nif_e);
-        System.out.print("\nNome do emitente --> "); String nome_e = this.contribuinte.getNome(); System.out.print(nome_e);
+        System.out.print("\nNIF do emitente --> "); String nif_e = this.nif_contribuinte; System.out.print(nif_e);
+        System.out.print("\nNome do emitente --> "); String nome_e = this.registados.get(nif_e).getNome(); System.out.print(nome_e);
         System.out.print("\n");
 
         if(c.getAtividades_Economicas().size() == 1)
         {
             at.add((String) c.getAtividades_Economicas().keySet().toArray()[0]);
             sb.append((String) c.getAtividades_Economicas().keySet().toArray()[0]);
-            System.out.println("Atividade económica da despesa --> " + sb.toString());
+            System.out.println("Atividade económica da Empresa --> " + sb.toString());
         }
         else
         {
@@ -544,27 +553,29 @@ public class Sistema implements Serializable
                 sb.append(s).append(", ");
             }
             String res = sb.toString(); res = res.substring(0, res.length()-2); 
-            System.out.println("Possíveis atividades económicas da despesa --> " + res);
+            System.out.println("Atividades económicas da Empresa --> " + res);
         }
         
         do
         {
-            System.out.print("NIF do cliente --> "); nif_ci = read2.nextLine();
+            System.out.print("NIF do cliente --> "); nif_ci = read.nextLine();
             isNumeric = nif_ci.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
         }while(!this.registados.containsKey(nif_ci) || nif_e.equals(nif_ci) || nif_ci.length() != 9 || isNumeric == false || (nif_ci.indexOf('1') != 0 && nif_ci.indexOf('2') != 0 && nif_ci.indexOf('5') != 0));
 
         do
         {
-            System.out.print("Descrição da despesa --> "); descriçao = read2.nextLine();
+            System.out.print("Descrição da despesa --> "); descriçao = read.nextLine();
         }while(descriçao.length() == 0);
         
         do
         {
-            System.out.print("Valor da despesa --> "); valor = read1.nextDouble();
-        }while(valor <= 0);
+            System.out.print("Valor da despesa --> "); numero = read.nextLine();
+            isNumeric = numero.chars().allMatch(Character::isDigit);
+            valor = Double.parseDouble(numero);
+        }while(valor <= 0 || isNumeric == false);
         
         System.out.print("Data / Hora da despesa --> "); LocalDateTime data_hora = LocalDateTime.now(); System.out.print(data_hora.toString());
-        
+        read.close();
         Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false);
         
         if(!this.faturas.contains(f))
@@ -615,9 +626,9 @@ public class Sistema implements Serializable
         List<String> res = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
+            if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println("---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
@@ -630,11 +641,11 @@ public class Sistema implements Serializable
                         this.faturas.get(i).setNatureza_Despesa(res);
                         this.faturas.get(i).setPendente(false);
                         res.clear();
-                        if(this.contribuinte instanceof Individual)
+                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
                             acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                         }
-                        else if(this.contribuinte instanceof Coletivo)
+                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
                             acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                         }
@@ -662,30 +673,27 @@ public class Sistema implements Serializable
     {
         double d;
         Map<String, Double> map;
-        if(this.registados.get(nif_ci) instanceof Individual)
+        Individual i = ((Individual) this.registados.get(nif_ci)).clone();
+        int index = 1;
+        for(String s : i.getAtividades_Economicas().keySet())
         {
-            Individual i = ((Individual) this.registados.get(nif_ci)).clone();
-            int index = 1;
-            for(String s : i.getAtividades_Economicas().keySet())
+            if(at.compareTo(s) == 0)
             {
-                if(at.compareTo(s) == 0)
-                {
-                    d = i.getAtividades_Economicas().get(s);
-                    map = i.getAtividades_Economicas();
-                    map.put(s, d + despesa);
-                    ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
-                    break;
-                }
-                else if(index == i.getAtividades_Economicas().keySet().size() && i.getAtividades_Economicas().containsKey("Despesas gerais familiares"))
-                {
-                    d = i.getAtividades_Economicas().get("Despesas gerais familiares");
-                    map = i.getAtividades_Economicas();
-                    map.put("Despesas gerais familiares", d + despesa);
-                    ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
-                    break;
-                }
-                else index += 1;
+                d = i.getAtividades_Economicas().get(s);
+                map = i.getAtividades_Economicas();
+                map.put(s, d + despesa);
+                ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
+                break;
             }
+            else if(index == i.getAtividades_Economicas().keySet().size() && i.getAtividades_Economicas().containsKey("Despesas gerais familiares"))
+            {
+                d = i.getAtividades_Economicas().get("Despesas gerais familiares");
+                map = i.getAtividades_Economicas();
+                map.put("Despesas gerais familiares", d + despesa);
+                ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
+                break;
+            }
+            else index += 1;
         }
     }
     
@@ -698,23 +706,20 @@ public class Sistema implements Serializable
     {
         double d;
         Map<String, Double> map;
-        if(this.registados.get(nif_cc) instanceof Coletivo)
+        Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
+        for(String s : c.getAtividades_Economicas().keySet())
         {
-            Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
-            for(String s : c.getAtividades_Economicas().keySet())
+            if(at.compareTo(s) == 0)
             {
-                if(at.compareTo(s) == 0)
-                {
-                    d = c.getAtividades_Economicas().get(s);
-                    map = c.getAtividades_Economicas();
-                    map.put(s, d + despesa);
-                    ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas(map);
-                    break;
-                }
+                d = c.getAtividades_Economicas().get(s);
+                map = c.getAtividades_Economicas();
+                map.put(s, d + despesa);
+                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas(map);
+                break;
             }
         }
     }
-    
+
     /**
      * Método que obtem as listagens das facturas por contribuinte num determinado intervalo de datas, por parte das empresas.
      * @param 
@@ -731,7 +736,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
-        }while(!this.registados.containsKey(nif) || nif.equals(this.contribuinte.getNIF()));
+        }while(!this.registados.containsKey(nif) || nif.equals(this.nif_contribuinte));
         
         try{
             System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
@@ -765,7 +770,7 @@ public class Sistema implements Serializable
         System.out.print("\n");
         for(int i: this.registados.get(nif).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
             {
                 System.out.println(this.faturas.get(i).toString());
             }
@@ -785,7 +790,7 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
-        }while(!this.registados.containsKey(nif) || nif.equals(this.contribuinte.getNIF()));
+        }while(!this.registados.containsKey(nif) || nif.equals(this.nif_contribuinte));
         System.out.print("\n");
         
         TreeSet<Fatura> tree = new TreeSet<Fatura>(new Comparator()
@@ -799,7 +804,7 @@ public class Sistema implements Serializable
         });
         for(int i: this.registados.get(nif).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
             {
                 tree.add(this.faturas.get(i).clone());
             }
@@ -854,19 +859,19 @@ public class Sistema implements Serializable
         };
         
         System.out.print("\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
             {
                 res += this.faturas.get(i).getValor_Despesa();
             }
         }
-        System.out.printf("Total faturado pela Empresa / Instituição %s: %.2f €.", this.contribuinte.getNome(), res);
+        System.out.printf("Total faturado pela Empresa / Instituição %s: %.2f €.", this.registados.get(this.nif_contribuinte).getNome(), res);
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
     
     /**
-     * Método que obter a listagem das facturas de um determinado contribuinte, ordenada por data de emissão (mais recente -> mais antiga).
+     * Método que obter a listagem das facturas de um determinado Contribuinte (Individual / Coletivo), ordenada por data de emissão (mais recente -> mais antiga).
      * @param
      * @return
      */
@@ -883,18 +888,18 @@ public class Sistema implements Serializable
             }
         });
         
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
             res.add(this.faturas.get(i).clone());
         }
 
-        if(this.contribuinte instanceof Individual)
+        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.contribuinte.getNome() + " ordenada por data de emissão:\n\n");
+            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
         }
-        else if (this.contribuinte instanceof Coletivo)
+        else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
-            System.out.print("Listagem de Faturas da empresa " + this.contribuinte.getNome() + " ordenada por data de emissão:\n\n");
+            System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
         }
 
         for(Fatura f: res)
@@ -905,7 +910,7 @@ public class Sistema implements Serializable
     }
     
     /**
-     * Método que obter a listagem das facturas de um determinado contribuinte, ordenada por valor crescente de despesa.
+     * Método que obter a listagem das facturas de um determinado Contribuinte (Individual / Coletivo), ordenada por valor crescente de despesa.
      * @param
      * @return
      */
@@ -922,18 +927,18 @@ public class Sistema implements Serializable
             }
         });
 
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
             res.add(this.faturas.get(i).clone());
         }
 
-        if(this.contribuinte instanceof Individual)
+        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.contribuinte.getNome() + " ordenada por valor crescente de despesa:\n\n");
+            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
         }
-        else if (this.contribuinte instanceof Coletivo)
+        else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
-            System.out.print("Listagem de Faturas da empresa " + this.contribuinte.getNome() + " ordenada por valor crescente de despesa:\n\n");
+            System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
         }
 
         for(Fatura f: res)
@@ -951,8 +956,8 @@ public class Sistema implements Serializable
     public void mostrar_faturas_CI()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas do contribuinte " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        System.out.println("Faturas do contribuinte " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
             System.out.println(this.faturas.get(i).toString());
         }
@@ -967,10 +972,10 @@ public class Sistema implements Serializable
     public void mostrar_faturas_emitidas_CC()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas emitidas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        System.out.println("Faturas emitidas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.contribuinte.getNIF()))
+            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
             {
                 System.out.println(this.faturas.get(i).toString());
             }
@@ -986,10 +991,10 @@ public class Sistema implements Serializable
     public void mostrar_faturas_para_CC()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas de despesas feitas pela empresa " + this.contribuinte.getNome() + ", com NIF " + this.contribuinte.getNIF() + ":\n");
-        for(int i: this.registados.get(this.contribuinte.getNIF()).getIndex())
+        System.out.println("Faturas de despesas feitas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Cliente().equals(this.contribuinte.getNIF()))
+            if(this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println(this.faturas.get(i).toString());
             }
@@ -1195,7 +1200,7 @@ public class Sistema implements Serializable
     public void calcular_deduçao_fiscal_CI(int numero_af)
     {
         Scanner ler = new Scanner(System.in);
-        Individual i = ((Individual) this.registados.get(this.contribuinte.getNIF())).clone();
+        Individual i = ((Individual) this.registados.get(this.nif_contribuinte)).clone();
         if (numero_af >= 5) numero_af = 5;
         double percentagem = 0; double maximo_valor = 0; double valor_deduzido = 0; double res = 0;
 

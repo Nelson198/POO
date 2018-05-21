@@ -213,7 +213,7 @@ public class Menu
                                         break;
                                     
                                     case 6:
-                                        int n = ((Individual) s.getContribuinte()).getAgregado_Familiar();
+                                        int n = ((Individual) s.getRegistados().get(s.getNIF_Contribuinte())).getAgregado_Familiar();
                                         s.calcular_deduçao_fiscal_CI(n);
                                         break;
                                     
