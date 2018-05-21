@@ -19,9 +19,10 @@ public class Fatura implements Serializable
     private LocalDateTime data_hora_despesa;
     private String NIF_cliente;
     private String descrição_despesa;
-    private List<String> natureza_despesa; //atividade económica
+    private List<String> natureza_despesa; /* Atividade económica */
     private double valor_despesa;
     private boolean pendente;
+    private int indice;                    /* Indice da última atividade económica para o qual a fatura foi validada da v.i. natureza_despesa. */ 
 
     /**
      * Construtor por omissão de Fatura.
@@ -38,6 +39,7 @@ public class Fatura implements Serializable
         this.natureza_despesa = new ArrayList<>();
         this.valor_despesa = 0;
         this.pendente = false;
+        this.indice = -1;
     }
     
     /**
@@ -49,9 +51,10 @@ public class Fatura implements Serializable
      * @param descrição
      * @param natureza
      * @param valor
+     * @param indice
      * @return
      */
-    public Fatura(String NIF_e, String nome_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, List<String> natureza_d, double valor_d, boolean pendente)
+    public Fatura(String NIF_e, String nome_e, LocalDateTime data_hora_d, String NIF_c, String descrição_d, List<String> natureza_d, double valor_d, boolean pendente, int indice)
     {
         this.NIF_emitente = NIF_e;
         this.nome_emitente = nome_e;
@@ -61,6 +64,7 @@ public class Fatura implements Serializable
         setNatureza_Despesa(natureza_d);
         this.valor_despesa = valor_d;
         this.pendente = pendente;
+        this.indice = indice;
     }
     
     /**
@@ -78,6 +82,7 @@ public class Fatura implements Serializable
         this.natureza_despesa = umaDespesa.getNatureza_Despesa();
         this.valor_despesa = umaDespesa.getValor_Despesa();
         this.pendente = umaDespesa.getPendente();
+        this.indice = umaDespesa.getIndice();
     }
     
     /**
@@ -250,6 +255,26 @@ public class Fatura implements Serializable
     }
 
     /**
+     * Devolve o indice da última atividade económica para o qual a despesa foi validada.
+     * @param
+     * @return indice
+     */
+    public int getIndice()
+    {
+        return this.indice;
+    }
+
+    /**
+     * Atualiza o indice da última atividade económica para o qual a despesa foi validada.
+     * @param indice
+     * @return
+     */
+    public void setIndice(int indice)
+    {
+        this.indice = indice;
+    }
+
+    /**
      * Método que verifica se a Fatura d é igual à Fatura que recebe a mensagem.
      * @param Object
      * @return boolean
@@ -266,7 +291,8 @@ public class Fatura implements Serializable
              && this.descrição_despesa.equals(d.getDescriçao_Despesa())
              && this.natureza_despesa.equals(d.getNatureza_Despesa())
              && this.valor_despesa == d.getValor_Despesa()
-             && this.pendente == d.getPendente());
+             && this.pendente == d.getPendente()
+             && this.indice == d.getIndice());
     }
     
     /**
@@ -285,8 +311,33 @@ public class Fatura implements Serializable
         
         if(this.getPendente() == true)
         {
-            sb.append("Esta fatura está pendente de validação por parte do Contribuinte.\n");
+            sb.append("Esta fatura está pendente de validação por parte do contribuinte com NIF: " + this.getNIF_Cliente() + ".\n");
         }
+        else
+        {
+            sb.append("Atividade económica associada: " + this.getNatureza_Despesa().get(this.getIndice()) + "\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Método que devolve a representação em String da classe Fatura para o administrador.
+     * @param
+     * @return String.
+     */
+    public String show()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Empresa emitente: ").append(this.getNome_Emitente()).append("\n");
+        sb.append("NIF da Empresa emitente: ").append(this.getNIF_Emitente()).append("\n");
+        sb.append("NIF do Contribuinte cliente: ").append(this.getNIF_Cliente()).append("\n");
+        sb.append("Descrição: ").append(this.getDescriçao_Despesa()).append("\n");
+        sb.append("Valor da despesa: ").append(this.getValor_Despesa()).append(" €").append("\n");
+        sb.append("Data da despesa: ").append(this.getData_Hora().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"))).append("\n");
+        sb.append("Hora da despesa: ").append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))).append("\n");
+        sb.append("Pendente? ").append(this.getPendente()).append("\n");
+        sb.append("Atividade(s) económica(s) associada(s): ").append(this.getNatureza_Despesa().toString()).append("\n");
+        sb.append("Índice da última atividade económica para o qual a fatura foi validada: ").append(this.getIndice()).append("\n\n");
         return sb.toString();
     }
     

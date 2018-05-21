@@ -322,7 +322,7 @@ public class Sistema implements Serializable
         List<String> nifs = new ArrayList<>(); List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, s, numero; 
-        boolean isNumeric, isLetter, bool;
+        boolean isNumeric, bool;
         int numero_ag;
         double cf;
         Scanner read = new Scanner(System.in);
@@ -330,7 +330,7 @@ public class Sistema implements Serializable
         System.out.print("Registar Contribuinte Individual:\n");
         do{
             System.out.print("NIF --> "); nif = read.nextLine();
-            isNumeric = nif.chars().allMatch(Character::isDigit); //Verificar se a string NIF é numérica.
+            isNumeric = nif.chars().allMatch(Character::isDigit);
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('1') != 0 && nif.indexOf('2') != 0);
         
         do{
@@ -339,8 +339,7 @@ public class Sistema implements Serializable
 
         do{
             System.out.print("Nome --> "); nome = read.nextLine();
-            isLetter = nome.chars().allMatch(Character::isLetter);
-        }while(nome.length() == 0  || isLetter == false);
+        }while(nome.length() == 0);
         
         do{
             System.out.print("Morada --> "); morada = read.nextLine();
@@ -416,7 +415,7 @@ public class Sistema implements Serializable
         {
             this.registados.put(nif, ci.clone());
             System.out.print("\nA registar ..."); time(1000);
-            System.out.print("\nContribuinte registado com sucesso!"); time(1500);
+            System.out.print("\nContribuinte registado com sucesso!"); time(1000);
         }
         else
         {
@@ -434,14 +433,14 @@ public class Sistema implements Serializable
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, intr, numero;
-        boolean isNumeric, isLetter, interior;
+        boolean isNumeric, interior;
         double cf;
         Scanner read = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
         do{
             System.out.print("NIF --> "); nif = read.nextLine();
-            isNumeric = nif.chars().allMatch(Character::isDigit); /* Verificar se a string NIF é numérica. */
+            isNumeric = nif.chars().allMatch(Character::isDigit);
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('5') != 0);
         
         do{
@@ -450,8 +449,7 @@ public class Sistema implements Serializable
 
         do{
             System.out.print("Nome --> "); nome = read.nextLine();
-            isLetter = nome.chars().allMatch(Character::isLetter);
-        }while(nome.length() == 0  || isLetter == false);
+        }while(nome.length() == 0);
         
         do{
             System.out.print("Morada --> "); morada = read.nextLine();
@@ -511,7 +509,7 @@ public class Sistema implements Serializable
         {
             this.registados.put(nif, cc.clone());
             System.out.print("\nA registar ..."); time(1000);
-            System.out.print("\nContribuinte registado com sucesso!"); time(1500);
+            System.out.print("\nContribuinte registado com sucesso!"); time(1000);
         }
         else
         {
@@ -576,11 +574,12 @@ public class Sistema implements Serializable
         
         System.out.print("Data / Hora da despesa --> "); LocalDateTime data_hora = LocalDateTime.now(); System.out.print(data_hora.toString());
         read.close();
-        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false);
+        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false, -1);
         
         if(!this.faturas.contains(f))
         {
             if(at.size() >= 2) f.setPendente(true);
+            else if(at.size() == 1) f.setIndice(0);
             
             this.faturas.add(f.clone());
         
@@ -602,17 +601,14 @@ public class Sistema implements Serializable
                 {
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
-                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!");
-                time(1000);
+                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
             else if(at.size() >= 2)
             {
-                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema! Fatura Pendente de Validação por parte do Contribuinte!");
-                time(1000);
+                System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!\nFatura pendente de validação por parte do Contribuinte!"); time(2000);
             }
         }
-        else System.out.print("\nAviso: Esta fatura já foi submetida anteriormente."); 
-        time(2000);
+        else System.out.print("\nAviso: Esta fatura já foi submetida anteriormente."); time(2000);
     }
     
     /**
@@ -623,12 +619,12 @@ public class Sistema implements Serializable
     public void validar_faturas_pendentes()
     {
         String option;
-        List<String> res = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getPendente() == true && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+            if((this.faturas.get(i).getPendente() && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte)) ||
+               (!this.faturas.get(i).getPendente() && this.faturas.get(i).getNatureza_Despesa().size() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte)))
             {
                 System.out.println("---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
@@ -637,10 +633,8 @@ public class Sistema implements Serializable
                     System.out.print("Deseja associar a esta despesa a atividade económica " + s + "?(S/N) "); option = read.nextLine();
                     if(option.equals("S") || option.equals("s"))
                     {
-                        res.add(s);
-                        this.faturas.get(i).setNatureza_Despesa(res);
                         this.faturas.get(i).setPendente(false);
-                        res.clear();
+                        this.faturas.get(i).setIndice(this.faturas.get(i).getNatureza_Despesa().indexOf(s));
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
                             acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
@@ -649,11 +643,10 @@ public class Sistema implements Serializable
                         {
                             acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                         }
-                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1500);
+                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
                     }
-                    else if (option.equals("N") || option.equals("n"))
-                    {}
+                    else if (option.equals("N") || option.equals("n")) {}
                     else
                     {
                         System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
@@ -1013,7 +1006,7 @@ public class Sistema implements Serializable
         System.out.println("Faturas de todo o Sistema:\n");
         for(Fatura f: this.faturas)
         {
-            System.out.println(f.toString());
+            System.out.print(f.show());
         }
         System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
