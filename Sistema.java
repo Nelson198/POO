@@ -1195,32 +1195,32 @@ public class Sistema implements Serializable
         Scanner ler = new Scanner(System.in);
         Individual i = ((Individual) this.registados.get(this.nif_contribuinte)).clone();
         if (numero_af >= 5) numero_af = 5;
-        double percentagem = 0; double maximo_valor = 0; double valor_deduzido = 0; double res = 0;
+        double percentagem = 0; double maximo_valor = 0; double valor_total = 0; double valor_deduzido = 0;
 
         for(String s : i.getAtividades_Economicas().keySet())
         {
-            valor_deduzido = i.getAtividades_Economicas().get(s);
-            percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+            valor_total = i.getAtividades_Economicas().get(s);
+            percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
             if(s.compareTo("Despesas gerais familiares") == 0) maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * numero_af;
             else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
-            if(valor_deduzido <= maximo_valor)
+            if(valor_total * percentagem <= maximo_valor)
             {
-                res += valor_deduzido * (percentagem / 100);
-                res += res * (this.descontos_ag.clone()[numero_af - 1] / 100);
+                valor_deduzido += valor_total * percentagem;
+                //valor_deduzido += valor_deduzido * (this.descontos_ag.clone()[numero_af - 1] / 100);
             }
             else
             {
-                res += maximo_valor;
-                res += res * (this.descontos_ag.clone()[numero_af - 1] / 100);
+                valor_deduzido = maximo_valor;
+                //valor_deduzido += valor_deduzido * (this.descontos_ag.clone()[numero_af - 1] / 100);
             }
         }
         if(numero_af == 1)
         {
-            System.out.printf("Montante de dedução fiscal acumulado por %s, com NIF %s: %.2f €.", i.getNome(), i.getNIF(), res);
+            System.out.printf("Montante de dedução fiscal acumulado por %s, com NIF %s: %.2f €.", i.getNome(), i.getNIF(), valor_deduzido);
         }
         else
         {
-            System.out.printf("Montante de dedução fiscal acumulado pelo seu agregado familiar: %.2f €", res);
+            System.out.printf("Montante de dedução fiscal acumulado pelo seu agregado familiar: %.2f €", valor_deduzido);
         }
         System.out.print("\n\nPrima enter para continuar ..."); ler.nextLine();
     }
