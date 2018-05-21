@@ -14,6 +14,7 @@ public class Individual extends Contribuinte implements Serializable
 {
     // Variáveis de instância
     private int agregado_familiar;                      /* Nº de elementos do agregado familiar */
+    private int dependentes;                            /* Nº de dependentes, ou seja, de filhos */
     private List<String> NIFs_agregado_familiar;        /* Array com os NIF's de cada elemento do agregado familiar */
     private double coeficiente_fiscal;                  /* Factor multiplicativo que é associado a cada despesa elegível */
     private Map<String, Double> atividades_economicas;  /* Dicionário: Chave -> Ativididade Económica; Valor -> valor descontado */
@@ -27,6 +28,7 @@ public class Individual extends Contribuinte implements Serializable
     {
         super();
         this.agregado_familiar = 1;
+        this.dependentes = 0;
         this.NIFs_agregado_familiar = new ArrayList<>();
         this.coeficiente_fiscal = 0;
         this.atividades_economicas = new HashMap<>();
@@ -47,9 +49,10 @@ public class Individual extends Contribuinte implements Serializable
      * @return
      */
     public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p,
-                      int agregado_familiar_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, Map<String, Double> ae_p)
+                      int agregado_familiar_p, int dependentes_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, Map<String, Double> ae_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
+        this.dependentes = dependentes_p;
         this.agregado_familiar = agregado_familiar_p;
         setNifs_Agregado_Familiar(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
@@ -65,6 +68,7 @@ public class Individual extends Contribuinte implements Serializable
     {
         super(umContribuinte_Individual);
         this.agregado_familiar = umContribuinte_Individual.getAgregado_Familiar();
+        this.dependentes = umContribuinte_Individual.getDependentes();
         this.NIFs_agregado_familiar = umContribuinte_Individual.getNifs_Agregado_Familiar();
         this.coeficiente_fiscal = umContribuinte_Individual.getCoeficiente_Fiscal();
         this.atividades_economicas = umContribuinte_Individual.getAtividades_Economicas();
@@ -88,6 +92,26 @@ public class Individual extends Contribuinte implements Serializable
     public void setAgregado_Familiar(int agregado_familiar_p)
     {
         this.agregado_familiar = agregado_familiar_p;
+    }
+
+    /**
+     * Devolve o nº de elementos dependentes do contribuinte individual.
+     * @param
+     * @return dependentes
+     */
+    public int getDependentes()
+    {
+        return this.dependentes;
+    }
+    
+    /**
+     * Atualiza o nº de dependentes do contribuinte individual.
+     * @param dependentes
+     * @return
+     */
+    public void setDependentes(int dependentes_p)
+    {
+        this.dependentes = dependentes_p;
     }
     
     /**
