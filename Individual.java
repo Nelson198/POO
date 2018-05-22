@@ -59,7 +59,7 @@ public class Individual extends Contribuinte implements Serializable
         setNifs_Agregado_Familiar(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         setAtividades_Economicas(ae_p);
-        this.fam_numerosa = (this.dependentes_p >= 4)
+        setFam_numerosa(dependentes_p);
     }
     
     /**
