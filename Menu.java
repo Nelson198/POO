@@ -209,7 +209,7 @@ public class Menu
                                         break;
 
                                     case 5:
-                                        s.calcular_deduçao_fiscal_CI();
+                                        s.calcular_deduçao_fiscal_CI(s.getNIF());
                                         break;
                                     
                                     case 6:

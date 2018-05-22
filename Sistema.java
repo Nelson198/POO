@@ -47,7 +47,7 @@ public class Sistema implements Serializable
     private Map<String, Contribuinte> registados;                                      /* Dicionário que associa o NIF do Contribuinte - Chave - à sua informação - Valor */
     private List<Fatura> faturas;                                                      /* Lista com as faturas registadas */
     private Map<String, double[]> atividades_economicas_disponiveis;                   /* Dicionário Chave -> Atividade Económica; Valor -> [% de desconto, valor máximo de desconto] */
-    private List<List<Contribuinte>> agregados;                                        /* List com todos os agregados familiares do sistema */
+    private List<List<String>> agregados;                                        /* List com todos os agregados familiares do sistema */
     private List<String> concelhos_fiscais;                                            /* List com os concelhos com benefícios fiscais */
 
     /**
@@ -405,7 +405,7 @@ public class Sistema implements Serializable
 
                 if(!this.agregados.contains(nifs)) {
                     this.agregados.add(nifs);
-                    index_agreagado = this.agregados.size();
+                    index_agregado = this.agregados.size();
                 } else {
                     index_agregado = this.agregados.get(nifs);
                 }
@@ -517,7 +517,7 @@ public class Sistema implements Serializable
             System.out.print("Concelho: "); concelho = read.nextLine();
             for (String s: this.concelhos_fiscais)
             {
-                if(s.compareTo(concelho)) {
+                if(s.compareTo(concelho) == 0) {
                     interior = true;
                 }
             }
@@ -1212,20 +1212,21 @@ public class Sistema implements Serializable
      * @param int numero_af
      * @return
      */
-    public void calcular_deduçao_fiscal_CI(Individual i)
+    public void calcular_deduçao_fiscal_CI(String n)
     {
         Scanner ler = new Scanner(System.in);
         double percentagem = 0; 
         double maximo_valor = 0; 
         double valor_total = 0; 
         double valor_deduzido = 0;
-        Map<String, double> sats = i.getAtividades_Economicas;
+        Individual i = (Individual) this.getRegistados().get(n);
+        Map<String, Double> sats = i.getAtividades_Economicas();
 
-        System.out.println("/n"+ i.getNome() ", NIF: " + i.getNIF() + ":");
+        System.out.println("/n"+ i.getNome() + ", NIF: " + n + ":");
 
         for(String s: this.atividades_economicas_disponiveis.keySet())
         {
-            if (s.compareTo("Outros")) {
+            if (s.compareTo("Outros") == 0) {
                 System.out.println(s + ": Não dedutível.");
             }
 
@@ -1248,12 +1249,11 @@ public class Sistema implements Serializable
 
     public void calcular_deduçao_fiscal_agregado(int i)
     {
-        List<Contribuinte> agregado = this.agregados.get(i);
+        List<String> agregado = this.agregados.get(i);
 
-        for(Contribuinte c: agregado)
+        for(String c: agregado)
         {
-            Individual cont = (Individual) c;
-            calcular_deduçao_fiscal_CI(cont);
+            calcular_deduçao_fiscal_CI(c);
         }
     }
 

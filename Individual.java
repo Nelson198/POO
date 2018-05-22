@@ -30,12 +30,11 @@ public class Individual extends Contribuinte implements Serializable
         super();
         this.agregado_familiar = 1;
         this.dependentes = 0;
-        this.NIFs_agregado_familiar = new ArrayList<>();
         this.coeficiente_fiscal = 0;
         this.atividades_economicas = new HashMap<>();
         this.atividades_economicas.put("Outros", 0.0);
-        this.fam_numerosa = False;
-        this.index_agregado = null;
+        this.fam_numerosa = false;
+        this.index_agregado = 0;
     }
     
     /**
@@ -59,7 +58,7 @@ public class Individual extends Contribuinte implements Serializable
         this.agregado_familiar = agregado_familiar_p;
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         setAtividades_Economicas(ae_p);
-        setFam_numerosa(dependentes_p);
+        setFam_Numerosa(dependentes_p);
         this.index_agregado = index_agregado_p;
     }
     
@@ -195,8 +194,8 @@ public class Individual extends Contribuinte implements Serializable
 
     public void setFam_Numerosa(int dependentes)
     {
-        if (dependentes >= 4) this.fam_numerosa = True;
-        else this.fam_numerosa = False;
+        if (dependentes >= 4) this.fam_numerosa = true;
+        else this.fam_numerosa = false;
     }
 
     /**
@@ -210,9 +209,11 @@ public class Individual extends Contribuinte implements Serializable
         if (o == null || this.getClass() != o.getClass()) return false;
         Individual c = (Individual) o;
         return (super.equals(c) && this.agregado_familiar == c.getAgregado_Familiar()
-                                && this.NIFs_agregado_familiar.equals(c.getNifs_Agregado_Familiar())
+                                && this.dependentes == c.getDependentes()
                                 && this.coeficiente_fiscal == c.getCoeficiente_Fiscal()
-                                && this.atividades_economicas.equals(c.getAtividades_Economicas()));
+                                && this.atividades_economicas.equals(c.getAtividades_Economicas())
+                                && this.index_agregado == c.getIndex_Agregado()
+                                && this.fam_numerosa == c.getFam_Numerosa());
     }
     
     /**
@@ -231,9 +232,10 @@ public class Individual extends Contribuinte implements Serializable
         sb.append("Password: ").append(super.getPassword()).append(", ");
         sb.append("Indices das faturas associadas: ").append(super.getIndex()).append(", ");
         sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAgregado_Familiar()).append(", ");
-        sb.append("NIF's do Agregado Familiar: ").append(this.getNifs_Agregado_Familiar().toString()).append(", ");
+        sb.append("Nº de dependentes: ").append(this.getDependentes()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
+        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(", ");
+        sb.append("Pertence a uma família numerosa? ").append(this.getFam_Numerosa()).append(")\n");
         return sb.toString();
     }
     
