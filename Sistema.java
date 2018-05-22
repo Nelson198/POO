@@ -47,7 +47,7 @@ public class Sistema implements Serializable
     private Map<String, Contribuinte> registados;                                      /* Dicionário que associa o NIF do Contribuinte - Chave - à sua informação - Valor */
     private List<Fatura> faturas;                                                      /* Lista com as faturas registadas */
     private Map<String, double[]> atividades_economicas_disponiveis;                   /* Dicionário Chave -> Atividade Económica; Valor -> [% de desconto, valor máximo de desconto] */
-    private List<List<String>> agregados;                                        /* List com todos os agregados familiares do sistema */
+    private List<List<String>> agregados;                                              /* List com todos os agregados familiares do sistema */
     private List<String> concelhos_fiscais;                                            /* List com os concelhos com benefícios fiscais */
 
     /**
@@ -132,7 +132,6 @@ public class Sistema implements Serializable
         this.concelhos_fiscais.add("Guarda");
         this.concelhos_fiscais.add("Macedo de Cavaleiros");
         this.concelhos_fiscais.add("Castelo de Vide");
-
     }
 
     /**
@@ -1200,7 +1199,7 @@ public class Sistema implements Serializable
             for(Coletivo c: top)
             {
                 if(i == n) break;
-                System.out.printf("Empresa / Instituição %s, com NIF %s: ---> %d faturas emitidas; ---> Dedução fiscal acumulada: %.2f €.\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c), calcular_deduçao_fiscal_CC(c));
+                System.out.printf("Empresa / Instituição %s, com NIF %s: ---> %d faturas emitidas; ---> Dedução fiscal: %.2f €.\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c), calcular_deduçao_fiscal_CC(c));
                 i += 1;
             }
         }
