@@ -406,7 +406,7 @@ public class Sistema implements Serializable
                     this.agregados.add(nifs);
                     index_agregado = this.agregados.size();
                 } else {
-                    index_agregado = this.agregados.get(nifs);
+                    index_agregado = this.agregados.indexOf(nifs);
                 }
             }
         }while(bool == false);
