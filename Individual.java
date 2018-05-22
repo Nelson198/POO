@@ -18,6 +18,7 @@ public class Individual extends Contribuinte implements Serializable
     private List<String> NIFs_agregado_familiar;        /* Array com os NIF's de cada elemento do agregado familiar */
     private double coeficiente_fiscal;                  /* Factor multiplicativo que é associado a cada despesa elegível */
     private Map<String, Double> atividades_economicas;  /* Dicionário: Chave -> Ativididade Económica; Valor -> valor descontado */
+    private boolean fam_numerosa;
 
     /**
      * Construtor por omissão da classe Individual.
@@ -32,6 +33,7 @@ public class Individual extends Contribuinte implements Serializable
         this.NIFs_agregado_familiar = new ArrayList<>();
         this.coeficiente_fiscal = 0;
         this.atividades_economicas = new HashMap<>();
+        this.fam_numerosa = False;
     }
     
     /**
@@ -57,6 +59,7 @@ public class Individual extends Contribuinte implements Serializable
         setNifs_Agregado_Familiar(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         setAtividades_Economicas(ae_p);
+        this.fam_numerosa = (this.dependentes_p >= 4)
     }
     
     /**
@@ -72,6 +75,7 @@ public class Individual extends Contribuinte implements Serializable
         this.NIFs_agregado_familiar = umContribuinte_Individual.getNifs_Agregado_Familiar();
         this.coeficiente_fiscal = umContribuinte_Individual.getCoeficiente_Fiscal();
         this.atividades_economicas = umContribuinte_Individual.getAtividades_Economicas();
+        this.fam_numerosa = umContribuinte_Individual.getFam_Numerosa();
     }
     
     /**
@@ -190,6 +194,17 @@ public class Individual extends Contribuinte implements Serializable
         {
             this.atividades_economicas.put(s, ae_p.get(s));
         }
+    }
+
+    public boolean getFam_Numerosa()
+    {
+        return this.fam_numerosa;
+    }
+
+    public void setFam_Numerosa(int dependentes)
+    {
+        if (dependentes >= 4) this.fam_numerosa = True;
+        else this.fam_numerosa = False;
     }
 
     /**
