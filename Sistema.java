@@ -330,7 +330,7 @@ public class Sistema implements Serializable
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, s, numero; 
         boolean isNumeric, bool;
-        int numero_ag, dependentes, index_agregado;
+        int numero_ag, dependentes, index_agregado = -1;
         double cf;
         Scanner read = new Scanner(System.in);
         
@@ -1213,7 +1213,6 @@ public class Sistema implements Serializable
      */
     public void calcular_deduçao_fiscal_CI(String n)
     {
-        Scanner ler = new Scanner(System.in);
         double percentagem = 0; 
         double maximo_valor = 0; 
         double valor_total = 0; 
@@ -1254,6 +1253,37 @@ public class Sistema implements Serializable
         {
             calcular_deduçao_fiscal_CI(c);
         }
+    }
+
+    /**
+     * Método que calcula a dedução fiscal acumulada das faturas asoociadas a um determina Empresa / Contribuinte Coletivo.
+     * @param Contribuinte Coletivo
+     * @return valor_deduzido
+     */
+    public double calcular_deduçao_fiscal_CC(Coletivo c)
+    {
+        double percentagem = 0;
+        double valor_total = 0;
+        double valor_deduzido = 0;
+        Map<String, Double> sats = c.getAtividades_Economicas();
+
+        for(int i: c.getIndex())
+        {
+            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
+            {
+                for(String s: sats.keySet())
+                {
+                    if (sats.containsKey("Outros")) {}
+                    else
+                    {
+                        percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+                        valor_total = sats.get(s);
+                        valor_deduzido += valor_total * percentagem;
+                    }
+                }
+            }
+        }
+        return valor_deduzido;
     }
 
     /**
