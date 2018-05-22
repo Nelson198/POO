@@ -209,12 +209,11 @@ public class Menu
                                         break;
 
                                     case 5:
-                                        s.calcular_deduçao_fiscal_CI(1);
+                                        s.calcular_deduçao_fiscal_CI();
                                         break;
                                     
                                     case 6:
-                                        int n = ((Individual) s.getRegistados().get(s.getNIF_Contribuinte())).getAgregado_Familiar();
-                                        s.calcular_deduçao_fiscal_CI(n);
+                                        s.calcular_deduçao_fiscal_agregado(s.getIndex_Agregado);
                                         break;
                                     
                                     case 7:

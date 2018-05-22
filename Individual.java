@@ -15,10 +15,10 @@ public class Individual extends Contribuinte implements Serializable
     // Variáveis de instância
     private int agregado_familiar;                      /* Nº de elementos do agregado familiar */
     private int dependentes;                            /* Nº de dependentes, ou seja, de filhos */
-    private List<String> NIFs_agregado_familiar;        /* Array com os NIF's de cada elemento do agregado familiar */
     private double coeficiente_fiscal;                  /* Factor multiplicativo que é associado a cada despesa elegível */
-    private Map<String, Double> atividades_economicas;  /* Dicionário: Chave -> Ativididade Económica; Valor -> valor descontado */
-    private boolean fam_numerosa;
+    private Map<String, Double> atividades_economicas;  /* Dicionário: Chave -> Ativididade Económica; Valor -> valor das faturas por cada atividade económica */
+    private boolean fam_numerosa;                       /* Booleano que indica se uma família é ou não numerosa */
+    private int index_agregado;                         /* Inteiro com o índice do agregado a que pertence */
 
     /**
      * Construtor por omissão da classe Individual.
@@ -33,7 +33,9 @@ public class Individual extends Contribuinte implements Serializable
         this.NIFs_agregado_familiar = new ArrayList<>();
         this.coeficiente_fiscal = 0;
         this.atividades_economicas = new HashMap<>();
+        this.atividades_economicas.put("Outros", 0.0);
         this.fam_numerosa = False;
+        this.index_agregado = null;
     }
     
     /**
@@ -45,21 +47,20 @@ public class Individual extends Contribuinte implements Serializable
      * @param password
      * @param index
      * @param agregado_familiar
-     * @param NIFs_agregado_familiar
      * @param coeficiente_fiscal
      * @param atividades_economicas
      * @return
      */
     public Individual(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p,
-                      int agregado_familiar_p, int dependentes_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, Map<String, Double> ae_p)
+                      int agregado_familiar_p, int dependentes_p, List<String> NIFs_agregado_familiar_p, double coeficiente_fiscal_p, Map<String, Double> ae_p, int index_agregado_p)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         this.dependentes = dependentes_p;
         this.agregado_familiar = agregado_familiar_p;
-        setNifs_Agregado_Familiar(NIFs_agregado_familiar_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         setAtividades_Economicas(ae_p);
         setFam_numerosa(dependentes_p);
+        this.index_agregado = index_agregado_p;
     }
     
     /**
@@ -72,10 +73,10 @@ public class Individual extends Contribuinte implements Serializable
         super(umContribuinte_Individual);
         this.agregado_familiar = umContribuinte_Individual.getAgregado_Familiar();
         this.dependentes = umContribuinte_Individual.getDependentes();
-        this.NIFs_agregado_familiar = umContribuinte_Individual.getNifs_Agregado_Familiar();
         this.coeficiente_fiscal = umContribuinte_Individual.getCoeficiente_Fiscal();
         this.atividades_economicas = umContribuinte_Individual.getAtividades_Economicas();
         this.fam_numerosa = umContribuinte_Individual.getFam_Numerosa();
+        this.index_agregado = umContribuinte_Individual.getIndex_Agregado();
     }
     
     /**
@@ -123,14 +124,9 @@ public class Individual extends Contribuinte implements Serializable
      * @param
      * @return NIFs_agregado_familiar
      */
-    public List<String> getNifs_Agregado_Familiar()
+    public int getIndex_Agregado()
     {
-        List<String> nova = new ArrayList<>(this.getAgregado_Familiar());
-        for(String nif: this.NIFs_agregado_familiar)
-        {
-            nova.add(nif);
-        }
-        return nova;
+        return this.index_agregado;
     }
     
     /**
@@ -138,13 +134,9 @@ public class Individual extends Contribuinte implements Serializable
      * @param NIFs_agregado_familiar
      * @return
      */
-    public void setNifs_Agregado_Familiar(List<String> NIFs_agregado_familiar_p)
+    public void setIndex_Agregado(int index_agregado_p)
     {
-        this.NIFs_agregado_familiar = new ArrayList<String>(this.agregado_familiar);
-        for(String nif: NIFs_agregado_familiar_p)
-        {
-            this.NIFs_agregado_familiar.add(nif);
-        }
+        this.index_agregado = index_agregado_p;
     }
 
     /**

@@ -44,10 +44,11 @@ public class Sistema implements Serializable
     /* variáveis de instância */
     private static final String password_admin = "admin123";                           /* Palavra Passe do Administrador */
     private String nif_contribuinte;                                                   /* NIF do Contribuinte que se encontra dentro do Sistema */
-    private Map<String, Contribuinte> registados;                                      /* Dicionário que associa o NIF do Contribuinte (Chave) à sua informação (Valor) */
+    private Map<String, Contribuinte> registados;                                      /* Dicionário que associa o NIF do Contribuinte - Chave - à sua informação - Valor */
     private List<Fatura> faturas;                                                      /* Lista com as faturas registadas */
-    private Map<String, double[]> atividades_economicas_disponiveis;                   /* Dicionário (Chave -> Atividade Económica; Valor -> [% de desconto, valor máximo de desconto] */
-    private double[] descontos_ag;                                                     /* Array com os descontos extra associados ao nº de elementos do agregado familiar */
+    private Map<String, double[]> atividades_economicas_disponiveis;                   /* Dicionário Chave -> Atividade Económica; Valor -> [% de desconto, valor máximo de desconto] */
+    private List<List<Contribuinte>> agregados;                                        /* List com todos os agregados familiares do sistema */
+    private List<String> concelhos_fiscais;                                            /* List com os concelhos com benefícios fiscais */
 
     /**
      * Método para fazer uma pausa no sistema de x segundos.
@@ -113,9 +114,25 @@ public class Sistema implements Serializable
         this.atividades_economicas_disponiveis.put("Serviços de fornecimento de eletricidade e água", new double[] {20.0, 600});
         this.atividades_economicas_disponiveis.put("Cabeleireiros e Estética", new double[] {15.0, 250});
         this.atividades_economicas_disponiveis.put("Lares", new double[] {25.0, 400});
-        this.atividades_economicas_disponiveis.put("Donativos", new double[] {0.0, 0.0});
+        this.atividades_economicas_disponiveis.put("Outros", new double[] {0.0, 0.0});
 
-        this.descontos_ag = new double[] {5.0, 10.0, 12.5, 15.0, 17.5};
+        this.concelhos_fiscais.add("Cabeceiras de Basto");
+        this.concelhos_fiscais.add("Évora");
+        this.concelhos_fiscais.add("Vilar Formoso");
+        this.concelhos_fiscais.add("Chaves");
+        this.concelhos_fiscais.add("Bragança");
+        this.concelhos_fiscais.add("Celorico de Basto");
+        this.concelhos_fiscais.add("Fundão");
+        this.concelhos_fiscais.add("Covilhã");
+        this.concelhos_fiscais.add("Reguengos de Monsaraz");
+        this.concelhos_fiscais.add("Beja");
+        this.concelhos_fiscais.add("Mourão");
+        this.concelhos_fiscais.add("Marvão");
+        this.concelhos_fiscais.add("Pedrógão Grande");
+        this.concelhos_fiscais.add("Guarda");
+        this.concelhos_fiscais.add("Macedo de Cavaleiros");
+        this.concelhos_fiscais.add("Castelo de Vide");
+
     }
 
     /**
@@ -226,16 +243,6 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que devolve a lista de descontos extra associada ao nº de elementos do agregado familiar. 
-     * @param
-     * @return
-     */
-    public double[] getDescontos_AG()
-    {
-        return this.descontos_ag;
-    }
-
-    /**
      * Método que permite fazer o login dos Contribuinte no Sistema.
      * @param
      * @return r
@@ -319,11 +326,12 @@ public class Sistema implements Serializable
      */
     public void registar_CI()
     {
-        List<String> nifs = new ArrayList<>(); List<Integer> index = new ArrayList<>();
+        List<String> nifs = new ArrayList<>(); 
+        List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, s, numero; 
         boolean isNumeric, bool;
-        int numero_ag, dependentes;
+        int numero_ag, dependentes, index_agregado;
         double cf;
         Scanner read = new Scanner(System.in);
         
@@ -363,29 +371,43 @@ public class Sistema implements Serializable
         
         do{
             bool = true;
-            if(numero_ag == 1) {System.out.println("NIF 1: " + nif); nifs.add(nif);}
+            if(numero_ag == 1) {
+                System.out.println("NIF 1: " + nif); 
+                nifs.add(nif);
+            }
             else
             {
-                System.out.println("NIF 1: " + nif); nifs.add(nif);
+                System.out.println("NIF 1: " + nif); 
+                nifs.add(nif);
+
                 for(int i = 2; i <= numero_ag; i++)
                 {
                     System.out.printf("NIF %d: ", i);
                     s = read.nextLine();
                     nifs.add(s);
                 }
+
                 if(!nifs.contains(nif))
                 {
-                    bool = false; nifs.clear();
-                }
-                else
-                {
+                    bool = false; 
+                    nifs.clear();
+                } else {
                     for(String a: nifs)
                     {
                         if((a.chars().allMatch(Character::isDigit)) == false || a.length() != 9)
                         {
-                            bool = false; nifs.clear(); break;
+                            bool = false;
+                            nifs.clear();
+                            break;
                         }
                     }
+                }
+
+                if(!this.agregados.contains(nifs)) {
+                    this.agregados.add(nifs);
+                    index_agreagado = this.agregados.size();
+                } else {
+                    index_agregado = this.agregados.get(nifs);
                 }
             }
         }while(bool == false);
@@ -415,7 +437,7 @@ public class Sistema implements Serializable
         }while(cf <= 0 || isNumeric == false);
 
         read.close();
-        Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, dependentes, nifs, cf, ats);
+        Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, dependentes, nifs, cf, ats, index_agregado);
         
         if(!this.registados.containsKey(nif))
         {
@@ -438,7 +460,7 @@ public class Sistema implements Serializable
     {
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
-        String nif, email, nome, morada, password, at, intr, numero;
+        String nif, email, nome, morada, password, at, concelho, numero;
         boolean isNumeric, interior;
         double cf;
         Scanner read = new Scanner(System.in);
@@ -492,21 +514,15 @@ public class Sistema implements Serializable
         }while(cf <= 0 || isNumeric == false);
 
         do{
-            System.out.print("Interior? (S/N): "); intr = read.nextLine();
-            if(intr.equals("S") || intr.equals("s"))
+            System.out.print("Concelho: "); concelho = read.nextLine();
+            for (String s: this.concelhos_fiscais)
             {
-                interior = true;
+                if(s.compareTo(concelho)) {
+                    interior = true;
+                }
             }
-            else if(intr.equals("N") || intr.equals("n"))
-            {
-                interior = false;
-            }
-            else
-            {
-                System.out.print("Introduziu um opção inválida!");
-                return;
-            }
-        }while(interior != true && interior != false);
+            interior = false;
+        }while(concelho.length() == 0);
 
         read.close();
         Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf, interior);
@@ -684,11 +700,11 @@ public class Sistema implements Serializable
                 ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
                 break;
             }
-            else if(index == i.getAtividades_Economicas().keySet().size() && i.getAtividades_Economicas().containsKey("Despesas gerais familiares"))
+            else if(index == i.getAtividades_Economicas().keySet().size() && i.getAtividades_Economicas().containsKey("Outros"))
             {
-                d = i.getAtividades_Economicas().get("Despesas gerais familiares");
+                d = i.getAtividades_Economicas().get("Outros");
                 map = i.getAtividades_Economicas();
-                map.put("Despesas gerais familiares", d + despesa);
+                map.put("Outros", d + despesa);
                 ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
                 break;
             }
@@ -1196,66 +1212,49 @@ public class Sistema implements Serializable
      * @param int numero_af
      * @return
      */
-    public void calcular_deduçao_fiscal_CI(int numero_af)
+    public void calcular_deduçao_fiscal_CI(Individual i)
     {
         Scanner ler = new Scanner(System.in);
-        Individual i = ((Individual) this.registados.get(this.nif_contribuinte)).clone();
-        if (numero_af >= 5) numero_af = 5;
-        double percentagem = 0; double maximo_valor = 0; double valor_total = 0; double valor_deduzido = 0;
+        double percentagem = 0; 
+        double maximo_valor = 0; 
+        double valor_total = 0; 
+        double valor_deduzido = 0;
+        Map<String, double> sats = i.getAtividades_Economicas;
 
-        for(String s : i.getAtividades_Economicas().keySet())
+        System.out.println("/n"+ i.getNome() ", NIF: " + i.getNIF() + ":");
+
+        for(String s: this.atividades_economicas_disponiveis.keySet())
         {
-            valor_total = i.getAtividades_Economicas().get(s);
-            percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
-            if(s.compareTo("Despesas gerais familiares") == 0) maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * numero_af;
-            else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
-            if(valor_total * percentagem <= maximo_valor)
-            {
-                valor_deduzido += valor_total * percentagem;
-                //valor_deduzido += valor_deduzido * (this.descontos_ag.clone()[numero_af - 1] / 100);
+            if (s.compareTo("Outros")) {
+                System.out.println(s + ": Não dedutível.");
             }
-            else
-            {
-                valor_deduzido = maximo_valor;
-                //valor_deduzido += valor_deduzido * (this.descontos_ag.clone()[numero_af - 1] / 100);
+
+            if(sats.containsKey(s)) {
+                
+                percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+                maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
+                valor_total = sats.get(s);
+
+                valor_deduzido = valor_total * percentagem;
+
+                if (valor_deduzido <= maximo_valor) {
+                    System.out.println(s + ": " + valor_deduzido + "€ deduzidos.");
+                }  
+            } else {
+                System.out.println(s + ": " + "0.0€ deduzidos.");
             }
         }
-        if(numero_af == 1)
-        {
-            System.out.printf("Montante de dedução fiscal acumulado por %s, com NIF %s: %.2f €.", i.getNome(), i.getNIF(), valor_deduzido);
-        }
-        else
-        {
-            System.out.printf("Montante de dedução fiscal acumulado pelo seu agregado familiar: %.2f €", valor_deduzido);
-        }
-        System.out.print("\n\nPrima enter para continuar ..."); ler.nextLine();
     }
 
-    /**
-     * Método que calcula o montante de dedução fiscal de um contribuinte coletivo.
-     * @param
-     * @return
-     */
-    public double calcular_deduçao_fiscal_CC(Coletivo c)
+    public void calcular_deduçao_fiscal_agregado(int i)
     {
-        Scanner ler = new Scanner(System.in);
-        double percentagem = 0; double maximo_valor = 0; double valor_deduzido = 0; double res = 0;
+        List<Contribuinte> agregado = this.agregados.get(i);
 
-        for(String s : c.getAtividades_Economicas().keySet())
+        for(Contribuinte c: agregado)
         {
-            valor_deduzido = c.getAtividades_Economicas().get(s);
-            percentagem = this.atividades_economicas_disponiveis.get(s)[0];
-            maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
-            if(valor_deduzido <= maximo_valor)
-            {
-                res += valor_deduzido * (percentagem / 100);
-            }
-            else
-            {
-                res += maximo_valor;
-            }
+            Individual cont = (Individual) c;
+            calcular_deduçao_fiscal_CI(cont);
         }
-        return res;
     }
 
     /**
