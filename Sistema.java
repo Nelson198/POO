@@ -1302,7 +1302,7 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que calcula a dedução fiscal acumulada das faturas asoociadas a um determina Empresa / Contribuinte Coletivo.
+     * Método que calcula o montante de deduções fiscais que as despesas registadas por uma empresa representam.
      * @param Contribuinte Coletivo
      * @return valor_deduzido
      */
