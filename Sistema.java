@@ -116,6 +116,7 @@ public class Sistema implements Serializable
         this.atividades_economicas_disponiveis.put("Lares", new double[] {25.0, 400});
         this.atividades_economicas_disponiveis.put("Outros", new double[] {0.0, 0.0});
 
+        this.concelhos_fiscais = new ArrayList<>();
         this.concelhos_fiscais.add("Cabeceiras de Basto");
         this.concelhos_fiscais.add("Évora");
         this.concelhos_fiscais.add("Vilar Formoso");
@@ -132,6 +133,8 @@ public class Sistema implements Serializable
         this.concelhos_fiscais.add("Guarda");
         this.concelhos_fiscais.add("Macedo de Cavaleiros");
         this.concelhos_fiscais.add("Castelo de Vide");
+        
+        this.agregados = new ArrayList<>();
     }
 
     /**
@@ -363,7 +366,7 @@ public class Sistema implements Serializable
         }while(numero_ag < 1 || isNumeric == false);
 
         do {
-            System.out.print("Nº de dependentes --> "); numero = read.nextLine();
+            System.out.print("Nº de dependentes (ou seja, nº de filho(s)) --> "); numero = read.nextLine();
             isNumeric = numero.chars().allMatch(Character::isDigit);
             dependentes = Integer.parseInt(numero);
         }while(numero_ag <= dependentes || isNumeric == false);
@@ -404,7 +407,7 @@ public class Sistema implements Serializable
 
                 if(!this.agregados.contains(nifs)) {
                     this.agregados.add(nifs);
-                    index_agregado = this.agregados.size();
+                    index_agregado = this.agregados.size()-1;
                 } else {
                     index_agregado = this.agregados.indexOf(nifs);
                 }
@@ -589,9 +592,8 @@ public class Sistema implements Serializable
         do
         {
             System.out.print("Valor da despesa --> "); numero = read.nextLine();
-            isNumeric = numero.chars().allMatch(Character::isDigit);
             valor = Double.parseDouble(numero);
-        }while(valor <= 0 || isNumeric == false);
+        }while(valor <= 0);
         
         System.out.print("Data / Hora da despesa --> "); LocalDateTime data_hora = LocalDateTime.now(); System.out.print(data_hora.toString());
         read.close();
@@ -614,12 +616,10 @@ public class Sistema implements Serializable
             
             if(at.size() == 1)
             {
-                if(this.registados.get(nif_ci) instanceof Individual) 
-                {
+                if(this.registados.get(nif_ci) instanceof Individual) {
                     acumular_valor_despesa_CI(nif_ci, at.get(0), valor);
                 }
-                else if(this.registados.get(nif_ci) instanceof Coletivo) 
-                {
+                else if(this.registados.get(nif_ci) instanceof Coletivo) {
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
@@ -1229,11 +1229,9 @@ public class Sistema implements Serializable
             }
 
             if(sats.containsKey(s)) {
-                
                 percentagem = this.atividades_economicas_disponiveis.get(s)[0];
                 maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
                 valor_total = sats.get(s);
-
                 valor_deduzido = valor_total * percentagem;
 
                 if (valor_deduzido <= maximo_valor) {
@@ -1244,10 +1242,16 @@ public class Sistema implements Serializable
             }
         }
     }
-
+    
+    /**
+     * Método que calcula a dedução fiscal acumulada por um agregado familiar registado em Sistema.
+     * @param
+     * @return
+     */
     public void calcular_deduçao_fiscal_agregado(int i)
     {
         List<String> agregado = this.agregados.get(i);
+        double valor = 0;
 
         for(String c: agregado)
         {
@@ -1263,23 +1267,24 @@ public class Sistema implements Serializable
     public double calcular_deduçao_fiscal_CC(Coletivo c)
     {
         double percentagem = 0;
-        double valor_total = 0;
         double valor_deduzido = 0;
-        Map<String, Double> sats = c.getAtividades_Economicas();
+        double valor_despesa = 0;
+        int pos = -1;
 
         for(int i: c.getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
+            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()) && this.faturas.get(i).getIndice() != -1)
             {
-                for(String s: sats.keySet())
+                pos = this.faturas.get(i).getIndice();
+                List<String> atividades = this.faturas.get(i).getNatureza_Despesa();
+                String atividade_atual = atividades.get(pos);
+                valor_despesa = this.faturas.get(i).getValor_Despesa();
+                
+                if (atividade_atual.equals("Outros")) {}
+                else
                 {
-                    if (sats.containsKey("Outros")) {}
-                    else
-                    {
-                        percentagem = this.atividades_economicas_disponiveis.get(s)[0];
-                        valor_total = sats.get(s);
-                        valor_deduzido += valor_total * percentagem;
-                    }
+                    percentagem = (this.atividades_economicas_disponiveis.get(atividade_atual)[0]) / 100;
+                    valor_deduzido += valor_despesa * percentagem;
                 }
             }
         }
