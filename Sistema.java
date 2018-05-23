@@ -1308,36 +1308,9 @@ public class Sistema implements Serializable
      */
     public double calcular_deduçao_fiscal_CC(Coletivo c)
     {
-<<<<<<< HEAD
-        double valor_deduçoes = 0.0;
-        Map<String, Double> sats = c.getAcumulado_Vendas();
-=======
-        double percentagem = 0;
-        double valor_deduzido = 0;
-        double valor_despesa = 0;
-        int pos = -1;
->>>>>>> 42513cb5219f478441f22540a87978f221109d27
-
         for(String s: sats.keySet())
         {
-<<<<<<< HEAD
             valor_deduçoes += sats.get(s);
-=======
-            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()) && this.faturas.get(i).getIndice() != -1)
-            {
-                pos = this.faturas.get(i).getIndice();
-                List<String> atividades = this.faturas.get(i).getNatureza_Despesa();
-                String atividade_atual = atividades.get(pos);
-                valor_despesa = this.faturas.get(i).getValor_Despesa();
-                
-                if (atividade_atual.equals("Outros")) {}
-                else
-                {
-                    percentagem = (this.atividades_economicas_disponiveis.get(atividade_atual)[0]) / 100;
-                    valor_deduzido += valor_despesa * percentagem;
-                }
-            }
->>>>>>> 42513cb5219f478441f22540a87978f221109d27
         }
         return valor_deduçoes;
     }
