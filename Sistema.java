@@ -766,10 +766,12 @@ public class Sistema implements Serializable
     {
         Coletivo c = (Coletivo) this.registados.get(NIF);
         Map<String, Double> nova = c.getAcumulado_Vendas();
+        double res;
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                nova.get(s) += valor;
+                res = nova.get(s) + valor;
+                nova.put(s, res);
                 break;
             }
         }
