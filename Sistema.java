@@ -1369,8 +1369,8 @@ public class Sistema implements Serializable
     {
         StringBuilder sb = new StringBuilder();
         sb.append("Sistema:\n\n");
-        sb.append("Registados:\n"); sb.append(this.registados.toString()).append("\n\n");
-        sb.append("Faturas:\n"); sb.append(this.faturas.toString()).append("\n");
+        sb.append("Registados:\n").append(this.registados.toString()).append("\n\n");
+        sb.append("Faturas:\n").append(this.faturas.toString()).append("\n");
         return sb.toString();
     }
 }
