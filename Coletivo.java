@@ -14,6 +14,7 @@ public class Coletivo extends Contribuinte implements Serializable
 {
     // Variáveis de instância
     private Map<String, Double> atividades_economicas;
+    private Map<String, Double> acumulado_vendas;
     private double coeficiente_fiscal;
     private boolean interior;
     
@@ -26,6 +27,7 @@ public class Coletivo extends Contribuinte implements Serializable
     {
         super();
         this.atividades_economicas = new HashMap<>();
+        this.acumulado_vendas = new HashMap<>();
         this.coeficiente_fiscal = 0;
         this.interior = false;
     }
@@ -38,15 +40,17 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param morada
      * @param password
      * @param atividades_economicas
+     * @param acumulado_vendas
      * @param coeficiente_fiscal
      * @param interior
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                    Map<String, Double> atividades_economicas_p, double coeficiente_fiscal_p, boolean interior)
+                    Map<String, Double> atividades_economicas_p, Map<String, Double> acumulado_vendas_p, double coeficiente_fiscal_p, boolean interior)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         setAtividades_Economicas(atividades_economicas_p);
+        setAcumulado_Vendas(acumulado_vendas_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         this.interior = interior;
     }
@@ -60,6 +64,7 @@ public class Coletivo extends Contribuinte implements Serializable
     {
         super(c);
         this.atividades_economicas = c.getAtividades_Economicas();
+        this.acumulado_vendas = c.getAcumulado_Vendas();
         this.coeficiente_fiscal = c.getCoeficiente_Fiscal();
         this.interior = c.getInterior();
     }
@@ -90,6 +95,38 @@ public class Coletivo extends Contribuinte implements Serializable
         for(String ae: atividades_economicas_p.keySet())
         {
             this.atividades_economicas.put(ae, atividades_economicas_p.get(ae));
+        }
+    }
+
+    /**
+     * Devolve o map com o acumulado de vendas, por atividade económica, da empresa.
+     * 
+     * @param
+     * @return acumulado_vendas
+     */
+    public Map<String, Double> getAcumulado_Vendas()
+    {
+        Map<String, Double> nova = new HashMap<>();
+        for(String s: this.acumulado_vendas.keySet())
+        {
+            nova.put(s, this.acumulado_vendas.get(s));
+        }
+
+        return nova;
+    }
+
+    /**
+     * Atualiza o map com o acumulado de vendas, por atividade económica, da empresa.
+     * 
+     * @param acumulado_vendas
+     * @return
+     */
+    public void setAcumulado_Vendas(Map<String, Double> acumulado_vendas_p)
+    {
+        this.acumulado_vendas = new HashMap<>();
+        for(String av: acumulado_vendas_p.keySet())
+        {
+            this.acumulado_vendas.put(av, acumulado_vendas_p.get(av));
         }
     }
 
@@ -144,6 +181,7 @@ public class Coletivo extends Contribuinte implements Serializable
         if (o == null || this.getClass() != o.getClass()) return false;
         Coletivo c = (Coletivo) o;
         return (super.equals(c) && this.atividades_economicas.equals(c.getAtividades_Economicas())
+                                && this.acumulado_vendas.equals(c.getAcumulado_Vendas())
                                 && this.coeficiente_fiscal == c.getCoeficiente_Fiscal());
     }
    

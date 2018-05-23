@@ -459,6 +459,7 @@ public class Sistema implements Serializable
     {
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
+        Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
         boolean isNumeric, interior;
         double cf;
@@ -495,8 +496,11 @@ public class Sistema implements Serializable
                     if(at.equals("S") || at.equals("s"))
                     {
                         ats.put(t, 0.0);
+                        avs.put(t, 0.0);
+
                     }
-                    else if(at.equals("N") || at.equals("n")) {}
+                    else if(at.equals("N") || at.equals("n"))
+                    {}
                     else
                     {
                         System.out.print("Erro: Dados inválidos!"); time(1500);
@@ -524,7 +528,7 @@ public class Sistema implements Serializable
         }while(concelho.length() == 0);
 
         read.close();
-        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, cf, interior);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, avs, cf, interior);
         
         if(!this.registados.containsKey(nif))
         {
@@ -593,8 +597,11 @@ public class Sistema implements Serializable
             valor = Double.parseDouble(numero);
         }while(valor <= 0 || isNumeric == false);
         
-        System.out.print("Data / Hora da despesa --> "); LocalDateTime data_hora = LocalDateTime.now(); System.out.print(data_hora.toString());
+        System.out.print("Data / Hora da despesa --> "); 
+        LocalDateTime data_hora = LocalDateTime.now(); 
+        System.out.print(data_hora.toString());
         read.close();
+
         Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false, -1);
         
         if(!this.faturas.contains(f))
@@ -622,6 +629,9 @@ public class Sistema implements Serializable
                 {
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
+
+                acumular_vendas_CC(f.getNIF_Emitente(), at.get(0), valor);
+
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
             else if(at.size() >= 2)
@@ -649,25 +659,34 @@ public class Sistema implements Serializable
             {
                 System.out.println("---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
+
                 for(String s : this.faturas.get(i).getNatureza_Despesa())
                 {
-                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "?(S/N) "); option = read.nextLine();
+                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): "); option = read.nextLine();
+
                     if(option.equals("S") || option.equals("s"))
                     {
                         this.faturas.get(i).setPendente(false);
                         this.faturas.get(i).setIndice(this.faturas.get(i).getNatureza_Despesa().indexOf(s));
+
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
                         else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
+
+                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
+
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
                     }
-                    else if (option.equals("N") || option.equals("n")) {}
+
+                    else if (option.equals("N") || option.equals("n"))
+                    {}
+
                     else
                     {
                         System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
@@ -732,6 +751,29 @@ public class Sistema implements Serializable
                 break;
             }
         }
+    }
+    
+    /**
+     * Método que acumula o valor das vendas de uma empresa, por setor de atividade económica.
+     * 
+     * @param NIF - da empresa
+     * @param at - Atividade económica a acumular venda
+     * @param valor - da venda
+     * @return
+     */
+    
+    public void acumular_vendas_CC(String NIF, String at, double valor)
+    {
+        Coletivo c = (Coletivo) this.registados.get(NIF);
+        Map<String, Double> nova = c.getAcumulado_Vendas();
+        for(String s: nova.keySet())
+        {
+            if(s.compareTo(at) == 0) {
+                nova.get(s) += valor;
+                break;
+            }
+        }
+        c.setAcumulado_Vendas(nova);
     }
 
     /**
@@ -1262,28 +1304,14 @@ public class Sistema implements Serializable
      */
     public double calcular_deduçao_fiscal_CC(Coletivo c)
     {
-        double percentagem = 0;
-        double valor_total = 0;
-        double valor_deduzido = 0;
-        Map<String, Double> sats = c.getAtividades_Economicas();
+        double valor_deduçoes = 0.0;
+        Map<String, Double> sats = c.getAcumulado_Vendas();
 
-        for(int i: c.getIndex())
+        for(String s: sats.keySet())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
-            {
-                for(String s: sats.keySet())
-                {
-                    if (sats.containsKey("Outros")) {}
-                    else
-                    {
-                        percentagem = this.atividades_economicas_disponiveis.get(s)[0];
-                        valor_total = sats.get(s);
-                        valor_deduzido += valor_total * percentagem;
-                    }
-                }
-            }
+            valor_deduçoes += sats.get(s);
         }
-        return valor_deduzido;
+        return valor_deduçoes;
     }
 
     /**
