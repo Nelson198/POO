@@ -1308,6 +1308,9 @@ public class Sistema implements Serializable
      */
     public double calcular_deduçao_fiscal_CC(Coletivo c)
     {
+        double valor_deduçoes = 0.0;
+        Map<String, Double> sats = c.getAcumulado_Vendas();
+        
         for(String s: sats.keySet())
         {
             valor_deduçoes += sats.get(s);
