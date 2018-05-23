@@ -60,7 +60,7 @@ public class Sistema implements Serializable
         try{
             Thread.sleep(x);
         }
-        catch(Exception e){};
+        catch(Exception e){System.out.print("Erro!"); return;};
     }
     
     /**
@@ -523,7 +523,7 @@ public class Sistema implements Serializable
             System.out.print("Concelho: "); concelho = read.nextLine();
             for (String s: this.concelhos_fiscais)
             {
-                if(s.compareTo(concelho) == 0) {
+                if(s.equals(concelho)) {
                     interior = true;
                 }
             }
@@ -787,7 +787,8 @@ public class Sistema implements Serializable
     {
         LocalDateTime inicio = LocalDateTime.now();
         LocalDateTime fim = LocalDateTime.now();
-        LocalTime lt = LocalTime.of(0, 0, 0);
+        LocalTime lti = LocalTime.of(0, 0, 0);
+        LocalTime ltf = LocalTime.of(23, 59, 59);
         Date date1, date2;
         String nif, data;
         Scanner read = new Scanner(System.in);
@@ -804,7 +805,7 @@ public class Sistema implements Serializable
                 return;
             }
             LocalDate ld1 = convertToLocalDate(date1);
-            inicio = LocalDateTime.of(ld1, lt);
+            inicio = LocalDateTime.of(ld1, lti);
         }catch(Exception e){
             System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
             return;
@@ -819,7 +820,7 @@ public class Sistema implements Serializable
                 return;
             }
             LocalDate ld2 = convertToLocalDate(date2);
-            fim = LocalDateTime.of(ld2, lt);
+            fim = LocalDateTime.of(ld2, ltf);
         }catch(Exception e){
             System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
             return;
@@ -883,7 +884,8 @@ public class Sistema implements Serializable
     {
         double res = 0;
         LocalDateTime inicio = LocalDateTime.now(); LocalDateTime fim = LocalDateTime.now();
-        LocalTime lt = LocalTime.of(0, 0, 0);
+        LocalTime lti = LocalTime.of(0, 0, 0);
+        LocalTime ltf = LocalTime.of(23, 59, 59);
         Date date1, date2;
         String data;
         Scanner read = new Scanner(System.in);
@@ -896,7 +898,7 @@ public class Sistema implements Serializable
                 return;
             }
             LocalDate ld1 = convertToLocalDate(date1);
-            inicio = LocalDateTime.of(ld1, lt);
+            inicio = LocalDateTime.of(ld1, lti);
         }catch(Exception e){
             System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
             return;
@@ -910,7 +912,7 @@ public class Sistema implements Serializable
                 return;
             }
             LocalDate ld2 = convertToLocalDate(date2);
-            fim = LocalDateTime.of(ld2, lt);
+            fim = LocalDateTime.of(ld2, ltf);
         }catch(Exception e){
             System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
             return;

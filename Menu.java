@@ -20,9 +20,9 @@ public class Menu
     {
         try{
             Thread.sleep(x);
-        }catch(Exception e){};
+        }catch(Exception e){System.out.print("Erro!"); return;};
     }
-
+    
     /**
      * Método que constrói o menu inicial para a interface do programa.
      * @param

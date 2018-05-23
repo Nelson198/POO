@@ -202,7 +202,7 @@ public class Coletivo extends Contribuinte implements Serializable
         sb.append("Password de Acesso: ").append(super.getPassword()).append(", ");
         sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append(", ");
         sb.append("Atividades Económicas: ").append(this.getAtividades_Economicas().toString()).append(", ");
-        sb.append("Acumulado de vendas: ").append(this.getAcumulado_Vendas().toString().append(", "))
+        sb.append("Acumulado de vendas: ").append(this.getAcumulado_Vendas().toString()).append(", ");
         sb.append("Interior? ").append(this.getInterior()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
