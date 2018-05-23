@@ -46,6 +46,7 @@ public class Individual extends Contribuinte implements Serializable
      * @param password
      * @param index
      * @param agregado_familiar
+     * @param dependentes
      * @param coeficiente_fiscal
      * @param atividades_economicas
      * @return
@@ -234,8 +235,8 @@ public class Individual extends Contribuinte implements Serializable
         sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAgregado_Familiar()).append(", ");
         sb.append("Nº de dependentes: ").append(this.getDependentes()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(", ");
-        sb.append("Pertence a uma família numerosa? ").append(this.getFam_Numerosa()).append(")\n");
+        sb.append("Pertence a uma família numerosa? ").append(this.getFam_Numerosa()).append(", ");
+        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
     }
     
