@@ -559,6 +559,25 @@ public class Sistema implements Serializable
             System.out.print("\nAviso: Já existe um Contribuinte com este NIF no Sistema."); time(1500);
         }
     }
+
+    /**
+     * Método que permite ao comerciante (empresa) anular uma fatura.
+     * @param indice - da fatura
+     * @return
+     */
+    public void anular_fatura(int indice)
+    {
+        Fatura f = this.faturas.get(indice);
+        Coletivo emitente = (Coletivo) this.registados.get(f.getNIF_Emitente());
+        Contribuinte cliente = this.registados.get(f.getNIF_Cliente());
+
+        if(cliente instanceof Individual) {
+            desacumular_valor_despesa_CI(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+        } else if (cliente instanceof Coletivo) {
+            desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+        }
+        this.faturas.remove(f);
+    }
     
     /**
      * Método que permite submeter faturas por parte das Empresas / dos Contribuinte Coletivos.
@@ -1214,6 +1233,7 @@ public class Sistema implements Serializable
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
             {
+                System.out.println("Fatura " + i + ":\n");
                 System.out.println(this.faturas.get(i).toString());
             }
         }
