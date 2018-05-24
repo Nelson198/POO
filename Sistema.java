@@ -630,7 +630,7 @@ public class Sistema implements Serializable
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
 
-                acumular_vendas_CC(f.getNIF_Emitente(), at.get(0), valor);
+                acumular_vendas_CC(nif_e, at.get(0), valor);
 
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
@@ -683,10 +683,7 @@ public class Sistema implements Serializable
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
                     }
-
-                    else if (option.equals("N") || option.equals("n"))
-                    {}
-
+                    else if (option.equals("N") || option.equals("n")){}
                     else
                     {
                         System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
@@ -1095,6 +1092,29 @@ public class Sistema implements Serializable
     }
 
     /**
+     * Método que permite ao administrador ver todos os agregados familiares do Sistema.
+     * @param
+     * @return
+     */
+    public void mostrar_Agregados_Familiares_Administrador()
+    {
+        Scanner read = new Scanner(System.in);
+        int i = 1;
+        int j = 1;
+        System.out.println("Agregados Familiares registados no Sistema:\n");
+        for(List<String> c: this.agregados)
+        {
+            System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;
+            for(String s : c)
+            {
+                System.out.print("NIF " + j + ": " + s + "\n"); j += 1;
+            }
+            j = 1;
+        }
+        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
+    }
+
+    /**
      * Método que obtem o gasto de um determinado Contribuinte no Sistema JavaFatura.
      * @param Contribuinte c
      * @return double res
@@ -1253,40 +1273,41 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que calcula o montante de dedução fiscal de um contribuinte Individual(individualmente (fazendo numero_af = 1) ou pelo agregado familiar (fazendo numero_af = nº de elementos do agregado familiar.).
-     * @param int numero_af
-     * @return
+     * Método que calcula o montante de dedução fiscal de um contribuinte Individual.
+     * @param String NIF
+     * @return montante de dedução fiscal
      */
-    public void calcular_deduçao_fiscal_CI(String n)
+    public double calcular_deduçao_fiscal_CI(String nif)
     {
+        double acum = 0;
         double percentagem = 0; 
         double maximo_valor = 0; 
         double valor_total = 0; 
         double valor_deduzido = 0;
-        Individual i = (Individual) this.getRegistados().get(n);
+        Individual i = (Individual) this.getRegistados().get(nif);
         Map<String, Double> sats = i.getAtividades_Economicas();
 
-        System.out.println("/n"+ i.getNome() + ", NIF: " + n + ":");
-
+        System.out.println("--> " + i.getNome() + ", NIF: " + nif + ":\n");
         for(String s: this.atividades_economicas_disponiveis.keySet())
         {
-            if (s.compareTo("Outros") == 0) {
+            if(s.compareTo("Outros") == 0) {
                 System.out.println(s + ": Não dedutível.");
             }
 
-            if(sats.containsKey(s)) {
+            else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
                 percentagem = this.atividades_economicas_disponiveis.get(s)[0];
                 maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
                 valor_total = sats.get(s);
                 valor_deduzido = valor_total * percentagem;
+                acum += valor_deduzido;
 
                 if (valor_deduzido <= maximo_valor) {
-                    System.out.println(s + ": " + valor_deduzido + "€ deduzidos.");
+                    System.out.printf("%s: %.2f € deduzidos.\n", s, valor_deduzido);
                 }  
-            } else {
-                System.out.println(s + ": " + "0.0€ deduzidos.");
             }
         }
+        System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
+        return acum;
     }
     
     /**
@@ -1296,13 +1317,16 @@ public class Sistema implements Serializable
      */
     public void calcular_deduçao_fiscal_agregado(int i)
     {
+        Scanner read = new Scanner(System.in);
         List<String> agregado = this.agregados.get(i);
         double valor = 0;
 
         for(String c: agregado)
         {
-            calcular_deduçao_fiscal_CI(c);
+            valor += calcular_deduçao_fiscal_CI(c);
         }
+        System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
+        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
 
     /**
@@ -1355,7 +1379,6 @@ public class Sistema implements Serializable
         {
             FileInputStream fis = new FileInputStream("estado");
             ObjectInputStream ois = new ObjectInputStream(fis);
-
             s = (Sistema) ois.readObject();
             ois.close();
         }

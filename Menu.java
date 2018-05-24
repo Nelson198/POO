@@ -63,13 +63,15 @@ public class Menu
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");
         sb.append("                                                    ||        2 ---> Ver todos os Contribuintes registados no Sistema.              ||\n");
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");
-        sb.append("                                                    ||        3 ---> Ver os 10 Contribuintes que mais gastaram em todo o Sistema.   ||\n");
+        sb.append("                                                    ||        3 ---> Ver todos os Agregados Familiares registados no Sistema.       ||\n");
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");
-        sb.append("                                                    ||        4 ---> Ver a relação das X empresas que mais faturas têm em todo o    ||\n");
+        sb.append("                                                    ||        4 ---> Ver os 10 Contribuintes que mais gastaram em todo o Sistema.   ||\n");
+        sb.append("                                                    ||------------------------------------------------------------------------------||\n");
+        sb.append("                                                    ||        5 ---> Ver a relação das X empresas que mais faturas têm em todo o    ||\n");
         sb.append("                                                    ||               sistema e determinar o montante de deduções fiscais que as     ||\n");
         sb.append("                                                    ||               despesas registadas (dessas empresas) representam.             ||\n");
         sb.append("                                                    ||------------------------------------------------------------------------------||\n");                                     
-        sb.append("                                                    ||        5 ---> Logout.                                                        ||\n");
+        sb.append("                                                    ||        6 ---> Logout.                                                        ||\n");
         sb.append("                                                    ==================================================================================\n");
         System.out.print(sb);
     }
@@ -213,7 +215,7 @@ public class Menu
                                         break;
                                     
                                     case 6:
-                                    Individual i = (Individual) s.getRegistados().get(s.getNIF_Contribuinte());
+                                        Individual i = (Individual) s.getRegistados().get(s.getNIF_Contribuinte());
                                         s.calcular_deduçao_fiscal_agregado(i.getIndex_Agregado());
                                         break;
                                     
@@ -317,17 +319,21 @@ public class Menu
                                         break;
                                     
                                     case 3:
+                                        s.mostrar_Agregados_Familiares_Administrador();
+                                        break;
+                                    
+                                    case 4:
                                         s.top_10_Administrador();
                                         break;
 
-                                    case 4:
+                                    case 5:
                                         s.relaçao_X_CC();
                                         break;
                                     
-                                    case 5:
+                                    case 6:
                                         break;
                                 }
-                            } while(opçao4 != 5);
+                            } while(opçao4 != 6);
                             s.logout_Administrador();
                             System.out.print('\u000C');
                             break;

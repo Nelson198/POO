@@ -236,6 +236,7 @@ public class Individual extends Contribuinte implements Serializable
         sb.append("Nº de dependentes: ").append(this.getDependentes()).append(", ");
         sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
         sb.append("Pertence a uma família numerosa? ").append(this.getFam_Numerosa()).append(", ");
+        sb.append("Índice do agregado familiar a que pertence: ").append(this.getIndex_Agregado()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
     }
