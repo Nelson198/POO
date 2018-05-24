@@ -402,7 +402,7 @@ public class Menu
                 case 3:
                     s.registar_CI();
                     try{
-                    s.gravar_estado();
+                        s.gravar_estado();
                     } catch(FileNotFoundException e) {
                         System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
                     } catch(IOException e) {
@@ -414,7 +414,7 @@ public class Menu
                 case 4:
                     s.registar_CC();
                     try{
-                    s.gravar_estado();
+                        s.gravar_estado();
                     } catch(FileNotFoundException e) {
                         System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
                     } catch(IOException e) {

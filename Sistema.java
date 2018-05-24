@@ -334,7 +334,7 @@ public class Sistema implements Serializable
         String nif, email, nome, morada, password, at, s, numero; 
         boolean isNumeric, bool;
         int numero_ag, dependentes, index_agregado = -1;
-        double cf;
+        double cf = 0;
         Scanner read = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Individual:\n");
@@ -434,8 +434,12 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
-            isNumeric = numero.chars().allMatch(Character::isDigit);
-            cf = Double.parseDouble(numero);
+            isNumeric = true;
+            try {
+                cf = Double.parseDouble(numero);
+            } catch (NumberFormatException e) {
+                isNumeric = false;
+            }
         }while(cf <= 0 || isNumeric == false);
 
         read.close();
@@ -466,7 +470,7 @@ public class Sistema implements Serializable
         Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
         boolean isNumeric, interior;
-        double cf;
+        double cf = 0;
         Scanner read = new Scanner(System.in);
         
         System.out.print("Registar Contribuinte Coletivo / Empresa:\n");
@@ -530,8 +534,12 @@ public class Sistema implements Serializable
         
         do{
             System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
-            isNumeric = numero.chars().allMatch(Character::isDigit);
-            cf = Double.parseDouble(numero);
+            isNumeric = true;
+            try {
+                cf = Double.parseDouble(numero);
+            } catch (NumberFormatException e) {
+                isNumeric = false;
+            }
         }while(cf <= 0 || isNumeric == false);
 
         do{
@@ -593,7 +601,7 @@ public class Sistema implements Serializable
         List<String> at = new ArrayList<>();
         List<String> nd = new ArrayList<>();
         boolean isNumeric;
-        double valor, aux;
+        double valor = 0, aux;
         String nif_ci, descriçao, atividades, numero;
         Scanner read = new Scanner(System.in);
         
@@ -630,11 +638,15 @@ public class Sistema implements Serializable
             System.out.print("Descrição da despesa --> "); descriçao = read.nextLine();
         }while(descriçao.length() == 0);
         
-        do
-        {
-            System.out.print("Valor da despesa --> "); numero = read.nextLine();
-            valor = Double.parseDouble(numero);
-        }while(valor <= 0);
+        do{
+            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            isNumeric = true;
+            try {
+                valor = Double.parseDouble(numero);
+            } catch (NumberFormatException e) {
+                isNumeric = false;
+            }
+        }while(valor <= 0 || isNumeric == false);
         
         System.out.print("Data / Hora da despesa --> "); 
         LocalDateTime data_hora = LocalDateTime.now(); 
