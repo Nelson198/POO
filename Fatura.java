@@ -14,15 +14,15 @@ import java.io.Serializable;
 public class Fatura implements Serializable
 {
     // Variáveis de Instância
-    private String NIF_emitente;
-    private String nome_emitente;
-    private LocalDateTime data_hora_despesa;
-    private String NIF_cliente;
-    private String descrição_despesa;
-    private List<String> naturezas_despesa; /* Atividades económicas possíveis */
-    private double valor_despesa;
-    private boolean pendente;
-    private List<String> natureza_despesa; /* Atividade económica atual - posição 0 - e todas as anteriores. */ 
+    private String NIF_emitente;                    /* NIF da empresa que venda o produto/serviço */
+    private String nome_emitente;                   /* Nome da empresa que vende o produto/serviço */
+    private LocalDateTime data_hora_despesa;        /* Data e hora da emissão da fatura */
+    private String NIF_cliente;                     /* NIF do comprador */
+    private String descrição_despesa;               /* Descreve o produto/serviço transacionado */
+    private List<String> naturezas_despesa;         /* Atividades económicas possíveis */
+    private double valor_despesa;                   /* Indica o valor da despesa */
+    private boolean pendente;                       /* Indica se a fatura está por validar */
+    private List<String> natureza_despesa;          /* Atividade económica atual - posição 0 - e todas as anteriores. */ 
 
     /**
      * Construtor por omissão de Fatura.
