@@ -961,7 +961,7 @@ public class Sistema implements Serializable
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) + (valor * cf);
+                res = nova.get(s) + ((valor * cf) * percentagem);
                 nova.put(s, res);
                 break;
             }
@@ -987,7 +987,7 @@ public class Sistema implements Serializable
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) - (valor * cf);
+                res = nova.get(s) - ((valor * cf) * percentagem);
                 nova.put(s, res);
                 break;
             }
@@ -1106,6 +1106,7 @@ public class Sistema implements Serializable
         Date date1, date2;
         String data;
         Scanner read = new Scanner(System.in);
+        Fatura f;
         
         try{
             System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
@@ -1138,9 +1139,10 @@ public class Sistema implements Serializable
         System.out.print("\n");
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
+            f = this.faturas.get(i);
+            if(f.getNIF_Emitente().equals(this.nif_contribuinte) && f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim))
             {
-                res += this.faturas.get(i).getValor_Despesa();
+                res += f.getValor_Despesa();
             }
         }
         System.out.printf("Total faturado pela Empresa / Instituição %s: %.2f €.", this.registados.get(this.nif_contribuinte).getNome(), res);
