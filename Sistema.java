@@ -576,6 +576,8 @@ public class Sistema implements Serializable
         } else if (cliente instanceof Coletivo) {
             desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
         }
+
+        desacumular_vendas_CC(emitente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
         this.faturas.remove(f);
     }
     
