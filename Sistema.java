@@ -761,13 +761,14 @@ public class Sistema implements Serializable
     
     public void acumular_vendas_CC(String NIF, String at, double valor)
     {
+        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
         Coletivo c = (Coletivo) this.registados.get(NIF);
         Map<String, Double> nova = c.getAcumulado_Vendas();
         double res;
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) + valor;
+                res = nova.get(s) + valor * percentagem;
                 nova.put(s, res);
                 break;
             }
@@ -1302,7 +1303,7 @@ public class Sistema implements Serializable
                 acum += valor_deduzido;
 
                 if (valor_deduzido <= maximo_valor) {
-                    System.out.printf("%s: %.2f € deduzidos.\n", s, valor_deduzido);
+                    System.out.printf("%s: %.2f€ deduzidos.\n", s, valor_deduzido);
                 }  
             }
         }
