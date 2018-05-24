@@ -174,7 +174,7 @@ public class Individual extends Contribuinte implements Serializable
         return (super.equals(c) && this.agregado_familiar == c.getAgregado_Familiar()
                                 && this.dependentes == c.getDependentes()
                                 && this.atividades_economicas.equals(c.getAtividades_Economicas())
-                                && this.index_agregado == c.getIndex_Agregado();
+                                && this.index_agregado == c.getIndex_Agregado());
     }
     
     /**

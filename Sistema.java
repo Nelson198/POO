@@ -443,7 +443,7 @@ public class Sistema implements Serializable
         }while(cf <= 0 || isNumeric == false);
 
         read.close();
-        Individual ci = new Individual(nif, email, nome, morada, password, index, numero_ag, dependentes, nifs, cf, ats, index_agregado);
+        Individual ci = new Individual(nif, email, nome, morada, password, index, cf, numero_ag, dependentes, ats, index_agregado);
         
         if(!this.registados.containsKey(nif))
         {
@@ -555,7 +555,7 @@ public class Sistema implements Serializable
         }while(concelho.length() == 0);
 
         read.close();
-        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, ats2, avs, cf, interior);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, cf, ats, ats2, avs, interior);
         
         if(!this.registados.containsKey(nif))
         {
@@ -702,36 +702,39 @@ public class Sistema implements Serializable
         String option;
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
+        Fatura f;
         
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(this.faturas.get(i).getPendente() && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+            f = this.faturas.get(i);
+
+            if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println("---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
 
-                for(String s : this.faturas.get(i).getNaturezas_Despesa())
+                for(String s : f.getNaturezas_Despesa())
                 {
                     System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
                     option = read.nextLine();
 
                     if(option.equals("S") || option.equals("s"))
                     {
-                        this.faturas.get(i).setPendente(false);
-                        nova = this.faturas.get(i).getNatureza_Despesa();
+                        f.setPendente(false);
+                        nova = f.getNatureza_Despesa();
                         nova.add(0, s);
-                        this.faturas.get(i).setNatureza_Despesa(nova);
+                        f.setNatureza_Despesa(nova);
 
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
                         else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
 
-                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
+                        acumular_vendas_CC(f.getNIF_Emitente(), s, f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
 
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
@@ -757,37 +760,40 @@ public class Sistema implements Serializable
         String option;
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
+        Fatura f;
         
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(!this.faturas.get(i).getPendente() && this.faturas.get(i).getNaturezas_Despesa().size() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+            f = this.faturas.get(i);
+
+            if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println("---> Fatura possível de revalidar:\n");
-                System.out.println(this.faturas.get(i).toString());
+                System.out.println(f.toString());
 
-                for(String s : this.faturas.get(i).getNaturezas_Despesa())
+                for(String s : f.getNaturezas_Despesa())
                 {
                     System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
                     option = read.nextLine();
 
                     if(option.equals("S") || option.equals("s"))
                     {
-                        nova = this.faturas.get(i).getNatureza_Despesa();
+                        nova = f.getNatureza_Despesa();
                         nova.add(0, s);
-                        this.faturas.get(i).setNatureza_Despesa(nova);
+                        f.setNatureza_Despesa(nova);
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            desacumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
-                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                            desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
                         else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            desacumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
-                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                            desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
 
-                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
-                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
+                        desacumular_vendas_CC(f.getNIF_Emitente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
+                        acumular_vendas_CC(f.getNIF_Emitente(), s, f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
                         
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;

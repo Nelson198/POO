@@ -54,7 +54,6 @@ public class Coletivo extends Contribuinte implements Serializable
         setAtividades_Economicas(atividades_economicas_p);
         setAtividades_Economicas_2(atividades_economicas_p_2);
         setAcumulado_Vendas(acumulado_vendas_p);
-        this.coeficiente_fiscal = coeficiente_fiscal_p;
         this.interior = interior;
     }
     
@@ -195,7 +194,7 @@ public class Coletivo extends Contribuinte implements Serializable
         return (super.equals(c) && this.atividades_economicas.equals(c.getAtividades_Economicas())
                                 && this.atividades_economicas_2.equals(c.getAtividades_Economicas_2())
                                 && this.acumulado_vendas.equals(c.getAcumulado_Vendas())
-                                && this.interior == c.getInterior();
+                                && this.interior == c.getInterior());
     }
    
     /**
