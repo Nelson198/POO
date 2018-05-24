@@ -1447,8 +1447,16 @@ public class Sistema implements Serializable
     public void relaçao_X_CC()
     {
         int i = 0;
-        Scanner read = new Scanner(System.in); Scanner ler = new Scanner(System.in);
-        System.out.print("Nº de empresas: "); int n = read.nextInt();
+        int n;
+        boolean isNumeric;
+        String read;
+        Scanner ler = new Scanner(System.in);
+        System.out.print("Nº de empresas: "); 
+        do {
+            read = ler.nextLine();
+            isNumeric = read.chars().allMatch(Character::isDigit);
+        }while(!isNumeric);
+        n = Integer.parseInt(opçao4);
 
         TreeSet<Coletivo> top = new TreeSet<Coletivo>(new Comparator()
         {
