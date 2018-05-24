@@ -22,7 +22,7 @@ public class Fatura implements Serializable
     private List<String> naturezas_despesa; /* Atividades económicas possíveis */
     private double valor_despesa;
     private boolean pendente;
-    private int List<String> natureza_despesa; /* Atividade económica atual - posição 0 - e todas as anteriores. */ 
+    private List<String> natureza_despesa; /* Atividade económica atual - posição 0 - e todas as anteriores. */ 
 
     /**
      * Construtor por omissão de Fatura.

@@ -531,7 +531,7 @@ public class Sistema implements Serializable
         }while(concelho.length() == 0);
 
         read.close();
-        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, avs, cf, interior);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, ats, ats2, avs, cf, interior);
         
         if(!this.registados.containsKey(nif))
         {
@@ -555,6 +555,7 @@ public class Sistema implements Serializable
         Coletivo c = ((Coletivo) this.registados.get(this.nif_contribuinte)).clone();
         StringBuilder sb = new StringBuilder();
         List<String> at = new ArrayList<>();
+        List<String> nd = new ArrayList<>();
         boolean isNumeric;
         double valor, aux;
         String nif_ci, descriçao, atividades, numero;
@@ -604,12 +605,12 @@ public class Sistema implements Serializable
         System.out.print(data_hora.toString());
         read.close();
 
-        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false, -1);
+        Fatura f = new Fatura(nif_e, nome_e, data_hora, nif_ci, descriçao, at, valor, false, nd);
         
         if(!this.faturas.contains(f))
         {
             if(at.size() >= 2) f.setPendente(true);
-            else if(at.size() == 1) f.setIndice(0);
+            else if(at.size() == 1) f.setNatureza_Despesa(at);
             
             this.faturas.add(f.clone());
         
@@ -670,7 +671,7 @@ public class Sistema implements Serializable
                         this.faturas.get(i).setPendente(false);
                         nova = this.faturas.get(i).getNatureza_Despesa();
                         nova.add(0, s);
-                        this.faturas.get(i).setNatureza_Despesa(nova));
+                        this.faturas.get(i).setNatureza_Despesa(nova);
 
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
@@ -710,7 +711,7 @@ public class Sistema implements Serializable
         
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if(!this.faturas.get(i).getPendente() && this.faturas.get(i).getNaturezas_Despesa() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+            if(!this.faturas.get(i).getPendente() && this.faturas.get(i).getNaturezas_Despesa().size() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println("---> Fatura possível de revalidar:\n");
                 System.out.println(this.faturas.get(i).toString());
@@ -724,20 +725,19 @@ public class Sistema implements Serializable
                     {
                         nova = this.faturas.get(i).getNatureza_Despesa();
                         nova.add(0, s);
-                        this.faturas.get(i).setNatureza_Despesa(nova));
-
+                        this.faturas.get(i).setNatureza_Despesa(nova);
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            desacumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                            desacumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                             acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
                         else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            desacumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                            desacumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                             acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
 
-                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
                         acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
                         
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
@@ -828,9 +828,11 @@ public class Sistema implements Serializable
     public void acumular_valor_despesa_CC(String nif_cc, String at, double despesa)
     {
         double d;
+        int index = 1;
         Map<String, Double> map;
         Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
-        for(String s : i.getAtividades_Economicas_2().keySet())
+        
+        for(String s : c.getAtividades_Economicas_2().keySet())
         {
             if(at.compareTo(s) == 0)
             {
@@ -840,7 +842,7 @@ public class Sistema implements Serializable
                 ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
                 break;
             }
-            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economica_2().containsKey("Outros"))
+            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economicas_2().containsKey("Outros"))
             {
                 d = c.getAtividades_Economicas_2().get("Outros");
                 map = c.getAtividades_Economicas_2();
@@ -860,9 +862,11 @@ public class Sistema implements Serializable
     public void desacumular_valor_despesa_CC(String nif_cc, String at, double despesa)
     {
         double d;
+        int index = 1;
         Map<String, Double> map;
         Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
-        for(String s : i.getAtividades_Economicas_2().keySet())
+        
+        for(String s : c.getAtividades_Economicas_2().keySet())
         {
             if(at.compareTo(s) == 0)
             {
@@ -872,7 +876,7 @@ public class Sistema implements Serializable
                 ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
                 break;
             }
-            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economica_2().containsKey("Outros"))
+            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economicas_2().containsKey("Outros"))
             {
                 d = c.getAtividades_Economicas_2().get("Outros");
                 map = c.getAtividades_Economicas_2();
@@ -1445,8 +1449,8 @@ public class Sistema implements Serializable
         double maximo_valor = 0; 
         double valor_total = 0; 
         double valor_deduzido = 0;
-        int dependentes = this.registados.get(nif).getDependentes();
         Individual i = (Individual) this.getRegistados().get(nif);
+        int dependentes = i.getDependentes();
         Map<String, Double> sats = i.getAtividades_Economicas();
 
         System.out.println("--> " + i.getNome() + ", NIF: " + nif + ":\n");
