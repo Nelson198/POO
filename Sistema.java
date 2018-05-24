@@ -415,9 +415,10 @@ public class Sistema implements Serializable
         }while(bool == false);
         
         do{
+            System.out.print("\nAtividades económicas:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read.nextLine();
+                System.out.print(t + " (S/N)? "); at = read.nextLine();
                 if(at.equals("S") || at.equals("s"))
                 {
                     ats.put(t, 0.0);
@@ -433,7 +434,7 @@ public class Sistema implements Serializable
         }while(ats.size() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            System.out.print("\nCoeficiente Fiscal --> "); numero = read.nextLine();
             isNumeric = true;
             try {
                 cf = Double.parseDouble(numero);
@@ -496,7 +497,7 @@ public class Sistema implements Serializable
         }while(password.length() == 0);
         
         do{
-            System.out.print("Atividade Económica, para venda:");
+            System.out.print("\nAtividade Económica, para venda:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
                 System.out.print(t + " (S/N)? "); at = read.nextLine();
@@ -516,7 +517,7 @@ public class Sistema implements Serializable
         }while(ats.size() == 0);
 
         do{
-            System.out.print("Atividades económicas para compra:\n");
+            System.out.print("\nAtividades económicas para compra:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
                 System.out.print(t + " (S/N)? "); at = read.nextLine();
@@ -535,7 +536,7 @@ public class Sistema implements Serializable
         }while(ats2.size() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            System.out.print("\nCoeficiente Fiscal --> "); numero = read.nextLine();
             isNumeric = true;
             try {
                 cf = Double.parseDouble(numero);
@@ -1173,15 +1174,21 @@ public class Sistema implements Serializable
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
             System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
+            for(Fatura f: res)
+            {
+                System.out.println(f.toString());
+            }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
             System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
-        }
-
-        for(Fatura f: res)
-        {
-            System.out.println(f.toString());
+            for(Fatura f: res)
+            {
+                if(f.getNIF_Emitente().equals(this.nif_contribuinte))
+                {
+                    System.out.println(f.toString());
+                }
+            }
         }
         System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
@@ -1212,15 +1219,21 @@ public class Sistema implements Serializable
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
             System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+            for(Fatura f: res)
+            {
+                System.out.println(f.toString());
+            }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
             System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-        }
-
-        for(Fatura f: res)
-        {
-            System.out.println(f.toString());
+            for(Fatura f: res)
+            {
+                if(f.getNIF_Emitente().equals(this.nif_contribuinte))
+                {
+                    System.out.println(f.toString());
+                }
+            }
         }
         System.out.print("Prima enter para continuar ..."); read.nextLine();
     }

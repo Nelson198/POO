@@ -252,7 +252,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(choice2 != 7);
+                            }while(choice2 != 8);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;
@@ -299,6 +299,7 @@ public class Menu
                                         } catch(IOException e) {
                                             System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
                                         }
+                                        break;
                                     
                                     case 3:
                                         s.validar_faturas_pendentes();
@@ -340,7 +341,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(choice3 != 10);
+                            }while(choice3 != 11);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;
