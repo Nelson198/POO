@@ -469,7 +469,7 @@ public class Sistema implements Serializable
         Map<String, Double> ats2 = new HashMap<>();
         Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
-        boolean isNumeric, interior;
+        boolean isNumeric, interior = false;
         double cf = 0;
         Scanner read = new Scanner(System.in);
         
@@ -550,7 +550,6 @@ public class Sistema implements Serializable
                     interior = true;
                 }
             }
-            interior = false;
         }while(concelho.length() == 0);
 
         read.close();
