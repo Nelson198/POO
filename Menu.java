@@ -274,6 +274,7 @@ public class Menu
                                             System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
                                         } catch(IOException e) {
                                             System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+                                        }
                                         break;
                                     
                                     case 2:
@@ -383,6 +384,7 @@ public class Menu
                         System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
                     } catch(IOException e) {
                         System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+                    }
                     System.out.print('\u000C');
                     break;
                     
@@ -394,7 +396,7 @@ public class Menu
                         System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
                     } catch(IOException e) {
                         System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
-        }
+                    }
                     System.out.print('\u000C');
                     break;
                     
