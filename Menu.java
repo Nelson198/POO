@@ -172,7 +172,7 @@ public class Menu
         do
         {
             m.show_menu_Principal();
-            System.out.print("Escolha uma opção: "); opçao1 = read.nextInt();
+            System.out.print("Escolha uma opção: "); opçao1 = read.nextLine();
             System.out.print("\n");
             switch(opçao1)
             {
@@ -189,7 +189,7 @@ public class Menu
                             {
                                 System.out.print('\u000C');
                                 m.show_menu_CI();
-                                System.out.print("Escolha uma opção: "); opçao2 = read.nextInt();
+                                System.out.print("Escolha uma opção: "); opçao2 = read.nextLine();
                                 System.out.print("\n");
                             
                                 switch(opçao2)
@@ -237,7 +237,7 @@ public class Menu
                             {
                                 System.out.print('\u000C');
                                 m.show_menu_CC();
-                                System.out.print("Escolha uma opção: "); opçao3 = read.nextInt();
+                                System.out.print("Escolha uma opção: "); opçao3 = read.nextLine();
                                 System.out.print("\n");
                             
                                 switch(opçao3)
@@ -306,7 +306,7 @@ public class Menu
                             {
                                 System.out.print('\u000C');
                                 m.show_menu_Administrador();
-                                System.out.print("Escolha uma opção: "); opçao4 = read.nextInt();
+                                System.out.print("Escolha uma opção: "); opçao4 = read.nextLine();
                                 System.out.print("\n");
                                 switch(opçao4)
                                 {
