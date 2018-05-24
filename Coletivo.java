@@ -13,7 +13,8 @@ import java.io.Serializable;
 public class Coletivo extends Contribuinte implements Serializable
 {
     // Variáveis de instância
-    private Map<String, Double> atividades_economicas;
+    private Map<String, Double> atividades_economicas; /* Atividades económicas para vendas */
+    private Map<String, Double> atividades_economicas_2; /* Atividades económicas para compras */
     private Map<String, Double> acumulado_vendas;
     private double coeficiente_fiscal;
     private boolean interior;
@@ -27,6 +28,7 @@ public class Coletivo extends Contribuinte implements Serializable
     {
         super();
         this.atividades_economicas = new HashMap<>();
+        this.atividades_economicas_2 = new HashMap<>();
         this.acumulado_vendas = new HashMap<>();
         this.coeficiente_fiscal = 0;
         this.interior = false;
@@ -40,16 +42,18 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param morada
      * @param password
      * @param atividades_economicas
+     * @param atividades_economicas_2
      * @param acumulado_vendas
      * @param coeficiente_fiscal
      * @param interior
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                    Map<String, Double> atividades_economicas_p, Map<String, Double> acumulado_vendas_p, double coeficiente_fiscal_p, boolean interior)
+                    Map<String, Double> atividades_economicas_p, Map<String, Double> atividades_economicas_p_2, Map<String, Double> acumulado_vendas_p, double coeficiente_fiscal_p, boolean interior)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
         setAtividades_Economicas(atividades_economicas_p);
+        setAtividades_Economicas_2(atividades_economicas_p_2);
         setAcumulado_Vendas(acumulado_vendas_p);
         this.coeficiente_fiscal = coeficiente_fiscal_p;
         this.interior = interior;
@@ -64,13 +68,14 @@ public class Coletivo extends Contribuinte implements Serializable
     {
         super(c);
         this.atividades_economicas = c.getAtividades_Economicas();
+        this.atividades_economicas_2 = c.getAtividades_Economicas_2();
         this.acumulado_vendas = c.getAcumulado_Vendas();
         this.coeficiente_fiscal = c.getCoeficiente_Fiscal();
         this.interior = c.getInterior();
     }
     
     /**
-     * Devolve o array com as atividades económicas da empresa.
+     * Devolve o array com as atividades económicas, para vendas, da empresa.
      * @param
      * @return atividades_economicas
      */
@@ -85,7 +90,7 @@ public class Coletivo extends Contribuinte implements Serializable
     }
     
     /**
-     * Atualiza o array com as atividades económicas da empresa.
+     * Atualiza o array com as atividades económicas, para vendas, da empresa.
      * @param atividades_economicas
      * @return
      */
@@ -95,6 +100,35 @@ public class Coletivo extends Contribuinte implements Serializable
         for(String ae: atividades_economicas_p.keySet())
         {
             this.atividades_economicas.put(ae, atividades_economicas_p.get(ae));
+        }
+    }
+
+    /**
+     * Devolve o array com as atividades económicas, para compras, da empresa.
+     * @param
+     * @return atividades_economicas_2
+     */
+    public Map<String, Double> getAtividades_Economicas_2()
+    {
+        Map<String, Double> nova = new HashMap<>();
+        for(String s: this.atividades_economicas_2.keySet())
+        {
+            nova.put(s, this.atividades_economicas_2.get(s));
+        }
+        return nova;
+    }
+    
+    /**
+     * Atualiza o array com as atividades económicas, para compras, da empresa.
+     * @param atividades_economicas_2
+     * @return
+     */
+    public void setAtividades_Economicas_2(Map<String, Double> atividades_economicas_p_2)
+    {
+        this.atividades_economicas_2 = new HashMap<>();
+        for(String ae: atividades_economicas_p_2.keySet())
+        {
+            this.atividades_economicas_2.put(ae, atividades_economicas_p_2.get(ae));
         }
     }
 

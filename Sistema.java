@@ -650,24 +650,27 @@ public class Sistema implements Serializable
     public void validar_faturas_pendentes()
     {
         String option;
+        List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            if((this.faturas.get(i).getPendente() && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte)) ||
-               (!this.faturas.get(i).getPendente() && this.faturas.get(i).getNatureza_Despesa().size() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte)))
+            if(this.faturas.get(i).getPendente() && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 System.out.println("---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
 
-                for(String s : this.faturas.get(i).getNatureza_Despesa())
+                for(String s : this.faturas.get(i).getNaturezas_Despesa())
                 {
-                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): "); option = read.nextLine();
+                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
+                    option = read.nextLine();
 
                     if(option.equals("S") || option.equals("s"))
                     {
                         this.faturas.get(i).setPendente(false);
-                        this.faturas.get(i).setIndice(this.faturas.get(i).getNatureza_Despesa().indexOf(s));
+                        nova = this.faturas.get(i).getNatureza_Despesa();
+                        nova.add(0, s);
+                        this.faturas.get(i).setNatureza_Despesa(nova));
 
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
@@ -680,6 +683,63 @@ public class Sistema implements Serializable
 
                         acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
 
+                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
+                        break;
+                    }
+                    else if (option.equals("N") || option.equals("n")){}
+                    else
+                    {
+                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+        /**
+     * Método que trata de revalidar faturas por parte dos Contribuintes, alterando a sua atividade económica.
+     * @param
+     * @return
+     */
+    public void revalidar_faturas_pendentes()
+    {
+        String option;
+        List<String> nova = new ArrayList<>();
+        Scanner read = new Scanner(System.in);
+        
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        {
+            if(!this.faturas.get(i).getPendente() && this.faturas.get(i).getNaturezas_Despesa() >= 2 && this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+            {
+                System.out.println("---> Fatura possível de revalidar:\n");
+                System.out.println(this.faturas.get(i).toString());
+
+                for(String s : this.faturas.get(i).getNaturezas_Despesa())
+                {
+                    System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
+                    option = read.nextLine();
+
+                    if(option.equals("S") || option.equals("s"))
+                    {
+                        nova = this.faturas.get(i).getNatureza_Despesa();
+                        nova.add(0, s);
+                        this.faturas.get(i).setNatureza_Despesa(nova));
+
+                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
+                        {
+                            desacumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CI(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                        }
+                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
+                        {
+                            desacumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                            acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
+                        }
+
+                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.getNatureza_Despesa(i).get(0), this.faturas.get(i).getValor_Despesa());
+                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
+                        
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
                     }
@@ -726,9 +786,42 @@ public class Sistema implements Serializable
             else index += 1;
         }
     }
+
+    /**
+     * Método que retira o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Individual), por esta ter sido alterada.
+     * @param
+     * @return
+     */
+    public void desacumular_valor_despesa_CI(String nif_ci, String at, double despesa)
+    {
+        double d;
+        Map<String, Double> map;
+        Individual i = ((Individual) this.registados.get(nif_ci)).clone();
+        int index = 1;
+        for(String s : i.getAtividades_Economicas().keySet())
+        {
+            if(at.compareTo(s) == 0)
+            {
+                d = i.getAtividades_Economicas().get(s);
+                map = i.getAtividades_Economicas();
+                map.put(s, d - despesa);
+                ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
+                break;
+            }
+            else if(index == i.getAtividades_Economicas().keySet().size() && i.getAtividades_Economicas().containsKey("Outros"))
+            {
+                d = i.getAtividades_Economicas().get("Outros");
+                map = i.getAtividades_Economicas();
+                map.put("Outros", d - despesa);
+                ((Individual) this.registados.get(nif_ci)).setAtividades_Economicas(map);
+                break;
+            }
+            else index += 1;
+        }
+    }
     
     /**
-     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Coletivo).
+     * Método que acumula o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Coletivo), por esta ter sido alterada.
      * @param
      * @return
      */
@@ -737,16 +830,57 @@ public class Sistema implements Serializable
         double d;
         Map<String, Double> map;
         Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
-        for(String s : c.getAtividades_Economicas().keySet())
+        for(String s : i.getAtividades_Economicas_2().keySet())
         {
             if(at.compareTo(s) == 0)
             {
-                d = c.getAtividades_Economicas().get(s);
-                map = c.getAtividades_Economicas();
+                d = c.getAtividades_Economicas_2().get(s);
+                map = c.getAtividades_Economicas_2();
                 map.put(s, d + despesa);
-                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas(map);
+                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
                 break;
             }
+            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economica_2().containsKey("Outros"))
+            {
+                d = c.getAtividades_Economicas_2().get("Outros");
+                map = c.getAtividades_Economicas_2();
+                map.put("Outros", d + despesa);
+                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
+                break;
+            }
+            else index += 1;
+        }
+    }
+
+    /**
+     * Método que retira o valor da despesa de uma fatura à respetiva atividade económica do cliente (Contribuinte Coletivo).
+     * @param
+     * @return
+     */
+    public void desacumular_valor_despesa_CC(String nif_cc, String at, double despesa)
+    {
+        double d;
+        Map<String, Double> map;
+        Coletivo c = ((Coletivo) this.registados.get(nif_cc)).clone();
+        for(String s : i.getAtividades_Economicas_2().keySet())
+        {
+            if(at.compareTo(s) == 0)
+            {
+                d = c.getAtividades_Economicas_2().get(s);
+                map = c.getAtividades_Economicas_2();
+                map.put(s, d - despesa);
+                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
+                break;
+            }
+            else if(index == c.getAtividades_Economicas_2().keySet().size() && c.getAtividades_Economica_2().containsKey("Outros"))
+            {
+                d = c.getAtividades_Economicas_2().get("Outros");
+                map = c.getAtividades_Economicas_2();
+                map.put("Outros", d - despesa);
+                ((Coletivo) this.registados.get(nif_cc)).setAtividades_Economicas_2(map);
+                break;
+            }
+            else index += 1;
         }
     }
     
@@ -768,7 +902,33 @@ public class Sistema implements Serializable
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) + valor * percentagem;
+                res = nova.get(s) + valor;
+                nova.put(s, res);
+                break;
+            }
+        }
+        c.setAcumulado_Vendas(nova);
+    }
+
+    /**
+     * Método que retira o valor das vendas de uma empresa, por setor de atividade económica.
+     * 
+     * @param NIF - da empresa
+     * @param at - Atividade económica a retirar
+     * @param valor - da venda
+     * @return
+     */
+    
+    public void desacumular_vendas_CC(String NIF, String at, double valor)
+    {
+        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
+        Coletivo c = (Coletivo) this.registados.get(NIF);
+        Map<String, Double> nova = c.getAcumulado_Vendas();
+        double res;
+        for(String s: nova.keySet())
+        {
+            if(s.compareTo(at) == 0) {
+                res = nova.get(s) - valor;
                 nova.put(s, res);
                 break;
             }
