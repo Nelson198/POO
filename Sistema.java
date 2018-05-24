@@ -1324,7 +1324,9 @@ public class Sistema implements Serializable
 
         for(String c: agregado)
         {
-            valor += calcular_deduçao_fiscal_CI(c);
+            if(this.registados.containsKey(c)) {
+                valor += calcular_deduçao_fiscal_CI(c);
+            }
         }
         System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
