@@ -1445,6 +1445,7 @@ public class Sistema implements Serializable
         double maximo_valor = 0; 
         double valor_total = 0; 
         double valor_deduzido = 0;
+        int dependentes = this.registados.get(nif).getDependentes();
         Individual i = (Individual) this.getRegistados().get(nif);
         Map<String, Double> sats = i.getAtividades_Economicas();
 
@@ -1457,14 +1458,20 @@ public class Sistema implements Serializable
 
             else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
                 percentagem = this.atividades_economicas_disponiveis.get(s)[0];
-                maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
+                if(dependentes >= 4) {
+                    maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * (1 + ((0.05) * dependentes));
+                } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
+                
                 valor_total = sats.get(s);
                 valor_deduzido = valor_total * percentagem;
-                acum += valor_deduzido;
 
                 if (valor_deduzido <= maximo_valor) {
                     System.out.printf("%s: %.2f€ deduzidos.\n", s, valor_deduzido);
-                }  
+                    acum += valor_deduzido;
+                } else {
+                    System.out.printf("%s: %.2f€ deduzidos.\n", s, maximo_valor);
+                    acum += maximo_valor;
+                } 
             }
         }
         System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
