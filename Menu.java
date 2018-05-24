@@ -92,15 +92,17 @@ public class Menu
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
         sb.append("                                             ||        2 ---> Validar faturas pendentes.                                                          ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        3 ---> Obter a listagem das facturas, ordenada por data de emissão.                        ||\n"); 
+        sb.append("                                             ||        3 ---> Alterar atividade económica de fatura(s).                                           ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        4 ---> Obter a listagem das facturas, ordenada por valor crescente de despesa.             ||\n"); 
+        sb.append("                                             ||        4 ---> Obter a listagem das facturas, ordenada por data de emissão.                        ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        5 ---> Verificar montante de dedução fiscal acumulado por si.                              ||\n");
+        sb.append("                                             ||        5 ---> Obter a listagem das facturas, ordenada por valor crescente de despesa.             ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        6 ---> Verificar montante de dedução fiscal acumulado pelo agregado familiar.              ||\n");
+        sb.append("                                             ||        6 ---> Verificar montante de dedução fiscal acumulado por si.                              ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        7 ---> Logout.                                                                             ||\n");
+        sb.append("                                             ||        7 ---> Verificar montante de dedução fiscal acumulado pelo agregado familiar.              ||\n");
+        sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
+        sb.append("                                             ||        8 ---> Logout.                                                                             ||\n");
         sb.append("                                             =======================================================================================================\n");
         System.out.print(sb);
     }
@@ -216,23 +218,27 @@ public class Menu
                                         break;
                                     
                                     case 3:
+                                        s.revalidar_faturas_pendentes();
+                                        break;
+
+                                    case 4:
                                         s.mostrar_faturas_ord_data_Contribuintes();
                                         break;
                                     
-                                    case 4:
+                                    case 5:
                                         s.mostrar_faturas_ord_valor_crescente_despesa_Contribuintes();
                                         break;
 
-                                    case 5:
+                                    case 6:
                                         s.calcular_deduçao_fiscal_CI(s.getNIF_Contribuinte());
                                         break;
                                     
-                                    case 6:
+                                    case 7:
                                         Individual i = (Individual) s.getRegistados().get(s.getNIF_Contribuinte());
                                         s.calcular_deduçao_fiscal_agregado(i.getIndex_Agregado());
                                         break;
                                     
-                                    case 7:
+                                    case 8:
                                         break;
                                     
                                     default:
@@ -262,6 +268,12 @@ public class Menu
                                 {
                                     case 1:
                                         s.registar_Faturas();
+                                        try{
+                                            s.gravar_estado();
+                                        } catch(FileNotFoundException e) {
+                                            System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                                        } catch(IOException e) {
+                                            System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
                                         break;
                                     
                                     case 2:
@@ -365,11 +377,24 @@ public class Menu
                     
                 case 3:
                     s.registar_CI();
+                    try{
+                    s.gravar_estado();
+                    } catch(FileNotFoundException e) {
+                        System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                    } catch(IOException e) {
+                        System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
                     System.out.print('\u000C');
                     break;
                     
                 case 4:
                     s.registar_CC();
+                    try{
+                    s.gravar_estado();
+                    } catch(FileNotFoundException e) {
+                        System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                    } catch(IOException e) {
+                        System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+        }
                     System.out.print('\u000C');
                     break;
                     
