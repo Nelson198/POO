@@ -462,6 +462,7 @@ public class Sistema implements Serializable
     {
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
+        Map<String, Double> ats2 = new HashMap<>();
         Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
         boolean isNumeric, interior;
@@ -493,25 +494,39 @@ public class Sistema implements Serializable
         do{
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                if(!t.equals("Despesas gerais familiares"))
+                System.out.print("Atividade Económica, para venda: " + t + " (S/N)? "); at = read.nextLine();
+                if(at.equals("S") || at.equals("s"))
                 {
-                    System.out.print("Atividade Económica: " + t + " (S/N)? "); at = read.nextLine();
-                    if(at.equals("S") || at.equals("s"))
-                    {
-                        ats.put(t, 0.0);
-                        avs.put(t, 0.0);
-
-                    }
-                    else if(at.equals("N") || at.equals("n"))
-                    {}
-                    else
-                    {
-                        System.out.print("Erro: Dados inválidos!"); time(1500);
-                        return;
-                    }
+                    ats.put(t, 0.0);
+                    avs.put(t, 0.0);
+                }
+                else if(at.equals("N") || at.equals("n"))
+                {}
+                else
+                {
+                    System.out.print("Erro: Dados inválidos!"); time(1500);
+                    return;
                 }
             }
         }while(ats.size() == 0);
+
+        do{
+            for(String t: this.atividades_economicas_disponiveis.keySet())
+            {
+                System.out.print("Atividade Económica, para compra: " + t + " (S/N)? "); at = read.nextLine();
+                if(at.equals("S") || at.equals("s"))
+                {
+                    ats2.put(t, 0.0);
+                }
+                else if(at.equals("N") || at.equals("n"))
+                {}
+                else
+                {
+                    System.out.print("Erro: Dados inválidos!"); time(1500);
+                    return;
+                }
+            }
+        }while(ats2.size() == 0);
         
         do{
             System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
