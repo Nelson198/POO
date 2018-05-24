@@ -344,12 +344,12 @@ public class Sistema implements Serializable
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('1') != 0 && nif.indexOf('2') != 0);
         
         do{
-            System.out.print("Email --> "); email = read.nextLine();
-        }while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
-
-        do{
             System.out.print("Nome --> "); nome = read.nextLine();
         }while(nome.length() == 0);
+
+        do{
+            System.out.print("Email --> "); email = read.nextLine();
+        }while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
         
         do{
             System.out.print("Morada --> "); morada = read.nextLine();
