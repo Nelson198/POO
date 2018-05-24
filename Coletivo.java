@@ -16,7 +16,6 @@ public class Coletivo extends Contribuinte implements Serializable
     private Map<String, Double> atividades_economicas; /* Atividades económicas para vendas */
     private Map<String, Double> atividades_economicas_2; /* Atividades económicas para compras */
     private Map<String, Double> acumulado_vendas;
-    private double coeficiente_fiscal;
     private boolean interior;
     
     /**
@@ -30,7 +29,6 @@ public class Coletivo extends Contribuinte implements Serializable
         this.atividades_economicas = new HashMap<>();
         this.atividades_economicas_2 = new HashMap<>();
         this.acumulado_vendas = new HashMap<>();
-        this.coeficiente_fiscal = 0;
         this.interior = false;
     }
     
@@ -41,17 +39,18 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param nome
      * @param morada
      * @param password
+     * @param index
+     * @param coeficiente_fiscal
      * @param atividades_economicas
      * @param atividades_economicas_2
      * @param acumulado_vendas
-     * @param coeficiente_fiscal
      * @param interior
      * @return
      */
-    public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, 
-                    Map<String, Double> atividades_economicas_p, Map<String, Double> atividades_economicas_p_2, Map<String, Double> acumulado_vendas_p, double coeficiente_fiscal_p, boolean interior)
+    public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, double coeficiente_fiscal_p, 
+                    Map<String, Double> atividades_economicas_p, Map<String, Double> atividades_economicas_p_2, Map<String, Double> acumulado_vendas_p, boolean interior)
     {
-        super(NIF_p, email_p, nome_p, morada_p, password_p, index_p);
+        super(NIF_p, email_p, nome_p, morada_p, password_p, index_p, coeficiente_fiscal_p);
         setAtividades_Economicas(atividades_economicas_p);
         setAtividades_Economicas_2(atividades_economicas_p_2);
         setAcumulado_Vendas(acumulado_vendas_p);
@@ -70,7 +69,6 @@ public class Coletivo extends Contribuinte implements Serializable
         this.atividades_economicas = c.getAtividades_Economicas();
         this.atividades_economicas_2 = c.getAtividades_Economicas_2();
         this.acumulado_vendas = c.getAcumulado_Vendas();
-        this.coeficiente_fiscal = c.getCoeficiente_Fiscal();
         this.interior = c.getInterior();
     }
     
@@ -165,26 +163,6 @@ public class Coletivo extends Contribuinte implements Serializable
     }
 
     /**
-     * Devolve o coeficiente fiscal da empresa.
-     * @param 
-     * @return coeficiente_fiscal
-     */
-    public double getCoeficiente_Fiscal()
-    {
-        return this.coeficiente_fiscal;
-    }
-
-    /**
-     * Atualiza o coeficiente fiscal da empresa.
-     * @param coeficiente_fiscal
-     * @return
-     */
-    public void setCoeficiente_Fiscal(double coeficiente_fiscal_p)
-    {
-        this.coeficiente_fiscal = coeficiente_fiscal_p;
-    }
-
-    /**
      * Indica se empresa é do interior
      * @param
      * @return interior
@@ -215,8 +193,8 @@ public class Coletivo extends Contribuinte implements Serializable
         if (o == null || this.getClass() != o.getClass()) return false;
         Coletivo c = (Coletivo) o;
         return (super.equals(c) && this.atividades_economicas.equals(c.getAtividades_Economicas())
+                                && this.atividades_economicas_2.equals(c.getAtividades_Economicas_2())
                                 && this.acumulado_vendas.equals(c.getAcumulado_Vendas())
-                                && this.coeficiente_fiscal == c.getCoeficiente_Fiscal())
                                 && this.interior == c.getInterior();
     }
    
@@ -235,7 +213,8 @@ public class Coletivo extends Contribuinte implements Serializable
         sb.append("Morada: ").append(super.getMorada()).append(", ");
         sb.append("Password de Acesso: ").append(super.getPassword()).append(", ");
         sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append(", ");
-        sb.append("Atividades Económicas: ").append(this.getAtividades_Economicas().toString()).append(", ");
+        sb.append("Atividades Económicas para venda: ").append(this.getAtividades_Economicas().toString()).append(", ");
+        sb.append("Atividades Económicas para compra: ").append(this.getAtividades_Economicas_2().toString()).append(", ");
         sb.append("Acumulado de vendas: ").append(this.getAcumulado_Vendas().toString()).append(", ");
         sb.append("Interior? ").append(this.getInterior()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");

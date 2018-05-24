@@ -346,7 +346,7 @@ public class Fatura implements Serializable
         sb.append("Hora da despesa: ").append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))).append("\n");
         sb.append("Pendente? ").append(this.getPendente()).append("\n");
         sb.append("Atividade(s) económica(s) associada(s): ").append(this.getNatureza_Despesa().toString()).append("\n");
-        sb.append("Atividade económica atual para a qual a fatura foi validada: ").append(this.getNatureza_Despesa()).append("\n\n");
+        sb.append("Atividade económica atual: ").append(this.getNatureza_Despesa()).append("\n\n");
         return sb.toString();
     }
     

@@ -480,13 +480,13 @@ public class Sistema implements Serializable
         }while(nif.length() != 9 || isNumeric == false || nif.indexOf('5') != 0);
         
         do{
+            System.out.print("Nome --> "); nome = read.nextLine();
+        }while(nome.length() == 0);
+
+        do{
             System.out.print("Email --> "); email = read.nextLine();
         } while(email.indexOf('@') == -1 || email.indexOf('.') == -1);
 
-        do{
-            System.out.print("Nome --> "); nome = read.nextLine();
-        }while(nome.length() == 0);
-        
         do{
             System.out.print("Morada --> "); morada = read.nextLine();
         }while(morada.length() == 0);
@@ -496,9 +496,10 @@ public class Sistema implements Serializable
         }while(password.length() == 0);
         
         do{
+            System.out.print("Atividade Económica, para venda:");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print("Atividade Económica, para venda: " + t + " (S/N)? "); at = read.nextLine();
+                System.out.print(t + " (S/N)? "); at = read.nextLine();
                 if(at.equals("S") || at.equals("s"))
                 {
                     ats.put(t, 0.0);
@@ -515,9 +516,10 @@ public class Sistema implements Serializable
         }while(ats.size() == 0);
 
         do{
+            System.out.print("Atividades económicas para compra:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print("Atividade Económica, para compra: " + t + " (S/N)? "); at = read.nextLine();
+                System.out.print(t + " (S/N)? "); at = read.nextLine();
                 if(at.equals("S") || at.equals("s"))
                 {
                     ats2.put(t, 0.0);
@@ -584,7 +586,7 @@ public class Sistema implements Serializable
             desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
         }
 
-        desacumular_vendas_CC(emitente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+        desacumular_vendas_CC(emitente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa(), cliente.getCoeficiente_Fiscal());
         this.faturas.remove(f);
     }
     
@@ -678,7 +680,7 @@ public class Sistema implements Serializable
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
 
-                acumular_vendas_CC(nif_e, at.get(0), valor);
+                acumular_vendas_CC(nif_e, at.get(0), valor, this.registados.get(nif_ci).getCoeficiente_Fiscal());
 
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
@@ -729,7 +731,7 @@ public class Sistema implements Serializable
                             acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
 
-                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
+                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
 
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
@@ -784,8 +786,8 @@ public class Sistema implements Serializable
                             acumular_valor_despesa_CC(this.faturas.get(i).getNIF_Cliente(), s, this.faturas.get(i).getValor_Despesa());
                         }
 
-                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa());
-                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa());
+                        desacumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), this.faturas.get(i).getNatureza_Despesa().get(0), this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
+                        acumular_vendas_CC(this.faturas.get(i).getNIF_Emitente(), s, this.faturas.get(i).getValor_Despesa(), this.registados.get(this.faturas.get(i).getNIF_Emitente()).getCoeficienteFiscal());
                         
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
@@ -944,7 +946,7 @@ public class Sistema implements Serializable
      * @return
      */
     
-    public void acumular_vendas_CC(String NIF, String at, double valor)
+    public void acumular_vendas_CC(String NIF, String at, double valor, double cf)
     {
         double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
         Coletivo c = (Coletivo) this.registados.get(NIF);
@@ -953,7 +955,7 @@ public class Sistema implements Serializable
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) + valor;
+                res = nova.get(s) + (valor * cf);
                 nova.put(s, res);
                 break;
             }
@@ -970,7 +972,7 @@ public class Sistema implements Serializable
      * @return
      */
     
-    public void desacumular_vendas_CC(String NIF, String at, double valor)
+    public void desacumular_vendas_CC(String NIF, String at, double valor, double cf)
     {
         double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
         Coletivo c = (Coletivo) this.registados.get(NIF);
@@ -979,7 +981,7 @@ public class Sistema implements Serializable
         for(String s: nova.keySet())
         {
             if(s.compareTo(at) == 0) {
-                res = nova.get(s) - valor;
+                res = nova.get(s) - (valor * cf);
                 nova.put(s, res);
                 break;
             }
@@ -1456,7 +1458,7 @@ public class Sistema implements Serializable
             read = ler.nextLine();
             isNumeric = read.chars().allMatch(Character::isDigit);
         }while(!isNumeric);
-        n = Integer.parseInt(opçao4);
+        n = Integer.parseInt(read);
 
         TreeSet<Coletivo> top = new TreeSet<Coletivo>(new Comparator()
         {
@@ -1506,6 +1508,7 @@ public class Sistema implements Serializable
         double valor_total = 0; 
         double valor_deduzido = 0;
         Individual i = (Individual) this.getRegistados().get(nif);
+        double cf = i.getCoeficiente_Fiscal();
         int dependentes = i.getDependentes();
         Map<String, Double> sats = i.getAtividades_Economicas();
 
@@ -1523,7 +1526,7 @@ public class Sistema implements Serializable
                 } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
                 
                 valor_total = sats.get(s);
-                valor_deduzido = valor_total * percentagem;
+                valor_deduzido = (valor_total * cf) * percentagem;
 
                 if (valor_deduzido <= maximo_valor) {
                     System.out.printf("%s: %.2f€ deduzidos.\n", s, valor_deduzido);

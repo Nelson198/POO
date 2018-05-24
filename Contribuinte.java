@@ -17,6 +17,7 @@ public class Contribuinte implements Serializable
     private String morada;
     private String password;
     private List<Integer> index;
+    private double coeficiente_fiscal;
     
     /**
      * Construtor por omissão da classe Contribuinte.
@@ -31,6 +32,7 @@ public class Contribuinte implements Serializable
         this.morada = "N/D";
         this.password = "N/D";
         this.index = new ArrayList<>();
+        this.coeficiente_fiscal = 0.0;
     }
     
     /**
@@ -41,9 +43,10 @@ public class Contribuinte implements Serializable
      * @param morada
      * @param password
      * @param index
+     * @param coeficiente_fiscal
      * @return
      */
-    public Contribuinte(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index)
+    public Contribuinte(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index, double coeficiente_fiscal_p)
     {
         this.NIF = NIF_p;
         this.email = email_p;
@@ -51,6 +54,7 @@ public class Contribuinte implements Serializable
         this.morada = morada_p;
         this.password = password_p;
         setIndex(index);
+        this.coeficiente_fiscal = coeficiente_fiscal_p;
     }
     
     /**
@@ -66,6 +70,7 @@ public class Contribuinte implements Serializable
         this.morada = umContribuinte.getMorada();
         this.password = umContribuinte.getPassword();
         this.index = umContribuinte.getIndex();
+        this.coeficiente_fiscal = umContribuinte.getCoeficiente_Fiscal();
     }
     
     /**
@@ -196,6 +201,26 @@ public class Contribuinte implements Serializable
             this.index.add(i);
         }
     }
+
+    /**
+     * Devolve o coeficiente fiscal do contribuinte.
+     * @param
+     * @return coeficiente_fiscal
+     */
+    public double getCoeficiente_Fiscal()
+    {
+        return this.coeficiente_fiscal;
+    }
+    
+    /**
+     * Atualiza o coeficiente fiscal do contribuinte.
+     * @param coeficiente_fiscal
+     * @return
+     */
+    public void setCoeficiente_Fiscal(double coeficiente_fiscal_p)
+    {
+        this.coeficiente_fiscal = coeficiente_fiscal_p;
+    }
     
     /**
      * Método que devolve a representação em String da classe Contribuinte.
@@ -211,7 +236,8 @@ public class Contribuinte implements Serializable
         sb.append("Nome: ").append(this.getNome()).append(", ");
         sb.append("Morada: ").append(this.getMorada()).append(", ");
         sb.append("Password de Acesso: ").append(getPassword()).append(", ");
-        sb.append("Lista de indices das faturas associadas: ").append(this.getIndex()).append(")\n");
+        sb.append("Lista de indices das faturas associadas: ").append(this.getIndex()).append(", ");
+        sb.append("Coeficiente fiscal: ").append(getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
     }
     
@@ -230,7 +256,8 @@ public class Contribuinte implements Serializable
              && this.nome.equals(c.getNome())
              && this.morada.equals(c.getMorada())
              && this.password.equals(c.getPassword())
-             && this.index.equals(c.getIndex()));
+             && this.index.equals(c.getIndex()))
+             && this.coeficiente_fiscal == c.getCoeficiente_Fiscal();
     }
     
     /**
