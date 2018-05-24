@@ -147,7 +147,9 @@ public class Menu
      */
     public static void main(String[] args)
     {   
-        int opçao1, opçao2, opçao3, opçao4;
+        String opçao1, opçao2, opçao3, opçao4;
+        boolean isNumeric;
+        int choice1, choice2, choice3, choice4;
         Scanner read = new Scanner(System.in);
         Menu m = new Menu(); 
         Sistema s;
@@ -171,10 +173,16 @@ public class Menu
         
         do
         {
-            m.show_menu_Principal();
-            System.out.print("Escolha uma opção: "); opçao1 = read.nextLine();
+            do {
+                System.out.print('\u000C');
+                m.show_menu_Principal();
+                System.out.print("Escolha uma opção: "); 
+                opçao1 = read.nextLine();
+                isNumeric = opçao1.chars().allMatch(Character::isDigit);
+            }while(!isNumeric);
+            choice1 = Integer.parseInt(opçao1);
             System.out.print("\n");
-            switch(opçao1)
+            switch(choice1)
             {
                 case 1:
                     int r = s.login_Contribuinte();
@@ -187,12 +195,17 @@ public class Menu
                         case 1:
                             do
                             {
-                                System.out.print('\u000C');
-                                m.show_menu_CI();
-                                System.out.print("Escolha uma opção: "); opçao2 = read.nextLine();
+                                do {
+                                    System.out.print('\u000C');
+                                    m.show_menu_CI();
+                                    System.out.print("Escolha uma opção: "); 
+                                    opçao2 = read.nextLine();
+                                    isNumeric = opçao2.chars().allMatch(Character::isDigit);
+                                }while(!isNumeric);
+                                choice2 = Integer.parseInt(opçao2);
                                 System.out.print("\n");
                             
-                                switch(opçao2)
+                                switch(choice2)
                                 {
                                     case 1:
                                         s.mostrar_faturas_CI();
@@ -227,7 +240,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(opçao2 != 7);
+                            }while(choice2 != 7);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;
@@ -235,12 +248,17 @@ public class Menu
                         case 2:
                             do
                             {
-                                System.out.print('\u000C');
-                                m.show_menu_CC();
-                                System.out.print("Escolha uma opção: "); opçao3 = read.nextLine();
+                                do {
+                                    System.out.print('\u000C');
+                                    m.show_menu_CC();
+                                    System.out.print("Escolha uma opção: ");
+                                    opçao3 = read.nextLine();
+                                    isNumeric = opçao3.chars().allMatch(Character::isDigit);
+                                }while(!isNumeric);
+                                choice3 = Integer.parseInt(opçao3);
                                 System.out.print("\n");
                             
-                                switch(opçao3)
+                                switch(choice3)
                                 {
                                     case 1:
                                         s.registar_Faturas();
@@ -286,7 +304,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(opçao3 != 10);
+                            }while(choice3 != 10);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;
@@ -304,11 +322,16 @@ public class Menu
                         case 0:
                             do
                             {
-                                System.out.print('\u000C');
-                                m.show_menu_Administrador();
-                                System.out.print("Escolha uma opção: "); opçao4 = read.nextLine();
+                                do {
+                                    System.out.print('\u000C');
+                                    m.show_menu_Administrador();
+                                    System.out.print("Escolha uma opção: ");
+                                    opçao4 = read.nextLine();
+                                    isNumeric = opçao4.chars().allMatch(Character::isDigit);
+                                }while(!isNumeric);
+                                choice4 = Integer.parseInt(opçao4);
                                 System.out.print("\n");
-                                switch(opçao4)
+                                switch(choice4)
                                 {
                                     case 1:
                                         s.mostrar_faturas_Administrador();
@@ -333,7 +356,7 @@ public class Menu
                                     case 6:
                                         break;
                                 }
-                            } while(opçao4 != 6);
+                            } while(choice4 != 6);
                             s.logout_Administrador();
                             System.out.print('\u000C');
                             break;
@@ -358,7 +381,7 @@ public class Menu
                     m.time(2000);
                     System.out.print('\u000C');
             }
-        }while(opçao1 != 5);
+        }while(choice1 != 5);
         
         System.out.print("A sair do Sistema ...");
         read.close();
