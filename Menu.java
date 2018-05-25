@@ -236,7 +236,7 @@ public class Menu
                                         break;
 
                                     case 6:
-                                        s.calcular_deduçao_fiscal_CI(s.getNIF_Contribuinte());
+                                        s.calcular_deduçao_fiscal_CI(s.getNIF_Contribuinte(), 0);
                                         break;
                                     
                                     case 7:

@@ -621,8 +621,11 @@ public class Sistema implements Serializable
             desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
         }
 
-        desacumular_vendas_CC(emitente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa(), cliente.getCoeficiente_Fiscal());
+        cliente.getIndex().remove(indice);
+        emitente.getIndex().remove(indice);
+        
         this.faturas.remove(f);
+        this.faturas.add(indice, NULL);
     }
     
     /**
@@ -715,8 +718,6 @@ public class Sistema implements Serializable
                     acumular_valor_despesa_CC(nif_ci, at.get(0), valor);
                 }
 
-                acumular_vendas_CC(nif_e, at.get(0), valor, this.registados.get(nif_ci).getCoeficiente_Fiscal());
-
                 System.out.print("\n\nA fatura foi submetida com sucesso no Sistema!"); time(1000);
             }
             else if(at.size() >= 2)
@@ -768,8 +769,6 @@ public class Sistema implements Serializable
                         {
                             acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
-
-                        acumular_vendas_CC(f.getNIF_Emitente(), s, f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
 
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
@@ -826,9 +825,6 @@ public class Sistema implements Serializable
                             desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
                             acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
-
-                        desacumular_vendas_CC(f.getNIF_Emitente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
-                        acumular_vendas_CC(f.getNIF_Emitente(), s, f.getValor_Despesa(), this.registados.get(f.getNIF_Emitente()).getCoeficiente_Fiscal());
                         
                         System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
                         break;
@@ -978,58 +974,6 @@ public class Sistema implements Serializable
         }
     }
     
-    /**
-     * Método que acumula o valor das vendas de uma empresa, por setor de atividade económica.
-     * 
-     * @param NIF - da empresa
-     * @param at - Atividade económica a acumular venda
-     * @param valor - da venda
-     * @return
-     */
-    
-    public void acumular_vendas_CC(String NIF, String at, double valor, double cf)
-    {
-        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
-        Coletivo c = (Coletivo) this.registados.get(NIF);
-        Map<String, Double> nova = c.getAcumulado_Vendas();
-        double res;
-        for(String s: nova.keySet())
-        {
-            if(s.compareTo(at) == 0) {
-                res = nova.get(s) + ((valor * cf) * percentagem);
-                nova.put(s, res);
-                break;
-            }
-        }
-        c.setAcumulado_Vendas(nova);
-    }
-
-    /**
-     * Método que retira o valor das vendas de uma empresa, por setor de atividade económica.
-     * 
-     * @param NIF - da empresa
-     * @param at - Atividade económica a retirar
-     * @param valor - da venda
-     * @return
-     */
-    
-    public void desacumular_vendas_CC(String NIF, String at, double valor, double cf)
-    {
-        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
-        Coletivo c = (Coletivo) this.registados.get(NIF);
-        Map<String, Double> nova = c.getAcumulado_Vendas();
-        double res;
-        for(String s: nova.keySet())
-        {
-            if(s.compareTo(at) == 0) {
-                res = nova.get(s) - ((valor * cf) * percentagem);
-                nova.put(s, res);
-                break;
-            }
-        }
-        c.setAcumulado_Vendas(nova);
-    }
-
     /**
      * Método que obtem as listagens das facturas por contribuinte num determinado intervalo de datas, por parte das empresas.
      * @param 
@@ -1555,7 +1499,7 @@ public class Sistema implements Serializable
      * @param String NIF
      * @return montante de dedução fiscal
      */
-    public double calcular_deduçao_fiscal_CI(String nif)
+    public double calcular_deduçao_fiscal_CI(String nif, int flag)
     {
         double acum = 0;
         double percentagem = 0; 
@@ -1593,6 +1537,12 @@ public class Sistema implements Serializable
             }
         }
         System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
+
+        if(!flag) {
+            System.out.print("\nPrima enter para continuar ...");
+            read.nextLine();
+        }
+
         return acum;
     }
     
@@ -1610,11 +1560,12 @@ public class Sistema implements Serializable
         for(String c: agregado)
         {
             if(this.registados.containsKey(c)) {
-                valor += calcular_deduçao_fiscal_CI(c);
+                valor += calcular_deduçao_fiscal_CI(c, 1);
             }
         }
         System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
-        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
+        System.out.print("\nPrima enter para continuar ...");
+        read.nextLine();
     }
 
     /**
@@ -1625,13 +1576,19 @@ public class Sistema implements Serializable
     public double calcular_deduçao_fiscal_CC(Coletivo c)
     {
         double valor_deduçoes = 0.0;
-        Map<String, Double> sats = c.getAcumulado_Vendas();
-        
-        for(String s: sats.keySet())
-        {
-            valor_deduçoes += sats.get(s);
+        List<Integer> ind = c.getIndex();
+        Fatura f;
+        Contribuinte cliente;
+        double percentagem;
+
+        for(int i: ind) {
+            f = this.faturas.get(ind);
+            cliente = this.registados.get(f.getNIF_Cliente());
+            percentagem = f.getNatureza_Despesa();
+            if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
+                valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
+            }
         }
-        return valor_deduçoes;
     }
 
     /**
