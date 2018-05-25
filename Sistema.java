@@ -404,14 +404,14 @@ public class Sistema implements Serializable
                         }
                     }
                 }
-
-                if(!this.agregados.contains(nifs)) {
-                    this.agregados.add(nifs);
-                    index_agregado = this.agregados.size()-1;
-                } else {
-                    index_agregado = this.agregados.indexOf(nifs);
-                }
             }
+            if(!this.agregados.contains(nifs)) {
+                this.agregados.add(nifs);
+                index_agregado = this.agregados.size()-1;
+            } else {
+                index_agregado = this.agregados.indexOf(nifs);
+            }
+            
         }while(bool == false);
         
         do{
