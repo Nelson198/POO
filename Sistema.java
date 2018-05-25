@@ -494,7 +494,7 @@ public class Sistema implements Serializable
         Map<String, Double> ats2 = new HashMap<>();
         Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
-        boolean isNumeric, interior = false;
+        boolean isNumeric, interior = false, bool;
         double cf = 0;
         Scanner read = new Scanner(System.in);
         
@@ -562,7 +562,7 @@ public class Sistema implements Serializable
                     else
                     {
                         System.out.print("Erro: Opção inválida!\n");
-                        System.out.print("Reintroduza a opção:\n")
+                        System.out.print("Reintroduza a opção:\n");
                         bool = false;
                     }
                 }while(!bool);
