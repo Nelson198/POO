@@ -187,7 +187,7 @@ public class Menu
                 System.out.print("Escolha uma opção: "); 
                 opçao1 = read.nextLine();
                 isNumeric = opçao1.chars().allMatch(Character::isDigit);
-            }while(!isNumeric);
+            }while(!isNumeric || opçao1.length() < 1);
             choice1 = Integer.parseInt(opçao1);
             System.out.print("\n");
             switch(choice1)
@@ -209,7 +209,7 @@ public class Menu
                                     System.out.print("Escolha uma opção: "); 
                                     opçao2 = read.nextLine();
                                     isNumeric = opçao2.chars().allMatch(Character::isDigit);
-                                }while(!isNumeric);
+                                }while(!isNumeric || opçao2.length() < 1);
                                 choice2 = Integer.parseInt(opçao2);
                                 System.out.print("\n");
                             
@@ -266,7 +266,7 @@ public class Menu
                                     System.out.print("Escolha uma opção: ");
                                     opçao3 = read.nextLine();
                                     isNumeric = opçao3.chars().allMatch(Character::isDigit);
-                                }while(!isNumeric);
+                                }while(!isNumeric || opçao3.length() < 1);
                                 choice3 = Integer.parseInt(opçao3);
                                 System.out.print("\n");
                             
@@ -289,7 +289,7 @@ public class Menu
                                             System.out.println("\nSelecione o número da fatura que pretende anular:\n");
                                             option = read.nextLine();
                                             isNumeric = option.chars().allMatch(Character::isDigit);
-                                        }while(!isNumeric);
+                                        }while(!isNumeric || option.length() < 1);
                                         choice = Integer.parseInt(option);
                                         s.anular_fatura(choice);
                                         try{
@@ -365,7 +365,7 @@ public class Menu
                                     System.out.print("Escolha uma opção: ");
                                     opçao4 = read.nextLine();
                                     isNumeric = opçao4.chars().allMatch(Character::isDigit);
-                                }while(!isNumeric);
+                                }while(!isNumeric || opçao4.length() < 1);
                                 choice4 = Integer.parseInt(opçao4);
                                 System.out.print("\n");
                                 switch(choice4)

@@ -108,7 +108,6 @@ public class Sistema implements Serializable
         this.atividades_economicas_disponiveis.put("Habitação", new double[] {15.0, 500});
         this.atividades_economicas_disponiveis.put("Restauração e similares", new double[] {15.0, 250});
         this.atividades_economicas_disponiveis.put("Transportes públicos", new double[] {20.0, 100});
-        this.atividades_economicas_disponiveis.put("Comércio", new double[] {10.0, 500});
         this.atividades_economicas_disponiveis.put("Manutenção e Reparação de veículos", new double[] {15.0, 250});
         this.atividades_economicas_disponiveis.put("Serviços Bancários", new double[] {5.0, 400});
         this.atividades_economicas_disponiveis.put("Serviços de fornecimento de eletricidade e água", new double[] {20.0, 600});
@@ -333,7 +332,7 @@ public class Sistema implements Serializable
         Map<String, Double> ats = new HashMap<>();
         String nif, email, nome, morada, password, at, s, numero; 
         boolean isNumeric, bool;
-        int numero_ag, dependentes, index_agregado = -1;
+        int numero_ag = 1, dependentes = 0, index_agregado = -1;
         double cf = 0;
         Scanner read = new Scanner(System.in);
         
@@ -360,17 +359,32 @@ public class Sistema implements Serializable
         }while(password.length() == 0);
         
         do{
-            System.out.print("Nº de pessoas do agregado familiar --> "); numero = read.nextLine();
-            isNumeric = numero.chars().allMatch(Character::isDigit);
-            numero_ag = Integer.parseInt(numero);
+            System.out.print("Nº de pessoas do agregado familiar --> ");
+            numero = read.nextLine();
+            isNumeric = true;
+            try {
+                numero_ag = Integer.parseInt(numero);
+            } catch (NumberFormatException e) {
+                isNumeric = false;
+            }
         }while(numero_ag < 1 || isNumeric == false);
 
-        do {
-            System.out.print("Nº de dependentes (ou seja, nº de filho(s)) --> "); numero = read.nextLine();
-            isNumeric = numero.chars().allMatch(Character::isDigit);
-            dependentes = Integer.parseInt(numero);
-        }while(numero_ag <= dependentes || isNumeric == false);
-        
+        if(numero_ag == 1) {
+            System.out.println("Nº de dependentes (ou seja, nº de filho(s)) --> 0");
+            dependentes = 0;
+        } else {
+            do {
+                System.out.print("Nº de dependentes (ou seja, nº de filho(s)) --> ");
+                numero = read.nextLine();
+                isNumeric = true;
+                try {
+                    dependentes = Integer.parseInt(numero);
+                } catch (NumberFormatException e) {
+                    isNumeric = false;
+                }
+            } while(numero_ag <= dependentes || isNumeric == false);    
+        }
+
         do{
             bool = true;
             if(numero_ag == 1) {
@@ -405,6 +419,7 @@ public class Sistema implements Serializable
                     }
                 }
             }
+            
             if(!this.agregados.contains(nifs)) {
                 this.agregados.add(nifs);
                 index_agregado = this.agregados.size()-1;
@@ -418,19 +433,28 @@ public class Sistema implements Serializable
             System.out.print("\nAtividades económicas:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print(t + " (S/N)? "); at = read.nextLine();
-                if(at.equals("S") || at.equals("s"))
-                {
-                    ats.put(t, 0.0);
-                }
-                else if(at.equals("N") || at.equals("n")) {}
-                else
-                {
-                    System.out.print("Erro: Dados inválidos!");
-                    time(1500);
-                    return;
-                }
-            }
+                do {
+                    bool = true;
+                    if(t.equals("Educação") || t.equals("Habitação") || t.equals("Serviços de fornecimento de eletricidade e água")) {  
+                        System.out.print(t + " (S/N)? "); 
+                        at = read.nextLine();
+                        if(at.equals("S") || at.equals("s"))
+                        {
+                            ats.put(t, 0.0);
+                        }
+                        else if(at.equals("N") || at.equals("n")) 
+                        {}
+                        else
+                        {
+                            System.out.print("Erro: Opção inválida!\n");
+                            System.out.print("Reintroduza a opção:\n");
+                            bool = false;
+                        }
+                    } else {
+                        ats.put(t, 0.0);
+                    }
+                }while(!bool);
+            }   
         }while(ats.size() == 0);
         
         do{
@@ -441,7 +465,7 @@ public class Sistema implements Serializable
             } catch (NumberFormatException e) {
                 isNumeric = false;
             }
-        }while(cf <= 0 || isNumeric == false);
+        }while(cf <= 0 || cf > 1 || isNumeric == false);
 
         read.close();
         Individual ci = new Individual(nif, email, nome, morada, password, index, cf, numero_ag, dependentes, ats, index_agregado);
@@ -500,19 +524,24 @@ public class Sistema implements Serializable
             System.out.print("\nAtividade Económica, para venda:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print(t + " (S/N)? "); at = read.nextLine();
-                if(at.equals("S") || at.equals("s"))
-                {
-                    ats.put(t, 0.0);
-                    avs.put(t, 0.0);
-                }
-                else if(at.equals("N") || at.equals("n"))
-                {}
-                else
-                {
-                    System.out.print("Erro: Dados inválidos!"); time(1500);
-                    return;
-                }
+                do {
+                    bool = true;  
+                    System.out.print(t + " (S/N)? "); 
+                    at = read.nextLine();
+                    if(at.equals("S") || at.equals("s"))
+                    {
+                        ats.put(t, 0.0);
+                        avs.put(t, 0.0);
+                    }
+                    else if(at.equals("N") || at.equals("n")) 
+                    {}
+                    else
+                    {
+                        System.out.print("Erro: Opção inválida!\n");
+                        System.out.print("Reintroduza a opção:\n");
+                        bool = false;
+                    }
+                }while(!bool);
             }
         }while(ats.size() == 0);
 
@@ -520,18 +549,23 @@ public class Sistema implements Serializable
             System.out.print("\nAtividades económicas para compra:\n");
             for(String t: this.atividades_economicas_disponiveis.keySet())
             {
-                System.out.print(t + " (S/N)? "); at = read.nextLine();
-                if(at.equals("S") || at.equals("s"))
-                {
-                    ats2.put(t, 0.0);
-                }
-                else if(at.equals("N") || at.equals("n"))
-                {}
-                else
-                {
-                    System.out.print("Erro: Dados inválidos!"); time(1500);
-                    return;
-                }
+                do {
+                    bool = true;
+                    System.out.print(t + " (S/N)? ");
+                    at = read.nextLine();
+                    if(at.equals("S") || at.equals("s"))
+                    {
+                        ats2.put(t, 0.0);
+                    }
+                    else if(at.equals("N") || at.equals("n"))
+                    {}
+                    else
+                    {
+                        System.out.print("Erro: Opção inválida!\n");
+                        System.out.print("Reintroduza a opção:\n")
+                        bool = false;
+                    }
+                }while(!bool);
             }
         }while(ats2.size() == 0);
         
@@ -543,7 +577,7 @@ public class Sistema implements Serializable
             } catch (NumberFormatException e) {
                 isNumeric = false;
             }
-        }while(cf <= 0 || isNumeric == false);
+        }while(cf <= 0 || cf > 1 || isNumeric == false);
 
         do{
             System.out.print("Concelho: "); concelho = read.nextLine();
