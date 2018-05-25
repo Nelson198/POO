@@ -27,7 +27,6 @@ public class Coletivo extends Contribuinte implements Serializable
         super();
         this.atividades_economicas = new HashMap<>();
         this.atividades_economicas_2 = new HashMap<>();
-        this.acumulado_vendas = new HashMap<>();
         this.interior = false;
     }
     
@@ -42,17 +41,15 @@ public class Coletivo extends Contribuinte implements Serializable
      * @param coeficiente_fiscal
      * @param atividades_economicas
      * @param atividades_economicas_2
-     * @param acumulado_vendas
      * @param interior
      * @return
      */
     public Coletivo(String NIF_p, String email_p, String nome_p, String morada_p, String password_p, List<Integer> index_p, double coeficiente_fiscal_p, 
-                    Map<String, Double> atividades_economicas_p, Map<String, Double> atividades_economicas_p_2, Map<String, Double> acumulado_vendas_p, boolean interior)
+                    Map<String, Double> atividades_economicas_p, Map<String, Double> atividades_economicas_p_2, boolean interior)
     {
         super(NIF_p, email_p, nome_p, morada_p, password_p, index_p, coeficiente_fiscal_p);
         setAtividades_Economicas(atividades_economicas_p);
         setAtividades_Economicas_2(atividades_economicas_p_2);
-        setAcumulado_Vendas(acumulado_vendas_p);
         this.interior = interior;
     }
     
@@ -66,7 +63,6 @@ public class Coletivo extends Contribuinte implements Serializable
         super(c);
         this.atividades_economicas = c.getAtividades_Economicas();
         this.atividades_economicas_2 = c.getAtividades_Economicas_2();
-        this.acumulado_vendas = c.getAcumulado_Vendas();
         this.interior = c.getInterior();
     }
     
@@ -125,38 +121,6 @@ public class Coletivo extends Contribuinte implements Serializable
         for(String ae: atividades_economicas_p_2.keySet())
         {
             this.atividades_economicas_2.put(ae, atividades_economicas_p_2.get(ae));
-        }
-    }
-
-    /**
-     * Devolve o map com o acumulado de vendas, por atividade económica, da empresa.
-     * 
-     * @param
-     * @return acumulado_vendas
-     */
-    public Map<String, Double> getAcumulado_Vendas()
-    {
-        Map<String, Double> nova = new HashMap<>();
-        for(String s: this.acumulado_vendas.keySet())
-        {
-            nova.put(s, this.acumulado_vendas.get(s));
-        }
-
-        return nova;
-    }
-
-    /**
-     * Atualiza o map com o acumulado de vendas, por atividade económica, da empresa.
-     * 
-     * @param acumulado_vendas
-     * @return
-     */
-    public void setAcumulado_Vendas(Map<String, Double> acumulado_vendas_p)
-    {
-        this.acumulado_vendas = new HashMap<>();
-        for(String av: acumulado_vendas_p.keySet())
-        {
-            this.acumulado_vendas.put(av, acumulado_vendas_p.get(av));
         }
     }
 
