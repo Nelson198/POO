@@ -492,7 +492,6 @@ public class Sistema implements Serializable
         List<Integer> index = new ArrayList<>();
         Map<String, Double> ats = new HashMap<>();
         Map<String, Double> ats2 = new HashMap<>();
-        Map<String, Double> avs = new HashMap<>();
         String nif, email, nome, morada, password, at, concelho, numero;
         boolean isNumeric, interior = false, bool;
         double cf = 0;
@@ -531,7 +530,6 @@ public class Sistema implements Serializable
                     if(at.equals("S") || at.equals("s"))
                     {
                         ats.put(t, 0.0);
-                        avs.put(t, 0.0);
                     }
                     else if(at.equals("N") || at.equals("n")) 
                     {}
@@ -590,7 +588,7 @@ public class Sistema implements Serializable
         }while(concelho.length() == 0);
 
         read.close();
-        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, cf, ats, ats2, avs, interior);
+        Coletivo cc = new Coletivo(nif, email, nome, morada, password, index, cf, ats, ats2, interior);
         
         if(!this.registados.containsKey(nif))
         {
@@ -614,6 +612,7 @@ public class Sistema implements Serializable
         Fatura f = this.faturas.get(indice);
         Coletivo emitente = (Coletivo) this.registados.get(f.getNIF_Emitente());
         Contribuinte cliente = this.registados.get(f.getNIF_Cliente());
+        List<Integer> l;
 
         if(cliente instanceof Individual) {
             desacumular_valor_despesa_CI(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
@@ -624,7 +623,7 @@ public class Sistema implements Serializable
         cliente.getIndex().remove(indice);
         emitente.getIndex().remove(indice);
         
-        List<Integer> l = cliente.getIndex();
+        l = cliente.getIndex();
         l.remove(this.faturas.indexOf(f));
         cliente.setIndex(l);
         

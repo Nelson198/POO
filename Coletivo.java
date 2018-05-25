@@ -15,7 +15,6 @@ public class Coletivo extends Contribuinte implements Serializable
     // Variáveis de instância
     private Map<String, Double> atividades_economicas; /* Atividades económicas para vendas */
     private Map<String, Double> atividades_economicas_2; /* Atividades económicas para compras */
-    private Map<String, Double> acumulado_vendas;
     private boolean interior;
     
     /**
@@ -193,7 +192,6 @@ public class Coletivo extends Contribuinte implements Serializable
         Coletivo c = (Coletivo) o;
         return (super.equals(c) && this.atividades_economicas.equals(c.getAtividades_Economicas())
                                 && this.atividades_economicas_2.equals(c.getAtividades_Economicas_2())
-                                && this.acumulado_vendas.equals(c.getAcumulado_Vendas())
                                 && this.interior == c.getInterior());
     }
    
@@ -214,7 +212,6 @@ public class Coletivo extends Contribuinte implements Serializable
         sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append(", ");
         sb.append("Atividades Económicas para venda: ").append(this.getAtividades_Economicas().toString()).append(", ");
         sb.append("Atividades Económicas para compra: ").append(this.getAtividades_Economicas_2().toString()).append(", ");
-        sb.append("Acumulado de vendas: ").append(this.getAcumulado_Vendas().toString()).append(", ");
         sb.append("Interior? ").append(this.getInterior()).append(", ");
         sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
         return sb.toString();
