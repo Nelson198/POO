@@ -621,6 +621,14 @@ public class Sistema implements Serializable
             desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
         }
 
+        List<Integer> l = cliente.getIndex();
+        l.remove(this.faturas.indexOf(f));
+        cliente.setIndex(l);
+        
+        l = emitente.getIndex();
+        l.remove(this.faturas.indexOf(f));
+        emitente.setIndex(l);
+
         desacumular_vendas_CC(emitente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa(), cliente.getCoeficiente_Fiscal());
         this.faturas.remove(f);
     }
@@ -675,7 +683,7 @@ public class Sistema implements Serializable
         }while(descriçao.length() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            System.out.print("Valor da despesa --> "); numero = read.nextLine();
             isNumeric = true;
             try {
                 valor = Double.parseDouble(numero);
@@ -989,7 +997,7 @@ public class Sistema implements Serializable
     
     public void acumular_vendas_CC(String NIF, String at, double valor, double cf)
     {
-        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
+        double percentagem = this.atividades_economicas_disponiveis.get(at)[0] / 100;
         Coletivo c = (Coletivo) this.registados.get(NIF);
         Map<String, Double> nova = c.getAcumulado_Vendas();
         double res;
@@ -1374,7 +1382,8 @@ public class Sistema implements Serializable
         System.out.println("Agregados Familiares registados no Sistema:\n");
         for(List<String> c: this.agregados)
         {
-            System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;
+            if(i == 1) {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
+            else {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
             for(String s : c)
             {
                 System.out.print("NIF " + j + ": " + s + "\n"); j += 1;
@@ -1557,6 +1566,7 @@ public class Sistema implements Serializable
      */
     public double calcular_deduçao_fiscal_CI(String nif)
     {
+        Scanner read = new Scanner(System.in);
         double acum = 0;
         double percentagem = 0; 
         double maximo_valor = 0; 
@@ -1575,7 +1585,7 @@ public class Sistema implements Serializable
             }
 
             else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
-                percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+                percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
                 if(dependentes >= 4) {
                     maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * (1 + ((0.05) * dependentes));
                 } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
@@ -1593,6 +1603,7 @@ public class Sistema implements Serializable
             }
         }
         System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
+        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
         return acum;
     }
     
@@ -1613,7 +1624,7 @@ public class Sistema implements Serializable
                 valor += calcular_deduçao_fiscal_CI(c);
             }
         }
-        System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
+        System.out.printf("\n--> Valor total deduzido pelo agregado familiar: %.2f", valor);
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
 

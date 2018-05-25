@@ -392,6 +392,11 @@ public class Menu
                                     
                                     case 6:
                                         break;
+                                    
+                                    default:
+                                        System.out.print("Selecionou uma opção inválida!\nSe pretende sair do menu, por favor insira a opção 6.");
+                                        m.time(2000);
+                                        System.out.print('\u000C');
                                 }
                             } while(choice4 != 6);
                             s.logout_Administrador();
