@@ -286,7 +286,7 @@ public class Menu
                                     case 2:
                                         s.mostrar_faturas_emitidas_CC();
                                         do {
-                                            System.out.println("\nSelecione o número da fatura que pretende anular:\n");
+                                            System.out.println("\nSelecione o número da fatura que pretende anular: ");
                                             option = read.nextLine();
                                             isNumeric = option.chars().allMatch(Character::isDigit);
                                         }while(!isNumeric || option.length() < 1);
@@ -392,6 +392,11 @@ public class Menu
                                     
                                     case 6:
                                         break;
+                                    
+                                    default:
+                                        System.out.print("Selecionou uma opção inválida!\nSe pretende sair do menu, por favor insira a opção 6.");
+                                        m.time(2000);
+                                        System.out.print('\u000C');
                                 }
                             } while(choice4 != 6);
                             s.logout_Administrador();

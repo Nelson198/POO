@@ -624,6 +624,14 @@ public class Sistema implements Serializable
         cliente.getIndex().remove(indice);
         emitente.getIndex().remove(indice);
         
+        List<Integer> l = cliente.getIndex();
+        l.remove(this.faturas.indexOf(f));
+        cliente.setIndex(l);
+        
+        l = emitente.getIndex();
+        l.remove(this.faturas.indexOf(f));
+        emitente.setIndex(l);
+        
         this.faturas.remove(f);
         this.faturas.add(indice, NULL);
     }
@@ -678,7 +686,7 @@ public class Sistema implements Serializable
         }while(descriçao.length() == 0);
         
         do{
-            System.out.print("Coeficiente Fiscal --> "); numero = read.nextLine();
+            System.out.print("Valor da despesa --> "); numero = read.nextLine();
             isNumeric = true;
             try {
                 valor = Double.parseDouble(numero);
@@ -1318,7 +1326,8 @@ public class Sistema implements Serializable
         System.out.println("Agregados Familiares registados no Sistema:\n");
         for(List<String> c: this.agregados)
         {
-            System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;
+            if(i == 1) {System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;}
+            else {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
             for(String s : c)
             {
                 System.out.print("NIF " + j + ": " + s + "\n"); j += 1;
@@ -1501,6 +1510,7 @@ public class Sistema implements Serializable
      */
     public double calcular_deduçao_fiscal_CI(String nif, int flag)
     {
+        Scanner read = new Scanner(System.in);
         double acum = 0;
         double percentagem = 0; 
         double maximo_valor = 0; 
@@ -1519,7 +1529,7 @@ public class Sistema implements Serializable
             }
 
             else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
-                percentagem = this.atividades_economicas_disponiveis.get(s)[0];
+                percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
                 if(dependentes >= 4) {
                     maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * (1 + ((0.05) * dependentes));
                 } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
