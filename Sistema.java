@@ -633,7 +633,7 @@ public class Sistema implements Serializable
         emitente.setIndex(l);
         
         this.faturas.remove(f);
-        this.faturas.add(indice, NULL);
+        this.faturas.add(indice, null);
     }
     
     /**
@@ -1508,7 +1508,7 @@ public class Sistema implements Serializable
      * @param String NIF
      * @return montante de dedução fiscal
      */
-    public double calcular_deduçao_fiscal_CI(String nif, int flag)
+    public double calcular_deduçao_fiscal_CI(String nif, boolean flag)
     {
         Scanner read = new Scanner(System.in);
         double acum = 0;
@@ -1570,7 +1570,7 @@ public class Sistema implements Serializable
         for(String c: agregado)
         {
             if(this.registados.containsKey(c)) {
-                valor += calcular_deduçao_fiscal_CI(c, 1);
+                valor += calcular_deduçao_fiscal_CI(c, true);
             }
         }
         System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
@@ -1592,13 +1592,15 @@ public class Sistema implements Serializable
         double percentagem;
 
         for(int i: ind) {
-            f = this.faturas.get(ind);
+            f = this.faturas.get(i);
             cliente = this.registados.get(f.getNIF_Cliente());
-            percentagem = f.getNatureza_Despesa();
+            percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0];
             if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
                 valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
             }
         }
+        
+        return valor_deduçoes;
     }
 
     /**
