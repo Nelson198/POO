@@ -824,12 +824,12 @@ public class Sistema implements Serializable
                         f.setNatureza_Despesa(nova);
                         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+                            desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
                             acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
                         else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
+                            desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
                             acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
                         
