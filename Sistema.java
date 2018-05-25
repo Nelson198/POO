@@ -1023,7 +1023,7 @@ public class Sistema implements Serializable
     
     public void desacumular_vendas_CC(String NIF, String at, double valor, double cf)
     {
-        double percentagem = this.atividades_economicas_disponiveis.get(at)[0];
+        double percentagem = this.atividades_economicas_disponiveis.get(at)[0] / 100;
         Coletivo c = (Coletivo) this.registados.get(NIF);
         Map<String, Double> nova = c.getAcumulado_Vendas();
         double res;
@@ -1382,7 +1382,7 @@ public class Sistema implements Serializable
         System.out.println("Agregados Familiares registados no Sistema:\n");
         for(List<String> c: this.agregados)
         {
-            if(i == 1) {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
+            if(i == 1) {System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;}
             else {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
             for(String s : c)
             {
@@ -1624,7 +1624,7 @@ public class Sistema implements Serializable
                 valor += calcular_deduçao_fiscal_CI(c);
             }
         }
-        System.out.printf("\n--> Valor total deduzido pelo agregado familiar: %.2f", valor);
+        System.out.printf("\n--> Valor total deduzido pelo agregado familiar: %.2f €.", valor);
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
 
