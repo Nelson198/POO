@@ -760,26 +760,6 @@ public class Sistema implements Serializable
     }
     
     /**
-     * Método que conta o nº de faturas pendentes de validação pelo contribuinte que se encontra dentro do Sistema.
-     * @param
-     * @return nº de faturas pendentes
-     */
-    public int conta_faturas_pendentes()
-    {
-        int res = 0;
-        Fatura f;
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            f = this.faturas.get(i);
-            if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
-            {
-                res += 1;
-            }
-        }
-        return res;
-    }
-    
-    /**
      * Método que trata de validar faturas pendentes por parte dos Contribuintes.
      * @param
      * @return
@@ -833,26 +813,6 @@ public class Sistema implements Serializable
         if(n == 0) {
             System.out.print("De momento não tem faturas por validar.\nPrima enter para continuar ..."); read.nextLine();
         }
-    }
-
-    /**
-     * Método que conta o nº de faturas que poderão ser revalidadas pelo contribuinte que se encontra dentro do Sistema.
-     * @param
-     * @return nº de faturas
-     */
-    public int conta_faturas_para_revalidar()
-    {
-        int res = 0;
-        Fatura f;
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            f = this.faturas.get(i);
-            if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
-            {
-                res += 1;
-            }
-        }
-        return res;
     }
 
     /**
@@ -1223,16 +1183,10 @@ public class Sistema implements Serializable
 
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            if(res.size() == 0) {
-                System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
-            }
-            else {
-                System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-                for(Fatura f: res)
-                {
-                    System.out.println(f.toString());
-                }
-                System.out.print("Prima enter para continuar ..."); read.nextLine();
+            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+            for(Fatura f: res)
+            {
+                System.out.println(f.toString());
             }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
@@ -1245,8 +1199,8 @@ public class Sistema implements Serializable
                     System.out.println(f.toString());
                 }
             }
-            System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
+        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
