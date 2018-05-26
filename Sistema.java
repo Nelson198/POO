@@ -1398,21 +1398,7 @@ public class Sistema implements Serializable
             {
                 Contribuinte c1 = (Contribuinte) o1;
                 Contribuinte c2 = (Contribuinte) o2;
-                if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
-                    return -1;
-                }
-                else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
-                    return 1;
-                }
-                else {
-                    if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
-                        return -1;
-                    }
-                    else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
-                        return 1;
-                    }
-                    else return 0;
-                }
+                return gasto_Contribuinte(c1) > gasto_Contribuinte(c2) ? -1 : 1;
             }
         });
         
@@ -1507,7 +1493,21 @@ public class Sistema implements Serializable
             {
                 Coletivo c1 = (Coletivo) o1;
                 Coletivo c2 = (Coletivo) o2;
-                return conta_faturas_emitidas_CC(c1) > conta_faturas_emitidas_CC(c2) ? -1 : 1;
+                if (conta_faturas_emitidas_CC(c1) > conta_faturas_emitidas_CC(c2)) {
+                    return -1;
+                }
+                else if (conta_faturas_emitidas_CC(c1) < conta_faturas_emitidas_CC(c2)) {
+                    return 1;
+                }
+                else {
+                    if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
+                        return -1;
+                    }
+                    else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
+                        return 1;
+                    }
+                    else return 0;
+                }
             }
         });
 
