@@ -703,6 +703,26 @@ public class Sistema implements Serializable
     }
     
     /**
+     * Método que conta o nº de faturas pendentes de validação pelo contribuinte que se encontra dentro do Sistema.
+     * @param
+     * @return nº de faturas pendentes
+     */
+    public int conta_faturas_pendentes()
+    {
+        int res = 0;
+        Fatura f;
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        {
+            f = this.faturas.get(i);
+            if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
+            {
+                res += 1;
+            }
+        }
+        return res;
+    }
+    
+    /**
      * Método que trata de validar faturas pendentes por parte dos Contribuintes.
      * @param
      * @return
@@ -713,52 +733,79 @@ public class Sistema implements Serializable
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         Fatura f;
+        int n = conta_faturas_pendentes();
         
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        if (n != 0)
         {
-            f = this.faturas.get(i);
-
-            if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                System.out.println("---> Fatura por validar:\n");
-                System.out.println(this.faturas.get(i).toString());
+                f = this.faturas.get(i);
 
-                for(String s : f.getNaturezas_Despesa())
+                if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
                 {
-                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
-                    option = read.nextLine();
+                    System.out.println("---> Fatura por validar:\n");
+                    System.out.println(this.faturas.get(i).toString());
 
-                    if(option.equals("S") || option.equals("s"))
+                    for(String s : f.getNaturezas_Despesa())
                     {
-                        f.setPendente(false);
-                        nova = f.getNatureza_Despesa();
-                        nova.add(0, s);
-                        f.setNatureza_Despesa(nova);
+                        System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
+                        option = read.nextLine();
 
-                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
+                        if(option.equals("S") || option.equals("s"))
                         {
-                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                        }
-                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
-                        {
-                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                        }
+                            f.setPendente(false);
+                            nova = f.getNatureza_Despesa();
+                            nova.add(0, s);
+                            f.setNatureza_Despesa(nova);
 
-                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
-                        break;
-                    }
-                    else if (option.equals("N") || option.equals("n")){}
-                    else
-                    {
-                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
-                        return;
+                            if(this.registados.get(this.nif_contribuinte) instanceof Individual)
+                            {
+                                acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            }
+                            else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
+                            {
+                                acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            }
+
+                            System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
+                            break;
+                        }
+                        else if (option.equals("N") || option.equals("n")) {}
+                        else
+                        {
+                            System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                            return;
+                        }
                     }
                 }
             }
         }
+        else{
+            System.out.print("De momento não tem faturas por validar.\nPrima enter para continuar ..."); read.nextLine();
+        }
     }
 
-        /**
+    /**
+     * Método que conta o nº de faturas que poderão ser revalidadas pelo contribuinte que se encontra dentro do Sistema.
+     * @param
+     * @return nº de faturas
+     */
+    public int conta_faturas_para_revalidar()
+    {
+        int res = 0;
+        Fatura f;
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        {
+            f = this.faturas.get(i);
+            if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
+            {
+                res += 1;
+            }
+        }
+        return res;
+    }
+
+    /**
      * Método que trata de revalidar faturas por parte dos Contribuintes, alterando a sua atividade económica.
      * @param
      * @return
@@ -769,48 +816,54 @@ public class Sistema implements Serializable
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         Fatura f;
+        int n = conta_faturas_para_revalidar();
         
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            f = this.faturas.get(i);
-
-            if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
+        if(n != 0)
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                System.out.println("---> Fatura possível de revalidar:\n");
-                System.out.println(f.toString());
+                f = this.faturas.get(i);
 
-                for(String s : f.getNaturezas_Despesa())
+                if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
                 {
-                    System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
-                    option = read.nextLine();
+                    System.out.println("---> Fatura possível de revalidar:\n");
+                    System.out.println(f.toString());
 
-                    if(option.equals("S") || option.equals("s"))
+                    for(String s : f.getNaturezas_Despesa())
                     {
-                        nova = f.getNatureza_Despesa();
-                        nova.add(0, s);
-                        f.setNatureza_Despesa(nova);
-                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
+                        System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
+                        option = read.nextLine();
+
+                        if(option.equals("S") || option.equals("s"))
                         {
-                            desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
-                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            nova = f.getNatureza_Despesa();
+                            nova.add(0, s);
+                            f.setNatureza_Despesa(nova);
+
+                            if(this.registados.get(this.nif_contribuinte) instanceof Individual)
+                            {
+                                desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
+                                acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            }
+                            else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
+                            {
+                                desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
+                                acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            }
+
+                            System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
+                            break;
                         }
-                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
+                        else if (option.equals("N") || option.equals("n")){}
+                        else
                         {
-                            desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
-                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
+                            System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                            return;
                         }
-                        
-                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
-                        break;
-                    }
-                    else if (option.equals("N") || option.equals("n")){}
-                    else
-                    {
-                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
-                        return;
                     }
                 }
             }
+        else {
+            System.out.print("De momento não tem faturas por revalidar.\nPrima enter para continuar ..."); read.nextLine();
         }
     }
 
@@ -1345,7 +1398,21 @@ public class Sistema implements Serializable
             {
                 Contribuinte c1 = (Contribuinte) o1;
                 Contribuinte c2 = (Contribuinte) o2;
-                return gasto_Contribuinte(c1) > gasto_Contribuinte(c2) ? -1 : 1;
+                if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
+                    return -1;
+                }
+                else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
+                    return 1;
+                }
+                else {
+                    if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
+                        return -1;
+                    }
+                    else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
+                        return 1;
+                    }
+                    else return 0;
+                }
             }
         });
         

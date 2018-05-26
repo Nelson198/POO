@@ -4,7 +4,6 @@
  * @author P.O.O. - Project - 2017/2018
  * @version 1.0
  */
-import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -318,12 +317,10 @@ public class Fatura implements Serializable
         sb.append(this.getData_Hora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         sb.append(" na data ").append(this.getData_Hora().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY"))).append(".\n");
         
-        if(this.getPendente() == true)
-        {
+        if(this.getPendente() == true) {
             sb.append("Esta fatura está pendente de validação por parte do contribuinte com NIF: " + this.getNIF_Cliente() + ".\n");
         }
-        else
-        {
+        else {
             sb.append("Atividade económica associada: " + this.getNatureza_Despesa().get(0) + "\n");
         }
         return sb.toString();
