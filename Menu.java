@@ -125,25 +125,23 @@ public class Menu
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
         sb.append("                                             ||        1 ---> Adicionar fatura.                                                                   ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        2 ---> Anular fatura.                                                                      ||\n");
+        sb.append("                                             ||        2 ---> Validar faturas pendentes.                                                          ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        3 ---> Validar faturas pendentes.                                                          ||\n");
+        sb.append("                                             ||        3 ---> Ver faturas emitidas pela empresa.                                                  ||\n");
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        4 ---> Ver faturas emitidas pela empresa.                                                  ||\n");
-        sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        5 ---> Ver faturas de despesas feitas pela empresa.                                        ||\n"); 
+        sb.append("                                             ||        4 ---> Ver faturas de despesas feitas pela empresa.                                        ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");        
-        sb.append("                                             ||        6 ---> Obter a listagem das faturas de um contribuinte num determinado intervalo de datas. ||\n"); 
+        sb.append("                                             ||        5 ---> Obter a listagem das faturas de um contribuinte num determinado intervalo de datas. ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        7 ---> Obter a listagem das faturas de um contribuinte ordenada por valor decrescente.     ||\n"); 
+        sb.append("                                             ||        6 ---> Obter a listagem das faturas de um contribuinte ordenada por valor decrescente.     ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        8 ---> Verificar o total faturado da empresa num determinado período.                      ||\n"); 
+        sb.append("                                             ||        7 ---> Verificar o total faturado da empresa num determinado período.                      ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||        9 ---> Obter a listagem das facturas da empresa, ordenada por data de emissão.             ||\n"); 
+        sb.append("                                             ||        8 ---> Obter a listagem das facturas da empresa, ordenada por data de emissão.             ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n");
-        sb.append("                                             ||       10 ---> Obter a listagem das facturas da empresa, ordenada por valor crescente de despesa.  ||\n"); 
+        sb.append("                                             ||        9 ---> Obter a listagem das facturas da empresa, ordenada por valor crescente de despesa.  ||\n"); 
         sb.append("                                             ||---------------------------------------------------------------------------------------------------||\n"); 
-        sb.append("                                             ||       11 ---> Logout.                                                                             ||\n");
+        sb.append("                                             ||       10 ---> Logout.                                                                             ||\n");
         sb.append("                                             =======================================================================================================\n");
         System.out.print(sb);
     }
@@ -282,58 +280,40 @@ public class Menu
                                             System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
                                         }
                                         break;
-
-                                    case 2:
-                                        s.mostrar_faturas_emitidas_CC();
-                                        do {
-                                            System.out.println("\nSelecione o número da fatura que pretende anular: ");
-                                            option = read.nextLine();
-                                            isNumeric = option.chars().allMatch(Character::isDigit);
-                                        }while(!isNumeric || option.length() < 1);
-                                        choice = Integer.parseInt(option);
-                                        s.anular_fatura(choice);
-                                        try{
-                                            s.gravar_estado();
-                                        } catch(FileNotFoundException e) {
-                                            System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
-                                        } catch(IOException e) {
-                                            System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
-                                        }
-                                        break;
                                     
-                                    case 3:
+                                    case 2:
                                         s.validar_faturas_pendentes();
                                         break;
 
-                                    case 4:
+                                    case 3:
                                         s.mostrar_faturas_emitidas_CC();
                                         break;
 
-                                    case 5:
+                                    case 4:
                                         s.mostrar_faturas_para_CC();
                                         break;
 
-                                    case 6:
+                                    case 5:
                                         s.faturas_contribuinte_ord_intervalo_datas_CC();
                                         break;
                                     
-                                    case 7:
+                                    case 6:
                                         s.faturas_contribuinte_ord_decrescente_despesa_CC();
                                         break;
                                     
-                                    case 8:
+                                    case 7:
                                         s.total_faturado_CC();
                                         break;
                                         
-                                    case 9:
+                                    case 8:
                                         s.mostrar_faturas_ord_data_Contribuintes();
                                         break;
                                         
-                                    case 10:
+                                    case 9:
                                         s.mostrar_faturas_ord_valor_crescente_despesa_Contribuintes();
                                         break;
                                         
-                                    case 11:
+                                    case 10:
                                         break;
                                     
                                     default:
@@ -341,7 +321,7 @@ public class Menu
                                         m.time(2000);
                                         break;
                                 }
-                            }while(choice3 != 11);
+                            }while(choice3 != 10);
                             s.logout_Contribuinte();
                             System.out.print('\u000C');
                             break;

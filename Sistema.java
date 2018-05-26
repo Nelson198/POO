@@ -601,39 +601,6 @@ public class Sistema implements Serializable
             System.out.print("\nAviso: Já existe um Contribuinte com este NIF no Sistema."); time(1500);
         }
     }
-
-    /**
-     * Método que permite ao comerciante (empresa) anular uma fatura.
-     * @param indice - da fatura
-     * @return
-     */
-    public void anular_fatura(int indice)
-    {
-        Fatura f = this.faturas.get(indice);
-        Coletivo emitente = (Coletivo) this.registados.get(f.getNIF_Emitente());
-        Contribuinte cliente = this.registados.get(f.getNIF_Cliente());
-        List<Integer> l;
-
-        if(cliente instanceof Individual) {
-            desacumular_valor_despesa_CI(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
-        } else if (cliente instanceof Coletivo) {
-            desacumular_valor_despesa_CC(cliente.getNIF(), f.getNatureza_Despesa().get(0), f.getValor_Despesa());
-        }
-
-        cliente.getIndex().remove(indice);
-        emitente.getIndex().remove(indice);
-        
-        l = cliente.getIndex();
-        l.remove(this.faturas.indexOf(f));
-        cliente.setIndex(l);
-        
-        l = emitente.getIndex();
-        l.remove(this.faturas.indexOf(f));
-        emitente.setIndex(l);
-        
-        this.faturas.remove(f);
-        this.faturas.add(indice, null);
-    }
     
     /**
      * Método que permite submeter faturas por parte das Empresas / dos Contribuinte Coletivos.
@@ -1572,7 +1539,7 @@ public class Sistema implements Serializable
                 valor += calcular_deduçao_fiscal_CI(c, true);
             }
         }
-        System.out.printf("Valor total deduzido pelo agregado familiar: %.2f", valor);
+        System.out.printf("\n\n--> Valor total deduzido pelo agregado familiar: %.2f €.", valor);
         System.out.print("\nPrima enter para continuar ...");
         read.nextLine();
     }
@@ -1593,7 +1560,7 @@ public class Sistema implements Serializable
         for(int i: ind) {
             f = this.faturas.get(i);
             cliente = this.registados.get(f.getNIF_Cliente());
-            percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0];
+            percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0] / 100;
             if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
                 valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
             }

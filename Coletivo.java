@@ -167,17 +167,17 @@ public class Coletivo extends Contribuinte implements Serializable
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Contribuinte Coletivo: ");
-        sb.append("(NIF: ").append(super.getNIF()).append(", ");
-        sb.append("Email: ").append(super.getEmail()).append(", ");
-        sb.append("Nome: ").append(super.getNome()).append(", ");
-        sb.append("Morada: ").append(super.getMorada()).append(", ");
-        sb.append("Password de Acesso: ").append(super.getPassword()).append(", ");
-        sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append(", ");
-        sb.append("Atividades Económicas para venda: ").append(this.getAtividades_Economicas().toString()).append(", ");
-        sb.append("Atividades Económicas para compra: ").append(this.getAtividades_Economicas_2().toString()).append(", ");
-        sb.append("Interior? ").append(this.getInterior()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append(")\n");
+        sb.append("Contribuinte Coletivo:\n");
+        sb.append("NIF: ").append(super.getNIF()).append("\n");
+        sb.append("Email: ").append(super.getEmail()).append("\n");
+        sb.append("Nome: ").append(super.getNome()).append("\n");
+        sb.append("Morada: ").append(super.getMorada()).append("\n");
+        sb.append("Password de Acesso: ").append(super.getPassword()).append("\n");
+        sb.append("Indíces das Faturas associadas: ").append(super.getIndex()).append("\n");
+        sb.append("Atividades Económicas para venda: ").append(this.getAtividades_Economicas().toString()).append("\n");
+        sb.append("Atividades Económicas para compra: ").append(this.getAtividades_Economicas_2().toString()).append("\n");
+        sb.append("Interior? ").append(this.getInterior()).append("\n");
+        sb.append("Coeficiente Fiscal: ").append(this.getCoeficiente_Fiscal()).append("\n");
         return sb.toString();
     }
     

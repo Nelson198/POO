@@ -185,18 +185,18 @@ public class Individual extends Contribuinte implements Serializable
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Contribuinte Individual: ");
-        sb.append("(NIF: ").append(super.getNIF()).append(", ");
-        sb.append("Email: ").append(super.getEmail()).append(", ");
-        sb.append("Nome: ").append(super.getNome()).append(", ");
-        sb.append("Morada: ").append(super.getMorada()).append(", ");
-        sb.append("Password: ").append(super.getPassword()).append(", ");
-        sb.append("Indices das faturas associadas: ").append(super.getIndex()).append(", ");
-        sb.append("Coeficiente Fiscal: ").append(super.getCoeficiente_Fiscal()).append(", ");
-        sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAgregado_Familiar()).append(", ");
-        sb.append("Nº de dependentes: ").append(this.getDependentes()).append(", ");
-        sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append(", ");
-        sb.append("Índice do agregado familiar a que pertence: ").append(this.getIndex_Agregado()).append(")\n");
+        sb.append("Contribuinte Individual:\n");
+        sb.append("NIF: ").append(super.getNIF()).append("\n");
+        sb.append("Email: ").append(super.getEmail()).append("\n");
+        sb.append("Nome: ").append(super.getNome()).append("\n");
+        sb.append("Morada: ").append(super.getMorada()).append("\n");
+        sb.append("Password: ").append(super.getPassword()).append("\n");
+        sb.append("Indices das faturas associadas: ").append(super.getIndex()).append("\n");
+        sb.append("Coeficiente Fiscal: ").append(super.getCoeficiente_Fiscal()).append("\n");
+        sb.append("Nº de elementos do Agregado Familiar: ").append(this.getAgregado_Familiar()).append("\n");
+        sb.append("Nº de dependentes: ").append(this.getDependentes()).append("\n");
+        sb.append("Atividades Económicas: ").append(this.atividades_economicas.toString()).append("\n");
+        sb.append("Índice do agregado familiar a que pertence: ").append(this.getIndex_Agregado()).append("\n");
         return sb.toString();
     }
     
