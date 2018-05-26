@@ -89,6 +89,63 @@ public class Sistema implements Serializable
     {
         return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
+    /** 
+     * Método que lê adequadamente uma data inicial através de um Scanner.
+     * @param
+     * @return data Inicial
+     */
+    public LocalDateTime ler_data_inicial()
+    {
+        Date date1;
+        LocalDateTime inicio = LocalDateTime.now();
+        LocalTime lti = LocalTime.of(0, 0, 0);
+        String data;
+        boolean b;
+        Scanner read = new Scanner(System.in);
+        try {
+            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            b = isValidDate(data);
+            if(b == false) {
+                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
+                return LocalDateTime.MAX;
+            }
+            LocalDate ld1 = convertToLocalDate(date1);
+            inicio = LocalDateTime.of(ld1, lti);
+            return inicio;
+        } catch(Exception e) {
+            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+            return LocalDateTime.MAX;
+        }
+    }
+
+    /** Método que lê adequadamente uma data final através de um Scanner.
+     * @param
+     * @return data final
+     */
+    public LocalDateTime ler_data_final()
+    {
+        Date date2;
+        LocalDateTime fim = LocalDateTime.now();
+        LocalTime ltf = LocalTime.of(23, 59, 59);
+        String data;
+        boolean b;
+        Scanner read = new Scanner(System.in);
+        try {
+            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+            b = isValidDate(data);
+            if(b == false) {
+                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
+                return LocalDateTime.MAX;
+            }
+            LocalDate ld2 = convertToLocalDate(date2);
+            fim = LocalDateTime.of(ld2, ltf);
+            return fim;
+        } catch(Exception e) {
+            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+            return LocalDateTime.MAX;
+        }
+    }
     
     /**
      * Construtor por omissão de Sistema.
@@ -733,54 +790,47 @@ public class Sistema implements Serializable
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         Fatura f;
-        int n = conta_faturas_pendentes();
+        int n = 0;
         
-        if (n != 0)
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
         {
-            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            f = this.faturas.get(i);
+            if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
-                f = this.faturas.get(i);
-
-                if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
+                n += 1;
+                System.out.println("---> Fatura por validar:\n");
+                System.out.println(this.faturas.get(i).toString());
+                for(String s : f.getNaturezas_Despesa())
                 {
-                    System.out.println("---> Fatura por validar:\n");
-                    System.out.println(this.faturas.get(i).toString());
-
-                    for(String s : f.getNaturezas_Despesa())
+                    System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
+                    option = read.nextLine();
+                    if(option.equals("S") || option.equals("s"))
                     {
-                        System.out.print("Deseja associar a esta despesa a atividade económica " + s + "? (S/N): ");
-                        option = read.nextLine();
-
-                        if(option.equals("S") || option.equals("s"))
+                        f.setPendente(false);
+                        nova = f.getNatureza_Despesa();
+                        nova.add(0, s);
+                        f.setNatureza_Despesa(nova);
+                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            f.setPendente(false);
-                            nova = f.getNatureza_Despesa();
-                            nova.add(0, s);
-                            f.setNatureza_Despesa(nova);
-
-                            if(this.registados.get(this.nif_contribuinte) instanceof Individual)
-                            {
-                                acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                            }
-                            else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
-                            {
-                                acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                            }
-
-                            System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
-                            break;
+                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
-                        else if (option.equals("N") || option.equals("n")) {}
-                        else
+                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
-                            return;
+                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
+                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
+                        break;
+                    }
+                    else if (option.equals("N") || option.equals("n")) {}
+                    else
+                    {
+                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                        return;
                     }
                 }
             }
         }
-        else{
+        if(n == 0) {
             System.out.print("De momento não tem faturas por validar.\nPrima enter para continuar ..."); read.nextLine();
         }
     }
@@ -816,53 +866,48 @@ public class Sistema implements Serializable
         List<String> nova = new ArrayList<>();
         Scanner read = new Scanner(System.in);
         Fatura f;
-        int n = conta_faturas_para_revalidar();
+        int n = 0;
         
-        if(n != 0)
-            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        {
+            f = this.faturas.get(i);
+            if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
-                f = this.faturas.get(i);
-
-                if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
+                n += 1;
+                System.out.println("---> Fatura possível de revalidar:\n");
+                System.out.println(f.toString());
+                for(String s : f.getNaturezas_Despesa())
                 {
-                    System.out.println("---> Fatura possível de revalidar:\n");
-                    System.out.println(f.toString());
-
-                    for(String s : f.getNaturezas_Despesa())
+                    System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
+                    option = read.nextLine();
+                    if(option.equals("S") || option.equals("s"))
                     {
-                        System.out.print("Deseja alterar a atividade económica desta despesa para: " + s + "? (S/N): ");
-                        option = read.nextLine();
-
-                        if(option.equals("S") || option.equals("s"))
+                        nova = f.getNatureza_Despesa();
+                        nova.add(0, s);
+                        f.setNatureza_Despesa(nova);
+                        if(this.registados.get(this.nif_contribuinte) instanceof Individual)
                         {
-                            nova = f.getNatureza_Despesa();
-                            nova.add(0, s);
-                            f.setNatureza_Despesa(nova);
-
-                            if(this.registados.get(this.nif_contribuinte) instanceof Individual)
-                            {
-                                desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
-                                acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                            }
-                            else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
-                            {
-                                desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
-                                acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
-                            }
-
-                            System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
-                            break;
+                            desacumular_valor_despesa_CI(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
+                            acumular_valor_despesa_CI(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
-                        else if (option.equals("N") || option.equals("n")){}
-                        else
+                        else if(this.registados.get(this.nif_contribuinte) instanceof Coletivo)
                         {
-                            System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
-                            return;
+                            desacumular_valor_despesa_CC(f.getNIF_Cliente(), f.getNatureza_Despesa().get(1), f.getValor_Despesa());
+                            acumular_valor_despesa_CC(f.getNIF_Cliente(), s, f.getValor_Despesa());
                         }
+                        System.out.print("\nA fatura foi validada com sucesso no Sistema!\n\n"); time(1000);
+                        break;
+                    }
+                    else if (option.equals("N") || option.equals("n")){}
+                    else
+                    {
+                        System.out.print("Erro: Dados introduzidos não estão corretos!"); time(1500);
+                        return;
                     }
                 }
             }
-        else {
+        }
+        if(n == 0) {
             System.out.print("De momento não tem faturas por revalidar.\nPrima enter para continuar ..."); read.nextLine();
         }
     }
@@ -1008,46 +1053,22 @@ public class Sistema implements Serializable
      */
     public void faturas_contribuinte_ord_intervalo_datas_CC()
     {
-        LocalDateTime inicio = LocalDateTime.now();
-        LocalDateTime fim = LocalDateTime.now();
-        LocalTime lti = LocalTime.of(0, 0, 0);
-        LocalTime ltf = LocalTime.of(23, 59, 59);
-        Date date1, date2;
-        String nif, data;
+        LocalDateTime inicio, fim;
+        String nif;
         Scanner read = new Scanner(System.in);
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
         }while(!this.registados.containsKey(nif) || nif.equals(this.nif_contribuinte));
         
-        try{
-            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            boolean b = isValidDate(data);
-            if(b == false){
-                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
-                return;
-            }
-            LocalDate ld1 = convertToLocalDate(date1);
-            inicio = LocalDateTime.of(ld1, lti);
-        }catch(Exception e){
-            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+        inicio = ler_data_inicial();
+        if (inicio.isEqual(LocalDateTime.MAX)) {
             return;
-        };
-        
-        try{
-            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            boolean b = isValidDate(data);
-            if(b == false)
-            {
-                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
-                return;
-            }
-            LocalDate ld2 = convertToLocalDate(date2);
-            fim = LocalDateTime.of(ld2, ltf);
-        }catch(Exception e){
-            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+        }
+        fim = ler_data_final();
+        if (fim.isEqual(LocalDateTime.MAX)) {
             return;
-        };
+        }
         
         System.out.print("\n");
         for(int i: this.registados.get(nif).getIndex())
@@ -1105,42 +1126,19 @@ public class Sistema implements Serializable
      */
     public void total_faturado_CC()
     {
-        double res = 0;
-        LocalDateTime inicio = LocalDateTime.now(); LocalDateTime fim = LocalDateTime.now();
-        LocalTime lti = LocalTime.of(0, 0, 0);
-        LocalTime ltf = LocalTime.of(23, 59, 59);
-        Date date1, date2;
-        String data;
-        Scanner read = new Scanner(System.in);
+        LocalDateTime inicio, fim;
         Fatura f;
+        double res = 0;
+        Scanner read = new Scanner(System.in);
         
-        try{
-            System.out.print("Introduza a data inicial (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date1 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            boolean b = isValidDate(data);
-            if(b == false){
-                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
-                return;
-            }
-            LocalDate ld1 = convertToLocalDate(date1);
-            inicio = LocalDateTime.of(ld1, lti);
-        }catch(Exception e){
-            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+        inicio = ler_data_inicial();
+        if (inicio.isEqual(LocalDateTime.MAX)) {
             return;
-        };
-        
-        try{
-            System.out.print("Introduza a data final (Nota: Use o formato dd/mm/aaaa): "); data = read.nextLine(); date2 = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-            boolean b = isValidDate(data);
-            if(b == false){
-                System.out.print("\nErro: Inseriu um data inválida!\nPrima enter para continuar ..."); read.nextLine();
-                return;
-            }
-            LocalDate ld2 = convertToLocalDate(date2);
-            fim = LocalDateTime.of(ld2, ltf);
-        }catch(Exception e){
-            System.out.print("\nErro: Formato da data inserido. Utilize o formato indicado!\nPrima enter para continuar ..."); read.nextLine();
+        }
+        fim = ler_data_final();
+        if (fim.isEqual(LocalDateTime.MAX)) {
             return;
-        };
+        }
         
         System.out.print("\n");
         for(int i: this.registados.get(this.nif_contribuinte).getIndex())
@@ -1225,10 +1223,16 @@ public class Sistema implements Serializable
 
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-            for(Fatura f: res)
-            {
-                System.out.println(f.toString());
+            if(res.size() == 0) {
+                System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
+            }
+            else {
+                System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+                for(Fatura f: res)
+                {
+                    System.out.println(f.toString());
+                }
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
             }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
@@ -1241,8 +1245,8 @@ public class Sistema implements Serializable
                     System.out.println(f.toString());
                 }
             }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
 
     /**
@@ -1253,12 +1257,17 @@ public class Sistema implements Serializable
     public void mostrar_faturas_CI()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas do contribuinte " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            System.out.println(this.faturas.get(i).toString());
+        if(this.registados.get(this.nif_contribuinte).getIndex().size() == 0) {
+            System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
+        else {
+            System.out.println("Faturas do contribuinte " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            {
+                System.out.println(this.faturas.get(i).toString());
+            }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
+        }
     }
 
     /**
@@ -1269,16 +1278,20 @@ public class Sistema implements Serializable
     public void mostrar_faturas_emitidas_CC()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas emitidas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
-            {
-                System.out.println("Fatura " + i + ":\n");
-                System.out.println(this.faturas.get(i).toString());
-            }
+        if(this.registados.get(this.nif_contribuinte).getIndex().size() == 0) {
+            System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
+        else {
+            System.out.println("Faturas emitidas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            {
+                if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
+                {
+                    System.out.println(this.faturas.get(i).toString());
+                }
+            }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
+        }
     }
 
     /**
@@ -1289,15 +1302,20 @@ public class Sistema implements Serializable
     public void mostrar_faturas_para_CC()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas de despesas feitas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            if(this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
-            {
-                System.out.println(this.faturas.get(i).toString());
-            }
+        if(this.registados.get(this.nif_contribuinte).getIndex().size() == 0) {
+            System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
+        else {
+            System.out.println("Faturas de despesas feitas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            {
+                if(this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
+                {
+                    System.out.println(this.faturas.get(i).toString());
+                }
+            }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
+        }
     }    
 
     /**
@@ -1308,12 +1326,17 @@ public class Sistema implements Serializable
     public void mostrar_faturas_Administrador()
     {
         Scanner read = new Scanner(System.in);
-        System.out.println("Faturas de todo o Sistema:\n");
-        for(Fatura f: this.faturas)
-        {
-            System.out.print(f.show());
+        if(this.faturas.size() == 0) {
+            System.out.print("Não há faturas registadas no Sistema.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
+        else {
+            System.out.println("Faturas de todo o Sistema:\n");
+            for(Fatura f: this.faturas)
+            {
+                System.out.print(f.show());
+            }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
+        }
     }
 
     /**
@@ -1325,11 +1348,16 @@ public class Sistema implements Serializable
     {
         Scanner read = new Scanner(System.in);
         System.out.println("Contribuintes registados no Sistema:\n");
-        for(Contribuinte c: this.registados.values())
-        {
-            System.out.println(c.toString());
+        if(this.registados.size() == 0) {
+            System.out.print("Não existem Contribuintes registados no Sistema.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
+        else {
+            for(Contribuinte c: this.registados.values())
+            {
+                System.out.println(c.toString());
+            }
+            System.out.print("Prima enter para continuar ..."); read.nextLine();
+        }
     }
 
     /**
@@ -1340,20 +1368,28 @@ public class Sistema implements Serializable
     public void mostrar_Agregados_Familiares_Administrador()
     {
         Scanner read = new Scanner(System.in);
-        int i = 1;
-        int j = 1;
-        System.out.println("Agregados Familiares registados no Sistema:\n");
-        for(List<String> c: this.agregados)
-        {
-            if(i == 1) {System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;}
-            else {System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;}
-            for(String s : c)
-            {
-                System.out.print("NIF " + j + ": " + s + "\n"); j += 1;
-            }
-            j = 1;
+        if(this.agregados.size() == 0) {
+            System.out.print("Não existem agregados familiares registados no Sistema.\nPrima enter para continuar ..."); read.nextLine();
         }
-        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
+        else {
+            int i = 1, j = 1;
+            System.out.println("Agregados Familiares registados no Sistema:\n");
+            for(List<String> c: this.agregados)
+            {
+                if(i == 1) {
+                    System.out.println("Agregado Familiar Nº " + i + ":"); i += 1;
+                }
+                else {
+                    System.out.println("\nAgregado Familiar Nº " + i + ":"); i += 1;
+                }
+                for(String s : c)
+                {
+                    System.out.print("NIF " + j + ": " + s + "\n"); j += 1;
+                }
+                j = 1;
+            }
+            System.out.print("\nPrima enter para continuar ..."); read.nextLine();
+        }
     }
 
     /**
@@ -1480,8 +1516,8 @@ public class Sistema implements Serializable
         boolean isNumeric;
         String read;
         Scanner ler = new Scanner(System.in);
-        System.out.print("Nº de empresas: "); 
         do {
+            System.out.print("Nº de empresas: ");
             read = ler.nextLine();
             isNumeric = read.chars().allMatch(Character::isDigit);
         }while(!isNumeric);
@@ -1500,10 +1536,10 @@ public class Sistema implements Serializable
                     return 1;
                 }
                 else {
-                    if (gasto_Contribuinte(c1) > gasto_Contribuinte(c2)) {
+                    if (calcular_deduçao_fiscal_CC(c1) > calcular_deduçao_fiscal_CC(c2)) {
                         return -1;
                     }
-                    else if (gasto_Contribuinte(c1) < gasto_Contribuinte(c2)) {
+                    else if (calcular_deduçao_fiscal_CC(c1) < calcular_deduçao_fiscal_CC(c2)) {
                         return 1;
                     }
                     else return 0;
