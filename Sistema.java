@@ -1205,7 +1205,7 @@ public class Sistema implements Serializable
             f = this.faturas.get(i);
             if(!f.getPendente()) {
                 cliente = this.registados.get(f.getNIF_Cliente());
-                percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0] / 100;
+                percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa().get(0))[0] / 100;
                 if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
                     valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
                 }
@@ -1700,7 +1700,7 @@ public class Sistema implements Serializable
             for(Coletivo c: top)
             {
                 if(i == n) break;
-                System.out.printf("Empresa / Instituição %s, com NIF %s: ---> %d faturas emitidas; ---> Dedução fiscal: %.2f €.\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c), calcular_deduçao_fiscal_CC(c));
+                System.out.printf("Empresa / Instituição %s, com NIF %s:\n ---> %d faturas emitidas;\n ---> Deduções fiscais que estas faturas representam: %.2f €.\n\n", c.getNome(), c.getNIF(), conta_faturas_emitidas_CC(c), calcular_deduçao_fiscal_CC(c));
                 i += 1;
             }
         }
