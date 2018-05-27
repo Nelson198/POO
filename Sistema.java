@@ -1132,7 +1132,7 @@ public class Sistema implements Serializable
         int dependentes = i.getDependentes();
         Map<String, Double> sats = i.getAtividades_Economicas();
 
-        System.out.println("--> " + i.getNome() + ", NIF: " + nif + ":\n");
+        System.out.println("\n--> " + i.getNome() + ", NIF: " + nif + ":\n");
         for(String s: this.atividades_economicas_disponiveis.keySet())
         {
             if(s.compareTo("Outros") == 0) {
