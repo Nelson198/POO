@@ -1201,7 +1201,8 @@ public class Sistema implements Serializable
         Contribuinte cliente;
         double percentagem;
 
-        for(int i: ind) {
+        for(int i: ind)
+        {
             f = this.faturas.get(i);
             if(!f.getPendente()) {
                 cliente = this.registados.get(f.getNIF_Cliente());
