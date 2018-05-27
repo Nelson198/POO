@@ -1612,7 +1612,11 @@ public class Sistema implements Serializable
         {
             top.add(c.clone());
         }
-        System.out.println("TOP 10 Contribuintes com mais gastos no Sistema:\n");
+        if(top.size() <= 10) {
+            System.out.println("TOP " + top.size() + " Contribuintes com mais gastos no Sistema:\n");
+        } else {
+            System.out.println("TOP 10 Contribuintes com mais gastos no Sistema:\n");
+        }
         
         for(Contribuinte c: top)
         {
