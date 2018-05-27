@@ -301,6 +301,88 @@ public class Sistema implements Serializable
     }
 
     /**
+     * Método que conta o nº de faturas emitidas por uma determinada empresa.
+     * @param Coletivo c, ou seja, uma empresa.
+     * @return int i, ou seja, nº de faturas.
+     */
+    private int conta_faturas_emitidas_CC(Coletivo c)
+    {
+        int res = 0;
+        for(int i: this.registados.get(c.getNIF()).getIndex())
+        {
+            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
+            {
+                res += 1;
+            }
+        }
+        return res;
+    }
+    
+    /**
+     * Método que conta o nº empresas no Sistema.
+     * @param
+     * @return int i.
+     */
+    private int conta_numero_CC()
+    {
+        int res = 0;
+        for(Contribuinte c: this.registados.values())
+        {
+            if(c instanceof Coletivo)
+            {
+                res += 1;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Método que obtem o gasto de um determinado Contribuinte no Sistema JavaFatura.
+     * @param Contribuinte c
+     * @return double res
+     */
+    private double gasto_Contribuinte(Contribuinte c)
+    {
+        double res = 0;
+        if(c instanceof Individual)
+        {
+            for(int i: this.registados.get(c.getNIF()).getIndex())
+            {
+                res += this.faturas.get(i).getValor_Despesa();
+            }
+        }
+        else if(c instanceof Coletivo)
+        {
+            for(int i: this.registados.get(c.getNIF()).getIndex())
+            {
+                if(this.faturas.get(i).getNIF_Cliente().equals(c.getNIF()))
+                {
+                    res += this.faturas.get(i).getValor_Despesa();
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Método que ,dado um contribuinte coletivo (Empresa), retorna a lista das faturas emitidas por si.
+     * @param Coletivo
+     * @return List<Fatura>
+     */
+    public List<Fatura> faturas_emitidas_CC(Coletivo c)
+    {
+        List<Fatura> res = new ArrayList<>();
+        for(int i: this.registados.get(c.getNIF()).getIndex())
+        {
+            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
+            {
+                res.add(this.faturas.get(i).clone());
+            }
+        }
+        return res;
+    }
+
+    /**
      * Método que permite fazer o login dos Contribuinte no Sistema.
      * @param
      * @return r
@@ -503,8 +585,7 @@ public class Sistema implements Serializable
                         {}
                         else
                         {
-                            System.out.print("Erro: Opção inválida!\n");
-                            System.out.print("Reintroduza a opção:\n");
+                            System.out.print("Erro: Opção inválida!\nReintroduza a opção:\n");
                             bool = false;
                         }
                     } else {
@@ -616,8 +697,7 @@ public class Sistema implements Serializable
                     {}
                     else
                     {
-                        System.out.print("Erro: Opção inválida!\n");
-                        System.out.print("Reintroduza a opção:\n");
+                        System.out.print("Erro: Opção inválida!\nReintroduza a opção:\n");
                         bool = false;
                     }
                 }while(!bool);
@@ -778,7 +858,7 @@ public class Sistema implements Serializable
             if(f.getPendente() && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 n += 1;
-                System.out.println("---> Fatura por validar:\n");
+                System.out.println("\n---> Fatura por validar:\n");
                 System.out.println(this.faturas.get(i).toString());
                 for(String s : f.getNaturezas_Despesa())
                 {
@@ -834,7 +914,7 @@ public class Sistema implements Serializable
             if(!f.getPendente() && f.getNaturezas_Despesa().size() >= 2 && f.getNIF_Cliente().equals(this.nif_contribuinte))
             {
                 n += 1;
-                System.out.println("---> Fatura possível de revalidar:\n");
+                System.out.println("\n---> Fatura possível de revalidar:\n");
                 System.out.println(f.toString());
                 for(String s : f.getNaturezas_Despesa())
                 {
@@ -868,7 +948,7 @@ public class Sistema implements Serializable
             }
         }
         if(n == 0) {
-            System.out.print("De momento não tem faturas por revalidar.\nPrima enter para continuar ..."); read.nextLine();
+            System.out.print("De momento não tem faturas para revalidar.\nPrima enter para continuar ..."); read.nextLine();
         }
     }
 
@@ -1005,6 +1085,108 @@ public class Sistema implements Serializable
             else index += 1;
         }
     }
+
+    /**
+     * Método que calcula o montante de dedução fiscal de um contribuinte Individual.
+     * @param String NIF
+     * @return montante de dedução fiscal
+     */
+    public double calcular_deduçao_fiscal_CI(String nif, boolean flag)
+    {
+        Scanner read = new Scanner(System.in);
+        double acum = 0;
+        double percentagem = 0; 
+        double maximo_valor = 0; 
+        double valor_total = 0; 
+        double valor_deduzido = 0;
+        Individual i = (Individual) this.getRegistados().get(nif);
+        double cf = i.getCoeficiente_Fiscal();
+        int dependentes = i.getDependentes();
+        Map<String, Double> sats = i.getAtividades_Economicas();
+
+        System.out.println("--> " + i.getNome() + ", NIF: " + nif + ":\n");
+        for(String s: this.atividades_economicas_disponiveis.keySet())
+        {
+            if(s.compareTo("Outros") == 0) {
+                System.out.println(s + ": Não dedutível.");
+            }
+
+            else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
+                percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
+                if(dependentes >= 4) {
+                    maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * (1 + ((0.05) * dependentes));
+                } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
+                
+                valor_total = sats.get(s);
+                valor_deduzido = (valor_total * cf) * percentagem;
+
+                if (valor_deduzido <= maximo_valor) {
+                    System.out.printf("%s: %.2f€ deduzidos.\n", s, valor_deduzido);
+                    acum += valor_deduzido;
+                } else {
+                    System.out.printf("%s: %.2f€ deduzidos.\n", s, maximo_valor);
+                    acum += maximo_valor;
+                } 
+            }
+        }
+        System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
+
+        if(!flag) {
+            System.out.print("\nPrima enter para continuar ...");
+            read.nextLine();
+        }
+
+        return acum;
+    }
+    
+    /**
+     * Método que calcula a dedução fiscal acumulada por um agregado familiar registado em Sistema.
+     * @param
+     * @return
+     */
+    public void calcular_deduçao_fiscal_agregado(int i)
+    {
+        Scanner read = new Scanner(System.in);
+        List<String> agregado = this.agregados.get(i);
+        double valor = 0;
+
+        for(String c: agregado)
+        {
+            if(this.registados.containsKey(c)) {
+                valor += calcular_deduçao_fiscal_CI(c, true);
+            }
+        }
+        System.out.printf("\n\n--> Valor total deduzido pelo agregado familiar: %.2f €.", valor);
+        System.out.print("\nPrima enter para continuar ...");
+        read.nextLine();
+    }
+
+    /**
+     * Método que calcula o montante de deduções fiscais que as despesas registadas por uma empresa representam.
+     * @param Contribuinte Coletivo
+     * @return valor_deduzido
+     */
+    public double calcular_deduçao_fiscal_CC(Coletivo c)
+    {
+        double valor_deduçoes = 0.0;
+        List<Integer> ind = c.getIndex();
+        Fatura f;
+        Contribuinte cliente;
+        double percentagem;
+
+        for(int i: ind) {
+            f = this.faturas.get(i);
+            if(!f.getPendente()) {
+                cliente = this.registados.get(f.getNIF_Cliente());
+                percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0] / 100;
+                if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
+                    valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
+                }
+            }
+        }
+        
+        return valor_deduçoes;
+    }
     
     /**
      * Método que obtem as listagens das facturas por contribuinte num determinado intervalo de datas, por parte das empresas.
@@ -1016,11 +1198,17 @@ public class Sistema implements Serializable
         LocalDateTime inicio, fim;
         String nif;
         Scanner read = new Scanner(System.in);
+        List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
+        
+        if(emitidas.size() == 0) {
+            System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            return;
+        }
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
         }while(!this.registados.containsKey(nif) || nif.equals(this.nif_contribuinte));
-        
+
         inicio = ler_data_inicial();
         if (inicio.isEqual(LocalDateTime.MAX)) {
             return;
@@ -1031,11 +1219,11 @@ public class Sistema implements Serializable
         }
         
         System.out.print("\n");
-        for(int i: this.registados.get(nif).getIndex())
+        for(Fatura f: emitidas)
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte) && this.faturas.get(i).getData_Hora().isAfter(inicio) && this.faturas.get(i).getData_Hora().isBefore(fim))
+            if(f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim))
             {
-                System.out.println(this.faturas.get(i).toString());
+                System.out.println(f.toString());
             }
         }
         System.out.print("Prima enter para continuar ..."); read.nextLine();
@@ -1048,8 +1236,14 @@ public class Sistema implements Serializable
      */
     public void faturas_contribuinte_ord_decrescente_despesa_CC()
     {
+        List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
         String nif;
         Scanner read = new Scanner(System.in);
+
+        if(emitidas.size() == 0) {
+            System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            return;
+        }
         
         do{
             System.out.print("Introduza o NIF do contribuinte: "); nif = read.nextLine();
@@ -1065,12 +1259,10 @@ public class Sistema implements Serializable
                 return (f1.getValor_Despesa() > f2.getValor_Despesa()) ? -1 : 1;
             }
         });
-        for(int i: this.registados.get(nif).getIndex())
+        
+        for(Fatura f: emitidas)
         {
-            if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
-            {
-                tree.add(this.faturas.get(i).clone());
-            }
+            tree.add(f.clone());
         }
         for(Fatura f: tree)
         {
@@ -1086,8 +1278,8 @@ public class Sistema implements Serializable
      */
     public void total_faturado_CC()
     {
+        List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
         LocalDateTime inicio, fim;
-        Fatura f;
         double res = 0;
         Scanner read = new Scanner(System.in);
         
@@ -1101,10 +1293,9 @@ public class Sistema implements Serializable
         }
         
         System.out.print("\n");
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+        for(Fatura f: emitidas)
         {
-            f = this.faturas.get(i);
-            if(f.getNIF_Emitente().equals(this.nif_contribuinte) && f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim))
+            if(f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim))
             {
                 res += f.getValor_Despesa();
             }
@@ -1130,32 +1321,47 @@ public class Sistema implements Serializable
                 return f1.getData_Hora().isAfter(f2.getData_Hora()) ? -1 : 1;
             }
         });
-        
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            res.add(this.faturas.get(i).clone());
-        }
 
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
-            for(Fatura f: res)
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                System.out.println(f.toString());
+                res.add(this.faturas.get(i).clone());
+            }
+            
+            if(res.size() == 0) {
+                System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            }
+            else {
+                System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
+                for(Fatura f: res)
+                {
+                    System.out.println(f.toString());
+                }
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
             }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
-            System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
-            for(Fatura f: res)
+            List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
+            
+            for(Fatura f: emitidas)
             {
-                if(f.getNIF_Emitente().equals(this.nif_contribuinte))
+                res.add(f.clone());
+            }
+            
+            if(res.size() == 0) {
+                System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            }
+            else {
+                System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
+                for(Fatura f: res)
                 {
                     System.out.println(f.toString());
                 }
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
             }
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
     
     /**
@@ -1176,33 +1382,48 @@ public class Sistema implements Serializable
             }
         });
 
-        for(int i: this.registados.get(this.nif_contribuinte).getIndex())
-        {
-            res.add(this.faturas.get(i).clone());
-        }
-
         if(this.registados.get(this.nif_contribuinte) instanceof Individual)
         {
-            System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-            for(Fatura f: res)
+            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                System.out.println(f.toString());
+                res.add(this.faturas.get(i).clone());
+            }
+            
+            if(res.size() == 0) {
+                System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            }
+            else {
+                System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+                for(Fatura f: res)
+                {
+                    System.out.println(f.toString());
+                }
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
             }
         }
         else if (this.registados.get(this.nif_contribuinte) instanceof Coletivo)
         {
-            System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-            for(Fatura f: res)
+            List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
+            
+            for(Fatura f: emitidas)
             {
-                if(f.getNIF_Emitente().equals(this.nif_contribuinte))
+                res.add(f.clone());
+            }
+            
+            if(res.size() == 0) {
+                System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
+            }
+            else {
+                System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+                for(Fatura f: res)
                 {
                     System.out.println(f.toString());
                 }
+                System.out.print("Prima enter para continuar ..."); read.nextLine();
             }
         }
-        System.out.print("Prima enter para continuar ..."); read.nextLine();
     }
-
+    
     /**
      * Método que permite visualizar todas as faturas de um Contribuinte Individual.
      * @param
@@ -1223,7 +1444,7 @@ public class Sistema implements Serializable
             System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
     }
-
+    
     /**
      * Método que permite visualizar todas as faturas emitidas por parte de uma Empresa.
      * @param
@@ -1247,7 +1468,7 @@ public class Sistema implements Serializable
             System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
     }
-
+    
     /**
      * Método que permite visualizar todas as faturas de despesas feitas por parte de uma Empresa.
      * @param
@@ -1347,34 +1568,6 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que obtem o gasto de um determinado Contribuinte no Sistema JavaFatura.
-     * @param Contribuinte c
-     * @return double res
-     */
-    private double gasto_Contribuinte(Contribuinte c)
-    {
-        double res = 0;
-        if(c instanceof Individual)
-        {
-            for(int i: this.registados.get(c.getNIF()).getIndex())
-            {
-                res += this.faturas.get(i).getValor_Despesa();
-            }
-        }
-        else if(c instanceof Coletivo)
-        {
-            for(int i: this.registados.get(c.getNIF()).getIndex())
-            {
-                if(this.faturas.get(i).getNIF_Cliente().equals(c.getNIF()))
-                {
-                    res += this.faturas.get(i).getValor_Despesa();
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
      * Método que obtem os 10 contribuintes que mais gastaram em todo o Sistema.
      */
     public void top_10_Administrador()
@@ -1421,41 +1614,6 @@ public class Sistema implements Serializable
         System.out.print("\nPrima enter para continuar ..."); read.nextLine();
     }
 
-    /**
-     * Método que conta o nº de faturas emitidas por uma determinada empresa.
-     * @param Coletivo c, ou seja, uma empresa.
-     * @return int i, ou seja, nº de faturas.
-     */
-    private int conta_faturas_emitidas_CC(Coletivo c)
-    {
-        int res = 0;
-        for(int i: this.registados.get(c.getNIF()).getIndex())
-        {
-            if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
-            {
-                res += 1;
-            }
-        }
-        return res;
-    }
-    
-    /**
-     * Método que conta o nº empresas no Sistema.
-     * @param
-     * @return int i.
-     */
-    private int conta_numero_CC()
-    {
-        int res = 0;
-        for(Contribuinte c: this.registados.values())
-        {
-            if(c instanceof Coletivo)
-            {
-                res += 1;
-            }
-        }
-        return res;
-    }    
 
     /**
      * Método que determina a relação das X empresas que mais faturas têm em todo o sistema 
@@ -1524,106 +1682,6 @@ public class Sistema implements Serializable
             }
         }
         System.out.print("\nPrima enter para continuar ..."); ler.nextLine();
-    }
-
-    /**
-     * Método que calcula o montante de dedução fiscal de um contribuinte Individual.
-     * @param String NIF
-     * @return montante de dedução fiscal
-     */
-    public double calcular_deduçao_fiscal_CI(String nif, boolean flag)
-    {
-        Scanner read = new Scanner(System.in);
-        double acum = 0;
-        double percentagem = 0; 
-        double maximo_valor = 0; 
-        double valor_total = 0; 
-        double valor_deduzido = 0;
-        Individual i = (Individual) this.getRegistados().get(nif);
-        double cf = i.getCoeficiente_Fiscal();
-        int dependentes = i.getDependentes();
-        Map<String, Double> sats = i.getAtividades_Economicas();
-
-        System.out.println("--> " + i.getNome() + ", NIF: " + nif + ":\n");
-        for(String s: this.atividades_economicas_disponiveis.keySet())
-        {
-            if(s.compareTo("Outros") == 0) {
-                System.out.println(s + ": Não dedutível.");
-            }
-
-            else if(sats.containsKey(s) && s.compareTo("Outros") != 0) {
-                percentagem = this.atividades_economicas_disponiveis.get(s)[0] / 100;
-                if(dependentes >= 4) {
-                    maximo_valor = this.atividades_economicas_disponiveis.get(s)[1] * (1 + ((0.05) * dependentes));
-                } else maximo_valor = this.atividades_economicas_disponiveis.get(s)[1];
-                
-                valor_total = sats.get(s);
-                valor_deduzido = (valor_total * cf) * percentagem;
-
-                if (valor_deduzido <= maximo_valor) {
-                    System.out.printf("%s: %.2f€ deduzidos.\n", s, valor_deduzido);
-                    acum += valor_deduzido;
-                } else {
-                    System.out.printf("%s: %.2f€ deduzidos.\n", s, maximo_valor);
-                    acum += maximo_valor;
-                } 
-            }
-        }
-        System.out.printf("\n--> Valor total deduzido: %.2f €.", acum);
-
-        if(!flag) {
-            System.out.print("\nPrima enter para continuar ...");
-            read.nextLine();
-        }
-
-        return acum;
-    }
-    
-    /**
-     * Método que calcula a dedução fiscal acumulada por um agregado familiar registado em Sistema.
-     * @param
-     * @return
-     */
-    public void calcular_deduçao_fiscal_agregado(int i)
-    {
-        Scanner read = new Scanner(System.in);
-        List<String> agregado = this.agregados.get(i);
-        double valor = 0;
-
-        for(String c: agregado)
-        {
-            if(this.registados.containsKey(c)) {
-                valor += calcular_deduçao_fiscal_CI(c, true);
-            }
-        }
-        System.out.printf("\n\n--> Valor total deduzido pelo agregado familiar: %.2f €.", valor);
-        System.out.print("\nPrima enter para continuar ...");
-        read.nextLine();
-    }
-
-    /**
-     * Método que calcula o montante de deduções fiscais que as despesas registadas por uma empresa representam.
-     * @param Contribuinte Coletivo
-     * @return valor_deduzido
-     */
-    public double calcular_deduçao_fiscal_CC(Coletivo c)
-    {
-        double valor_deduçoes = 0.0;
-        List<Integer> ind = c.getIndex();
-        Fatura f;
-        Contribuinte cliente;
-        double percentagem;
-
-        for(int i: ind) {
-            f = this.faturas.get(i);
-            cliente = this.registados.get(f.getNIF_Cliente());
-            percentagem = this.atividades_economicas_disponiveis.get(f.getNatureza_Despesa())[0] / 100;
-            if(c.getNIF().equals(f.getNIF_Emitente()) && cliente instanceof Individual) {
-                valor_deduçoes += (f.getValor_Despesa() * cliente.getCoeficiente_Fiscal()) * percentagem; 
-            }
-        }
-        
-        return valor_deduçoes;
     }
 
     /**
