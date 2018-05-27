@@ -219,10 +219,24 @@ public class Menu
                                         
                                     case 2:
                                         s.validar_faturas_pendentes();
+                                        try{
+                                            s.gravar_estado();
+                                        } catch(FileNotFoundException e) {
+                                            System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                                        } catch(IOException e) {
+                                            System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+                                        }
                                         break;
                                     
                                     case 3:
                                         s.revalidar_faturas_pendentes();
+                                        try{
+                                            s.gravar_estado();
+                                        } catch(FileNotFoundException e) {
+                                            System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                                        } catch(IOException e) {
+                                            System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+                                        }
                                         break;
 
                                     case 4:
@@ -283,6 +297,13 @@ public class Menu
                                     
                                     case 2:
                                         s.validar_faturas_pendentes();
+                                        try{
+                                            s.gravar_estado();
+                                        } catch(FileNotFoundException e) {
+                                            System.out.println("Erro de Escrita: Ficheiro especificado não existe / não foi encontrado!");
+                                        } catch(IOException e) {
+                                            System.out.println("Erro de Escrita: Erro ao aceder ao ficheiro!");
+                                        }
                                         break;
 
                                     case 3:

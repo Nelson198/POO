@@ -365,7 +365,7 @@ public class Sistema implements Serializable
     }
 
     /**
-     * Método que ,dado um contribuinte coletivo (Empresa), retorna a lista das faturas emitidas por si.
+     * Método que, dado um contribuinte coletivo (Empresa), retorna a lista das faturas emitidas por si.
      * @param Coletivo
      * @return List<Fatura>
      */
@@ -375,6 +375,24 @@ public class Sistema implements Serializable
         for(int i: this.registados.get(c.getNIF()).getIndex())
         {
             if(this.faturas.get(i).getNIF_Emitente().equals(c.getNIF()))
+            {
+                res.add(this.faturas.get(i).clone());
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Método que, dado um contribuinte coletivo (Empresa), retorna a lista das faturas de despesas feita por si.
+     * @param Coletivo
+     * @return List<Fatura>
+     */
+    public List<Fatura> faturas_para_CC(Coletivo c)
+    {
+        List<Fatura> res = new ArrayList<>();
+        for(int i: this.registados.get(c.getNIF()).getIndex())
+        {
+            if(this.faturas.get(i).getNIF_Cliente().equals(c.getNIF()))
             {
                 res.add(this.faturas.get(i).clone());
             }
@@ -547,9 +565,9 @@ public class Sistema implements Serializable
                     bool = false; 
                     nifs.clear();
                 } else {
-                    for(String a: nifs)
+                    for(int i = 1; i < nifs.size(); i++)
                     {
-                        if((a.chars().allMatch(Character::isDigit)) == false || a.length() != 9)
+                        if((nifs.get(i).chars().allMatch(Character::isDigit)) == false || nifs.get(i).equals(nif) || nifs.get(i).length() != 9 || (nifs.get(i).indexOf('1') != 0 && nifs.get(i).indexOf('2') != 0))
                         {
                             bool = false;
                             nifs.clear();
@@ -585,7 +603,7 @@ public class Sistema implements Serializable
                         {}
                         else
                         {
-                            System.out.print("Erro: Opção inválida!\nReintroduza a opção:\n");
+                            System.out.print("\nErro: Opção inválida!\nReintroduza a opção:\n");
                             bool = false;
                         }
                     } else {
@@ -697,7 +715,7 @@ public class Sistema implements Serializable
                     {}
                     else
                     {
-                        System.out.print("Erro: Opção inválida!\nReintroduza a opção:\n");
+                        System.out.print("\nErro: Opção inválida!\nReintroduza a opção:\n");
                         bool = false;
                     }
                 }while(!bool);
@@ -1135,7 +1153,6 @@ public class Sistema implements Serializable
             System.out.print("\nPrima enter para continuar ...");
             read.nextLine();
         }
-
         return acum;
     }
     
@@ -1184,7 +1201,6 @@ public class Sistema implements Serializable
                 }
             }
         }
-        
         return valor_deduçoes;
     }
     
@@ -1221,8 +1237,7 @@ public class Sistema implements Serializable
         System.out.print("\n");
         for(Fatura f: emitidas)
         {
-            if(f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim))
-            {
+            if(f.getNIF_Cliente().equals(nif) && f.getData_Hora().isAfter(inicio) && f.getData_Hora().isBefore(fim)) {
                 System.out.println(f.toString());
             }
         }
@@ -1262,7 +1277,9 @@ public class Sistema implements Serializable
         
         for(Fatura f: emitidas)
         {
-            tree.add(f.clone());
+            if(f.getNIF_Cliente().equals(nif)) {
+                tree.add(f.clone());
+            }
         }
         for(Fatura f: tree)
         {
@@ -1312,7 +1329,7 @@ public class Sistema implements Serializable
     public void mostrar_faturas_ord_data_Contribuintes()
     {
         Scanner read = new Scanner(System.in);
-        TreeSet<Fatura> res = new TreeSet<Fatura>(new Comparator()
+        TreeSet<Fatura> tree = new TreeSet<Fatura>(new Comparator()
         {
             public int compare(Object o1, Object o2)
             {
@@ -1326,15 +1343,15 @@ public class Sistema implements Serializable
         {
             for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                res.add(this.faturas.get(i).clone());
+                tree.add(this.faturas.get(i).clone());
             }
             
-            if(res.size() == 0) {
+            if(tree.size() == 0) {
                 System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
             }
             else {
                 System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
-                for(Fatura f: res)
+                for(Fatura f: tree)
                 {
                     System.out.println(f.toString());
                 }
@@ -1347,15 +1364,15 @@ public class Sistema implements Serializable
             
             for(Fatura f: emitidas)
             {
-                res.add(f.clone());
+                tree.add(f.clone());
             }
             
-            if(res.size() == 0) {
+            if(tree.size() == 0) {
                 System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
             }
             else {
-                System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
-                for(Fatura f: res)
+                System.out.print("Listagem de Faturas do Contribuinte Coletivo " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por data de emissão:\n\n");
+                for(Fatura f: tree)
                 {
                     System.out.println(f.toString());
                 }
@@ -1372,7 +1389,7 @@ public class Sistema implements Serializable
     public void mostrar_faturas_ord_valor_crescente_despesa_Contribuintes()
     {
         Scanner read = new Scanner(System.in);
-        TreeSet<Fatura> res = new TreeSet<Fatura>(new Comparator()
+        TreeSet<Fatura> tree = new TreeSet<Fatura>(new Comparator()
         {
             public int compare(Object o1, Object o2)
             {
@@ -1386,15 +1403,15 @@ public class Sistema implements Serializable
         {
             for(int i: this.registados.get(this.nif_contribuinte).getIndex())
             {
-                res.add(this.faturas.get(i).clone());
+                tree.add(this.faturas.get(i).clone());
             }
             
-            if(res.size() == 0) {
+            if(tree.size() == 0) {
                 System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
             }
             else {
                 System.out.print("Listagem de Faturas do Contribuinte Individual " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-                for(Fatura f: res)
+                for(Fatura f: tree)
                 {
                     System.out.println(f.toString());
                 }
@@ -1407,15 +1424,15 @@ public class Sistema implements Serializable
             
             for(Fatura f: emitidas)
             {
-                res.add(f.clone());
+                tree.add(f.clone());
             }
             
-            if(res.size() == 0) {
+            if(tree.size() == 0) {
                 System.out.print("De momento não há faturas para invocar a ordenação pretendida.\nPrima enter para continuar ..."); read.nextLine();
             }
             else {
-                System.out.print("Listagem de Faturas da empresa " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
-                for(Fatura f: res)
+                System.out.print("Listagem de Faturas do Contribuinte Coletivo " + this.registados.get(this.nif_contribuinte).getNome() + " ordenada por valor crescente de despesa:\n\n");
+                for(Fatura f: tree)
                 {
                     System.out.println(f.toString());
                 }
@@ -1452,18 +1469,16 @@ public class Sistema implements Serializable
      */
     public void mostrar_faturas_emitidas_CC()
     {
+        List<Fatura> emitidas = faturas_emitidas_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
         Scanner read = new Scanner(System.in);
-        if(this.registados.get(this.nif_contribuinte).getIndex().size() == 0) {
+        if(emitidas.size() == 0) {
             System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
         }
         else {
             System.out.println("Faturas emitidas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
-            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            for(Fatura f : emitidas) 
             {
-                if(this.faturas.get(i).getNIF_Emitente().equals(this.nif_contribuinte))
-                {
-                    System.out.println(this.faturas.get(i).toString());
-                }
+                System.out.println(f.toString());
             }
             System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
@@ -1476,18 +1491,16 @@ public class Sistema implements Serializable
      */
     public void mostrar_faturas_para_CC()
     {
+        List<Fatura> compras = faturas_para_CC((Coletivo) this.registados.get(this.nif_contribuinte).clone());
         Scanner read = new Scanner(System.in);
-        if(this.registados.get(this.nif_contribuinte).getIndex().size() == 0) {
+        if(compras.size() == 0) {
             System.out.print("De momento não tem faturas para visualizar.\nPrima enter para continuar ..."); read.nextLine();
         }
         else {
             System.out.println("Faturas de despesas feitas pela empresa " + this.registados.get(this.nif_contribuinte).getNome() + ", com NIF " + this.registados.get(this.nif_contribuinte).getNIF() + ":\n");
-            for(int i: this.registados.get(this.nif_contribuinte).getIndex())
+            for(Fatura f : compras) 
             {
-                if(this.faturas.get(i).getNIF_Cliente().equals(this.nif_contribuinte))
-                {
-                    System.out.println(this.faturas.get(i).toString());
-                }
+                System.out.println(f.toString());
             }
             System.out.print("Prima enter para continuar ..."); read.nextLine();
         }
