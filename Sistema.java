@@ -1612,29 +1612,24 @@ public class Sistema implements Serializable
         {
             top.add(c.clone());
         }
+        System.out.println("TOP 10 Contribuintes com mais gastos no Sistema:\n");
         
-        if(this.registados.values().size() < 10)
+        for(Contribuinte c: top)
         {
-            System.out.print("De momento não é possivel estabelecer a relação pedida por si, dado que não existem no mínimo 10 contribuintes no Sistema.\n");
-        }
-        else
-        {
-            System.out.println("TOP 10 Contribuintes com mais gastos no Sistema:\n");
-            for(Contribuinte c: top)
+            if(i == 10) break;
+            if(c instanceof Individual)
             {
-                if(i == 10) break;
-                if(c instanceof Individual)
-                {
-                    System.out.printf("Contribuinte Individual %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
-                }
-                else if(c instanceof Coletivo)
-                {
-                    System.out.printf("Empresa / Instituição %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
-                }
-                i += 1;
+                System.out.printf("Contribuinte Individual %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
             }
+            else if(c instanceof Coletivo)
+            {
+                System.out.printf("Empresa / Instituição %s, com NIF %s: %.2f €.\n", c.getNome(), c.getNIF(), gasto_Contribuinte(c));
+            }
+            i += 1;
         }
-        System.out.print("\nPrima enter para continuar ..."); read.nextLine();
+
+        System.out.print("\nPrima enter para continuar ..."); 
+        read.nextLine();
     }
 
 
