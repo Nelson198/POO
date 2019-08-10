@@ -1,4 +1,6 @@
-# JavaFatura
+# Licenciatura em Ciências da Computação - UMinho
+# Programação Orientada aos Objetos - 2017/2018
+# Trabalho Prático - JavaFatura
 
 ## Contribuidores
 
